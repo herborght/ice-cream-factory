@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<config>
+	<modules>
+		<module name="T1" baseArea="0.5" outletArea="0.004" height="2" heaterTemp="373.15" coolerTemp="273.15" thickness="0.05" HTC="80" CTC="80" type="PasteurizationModule" >
+
+			<AnalogOutputParameter>Level</AnalogOutputParameter>
+			<AnalogOutputParameter>LevelPercent</AnalogOutputParameter>
+			<AnalogInputParameter>InFlow</AnalogInputParameter>
+			<DigitalInputParameter>OpenOutlet</DigitalInputParameter>
+			<AnalogOutputParameter>OutFlow</AnalogOutputParameter>
+			<DigitalInputParameter>HeaterOn</DigitalInputParameter>
+			<AnalogOutputParameter>Temperature</AnalogOutputParameter>
+			<DigitalInputParameter>CoolerOn</DigitalInputParameter>
+		</module>
+	</modules>
+</config>

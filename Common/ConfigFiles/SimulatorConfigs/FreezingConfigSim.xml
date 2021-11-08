@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<config>
+	<modules>
+		<module name="T1" baseArea="1" outletArea="0.005" height="3" freezerTemp="253"  barrelRotationSpeed="200" type="FreezingModule">
+			<AnalogOutputParameter>Level</AnalogOutputParameter>
+			<AnalogOutputParameter>LevelPercent</AnalogOutputParameter>
+			<AnalogInputParameter>InFlow</AnalogInputParameter>
+			<DigitalInputParameter>OpenOutlet</DigitalInputParameter>
+			<DigitalInputParameter>FreezingOn</DigitalInputParameter>
+			<DigitalInputParameter>DasherOn</DigitalInputParameter>
+			<DigitalInputParameter>StartLiquidFlavoring</DigitalInputParameter>
+			<AnalogOutputParameter>OutFlow</AnalogOutputParameter>
+			<AnalogOutputParameter>ParticleSize</AnalogOutputParameter>
+			<AnalogOutputParameter>MixTemperature</AnalogOutputParameter>
+			<AnalogOutputParameter>Overrun</AnalogOutputParameter>
+			<AnalogOutputParameter>PasteurizationUnits</AnalogOutputParameter>
+			<AnalogOutputParameter>ParticleSize</AnalogOutputParameter>
+			<DigitalInputParameter>SendTestValues</DigitalInputParameter>
+		</module>
+	</modules>
+</config>

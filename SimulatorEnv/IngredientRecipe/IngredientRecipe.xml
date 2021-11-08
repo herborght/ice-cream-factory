@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<recipe>
+	<Butter fat="0.8" Solids="1.8">17.5</Butter>
+	<SkimMilkPowder Solids="97">9.98</SkimMilkPowder>
+	<Sucrose>14</Sucrose>
+	<Stabilizer>0.4</Stabilizer>
+	<Water>56.82</Water>
+	<SolidFlavorings Flavor ="Nuts" Density="0.481">1</SolidFlavorings>
+	<LiquidFlavorings Flavor ="Vanilla">0.3</LiquidFlavorings>
+</recipe>

@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "SimulatorEnv": {
+      "commandName": "Project",
+      "commandLineArgs": "ConfigFiles/SimulatorConfigs/TankConfigSim.xml"
+    }
+  }
+}

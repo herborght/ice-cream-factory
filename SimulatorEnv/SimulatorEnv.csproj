@@ -1,0 +1,74 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+	<Deterministic>false</Deterministic>
+    <GenerateAssemblyVersionAttribute>false</GenerateAssemblyVersionAttribute>
+	<GenerateAssemblyFileVersionAttribute>false</GenerateAssemblyFileVersionAttribute>
+	<GenerateAssemblyInformationalVersionAttribute>false</GenerateAssemblyInformationalVersionAttribute>
+	<RootNamespace>ABB.InSecTT.SimulatorEnv</RootNamespace>
+	<RepositoryUrl>https://github.com/decuse/OPC-UA-AS</RepositoryUrl>
+	<AssemblyName>ABB.InSecTT.SimulatorEnv</AssemblyName>
+	<GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="EventLogging\app.config" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="M2MqttClientDotnetCore" Version="1.0.1" PrivateAssets="All" />
+    <PackageReference Include="System.Configuration.ConfigurationManager" Version="5.0.0" PrivateAssets="All" />
+  </ItemGroup>
+
+  <ItemGroup>
+	  <ProjectReference Include="..\Common\Common.csproj" PrivateAssets="All" />
+	  <ProjectReference Include="..\SimulatorUITest\SimulatorUITest.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="IngredientRecipe\IngredientRecipe.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="SimulatorConfig.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+	<ItemGroup>
+		<Content Include="$(OutDir)\*.dll">
+			<PackagePath>lib\$(TargetFramework)</PackagePath>
+			<Pack>true</Pack>
+		</Content>
+		<Content Include="$(OutDir)\*.pdb">
+			<PackagePath>lib\$(TargetFramework)</PackagePath>
+			<Pack>true</Pack>
+		</Content>
+		<Content Include="$(OutDir)\*.config">
+			<PackagePath>lib\$(TargetFramework)</PackagePath>
+			<Pack>true</Pack>
+		</Content>
+		<Content Include="$(OutDir)\*.rsp">
+			<PackagePath>lib\$(TargetFramework)</PackagePath>
+			<Pack>true</Pack>
+		</Content>
+		<Content Include="$(OutDir)\*.exe">
+			<PackagePath>lib\$(TargetFramework)</PackagePath>
+			<Pack>true</Pack>
+		</Content>
+		<Content Include="$(OutDir)\ConfigFiles\SimulatorConfigs\*.xml">
+			<PackagePath>lib\$(TargetFramework)</PackagePath>
+			<Pack>true</Pack>
+		</Content>
+		<Content Include="$(OutDir)\*.xml">
+			<PackagePath>lib\$(TargetFramework)</PackagePath>
+			<Pack>true</Pack>
+		</Content>
+		<Content Include="$(OutDir)\IngredientRecipe\*.xml">
+			<PackagePath>lib\$(TargetFramework)</PackagePath>
+			<Pack>true</Pack>
+		</Content>
+	</ItemGroup>
+
+</Project>

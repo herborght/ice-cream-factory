@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<config>
+	<modules>
+		<module name="T1" baseArea="1" outletArea="0.005" height="1" stage1Pressure="1.7e7" stage2Pressure="6e6" type="HomogenizationModule" >
+			<AnalogOutputParameter>Level</AnalogOutputParameter>
+			<AnalogOutputParameter>LevelPercent</AnalogOutputParameter>
+			<AnalogInputParameter>InFlow</AnalogInputParameter>
+			<DigitalInputParameter>OpenOutlet</DigitalInputParameter>
+			<DigitalInputParameter>HomogenizationOn</DigitalInputParameter>
+			<DigitalInputParameter>AgeingCoolingOn</DigitalInputParameter>
+			<AnalogOutputParameter>OutFlow</AnalogOutputParameter>
+			<AnalogOutputParameter>ParticleSize</AnalogOutputParameter>
+			<AnalogOutputParameter>MixTemperature</AnalogOutputParameter>
+		</module>
+	</modules>
+</config>

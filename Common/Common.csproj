@@ -1,0 +1,53 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<OutputType>Library</OutputType>
+		<TargetFramework>netcoreapp3.1</TargetFramework>
+		<ApplicationIcon />
+		<StartupObject />
+		<RootNamespace>ABB.InSecTT.Common</RootNamespace>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="M2MqttClientDotnetCore" Version="1.0.1" />
+		<PackageReference Include="System.Configuration.ConfigurationManager" Version="5.0.0" />
+		<PackageReference Include="System.Runtime" Version="4.3.1" />
+		<PackageReference Include="System.Runtime.Extensions" Version="4.3.1" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <None Update="ConfigFiles\ControllerConfigs\FlavoringHardeningPackingConfigContr.xml">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Update="ConfigFiles\ControllerConfigs\FreezingConfigContr.xml">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Update="ConfigFiles\ControllerConfigs\HomogenizationConfigContr.xml">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Update="ConfigFiles\ControllerConfigs\PasteurizationConfigContr.xml">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Update="ConfigFiles\ControllerConfigs\TankConfigContr.xml">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Update="ConfigFiles\SimulatorConfigs\FlavoringHardeningPackingConfigSim.xml">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Update="ConfigFiles\SimulatorConfigs\FreezingConfigSim.xml">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Update="ConfigFiles\SimulatorConfigs\HomogenizationConfigSim.xml">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Update="ConfigFiles\SimulatorConfigs\MultipleModulesConfigSim.xml">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Update="ConfigFiles\SimulatorConfigs\PasteurizationConfigSim.xml">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Update="ConfigFiles\SimulatorConfigs\TankConfigSim.xml">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	</ItemGroup>
+</Project>

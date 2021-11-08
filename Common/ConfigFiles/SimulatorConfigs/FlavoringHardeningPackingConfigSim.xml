@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<config>
+	<modules>
+		<module name="T1" baseArea="1" outletArea="0.005" height="1" type="FlavoringPackagingModule" packagingType ="cone" coolerTemperature ="243.15">
+			<AnalogInputParameter>InFlow</AnalogInputParameter>
+			<AnalogOutputParameter>Level</AnalogOutputParameter>
+			<AnalogOutputParameter>LevelPercent</AnalogOutputParameter>
+			<DigitalInputParameter>OpenOutlet</DigitalInputParameter>
+			<AnalogOutputParameter>OutFlow</AnalogOutputParameter>
+			<AnalogOutputParameter>MixTemperature</AnalogOutputParameter>
+			<DigitalInputParameter>StartFlavoring</DigitalInputParameter>
+			<DigitalInputParameter>StartHardening</DigitalInputParameter>
+			<DigitalInputParameter>StartPackaging</DigitalInputParameter>
+			<DigitalInputParameter>FinishBatch</DigitalInputParameter>
+		</module>
+	</modules>
+</config>
