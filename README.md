@@ -1,1 +1,1 @@
-# ice-cream-factory
+# Ice Cream Factory
