@@ -105,8 +105,11 @@ namespace ABB.InSecTT.SimulatorEnv
 
         private static void RunApplication(IParameterDataBase parameters, IEnumerable<IModule> modules)
         {
-            var application = new System.Windows.Application();
-            application.Run(new SimulatorUITest.SimulationWindow(parameters, modules));
+            //var application = new System.Windows.Application();
+            //application.Run(new SimulatorUITest.SimulationWindow(parameters, modules));
+
+            var app2 = new SimulatorUI.Main(parameters, modules);
+            app2.Run();
         }
 
         private static IEnumerable<ICmd> CreateCommands(IParameterDataBase parameters)

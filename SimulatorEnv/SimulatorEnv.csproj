@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
@@ -24,7 +24,7 @@
 
   <ItemGroup>
 	  <ProjectReference Include="..\Common\Common.csproj" PrivateAssets="All" />
-	  <ProjectReference Include="..\SimulatorUITest\SimulatorUITest.csproj" />
+	  <ProjectReference Include="..\SimulatorUI\SimulatorUI.csproj" />
   </ItemGroup>
 
   <ItemGroup>
