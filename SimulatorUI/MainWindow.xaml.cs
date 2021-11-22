@@ -20,9 +20,45 @@ namespace SimulatorUI
     /// </summary>
     public partial class MainWindow : Window
     {
-        public MainWindow()
+        List<TankModule> tankList;
+        public MainWindow(List<TankModule> list)
         {
+            tankList = list;
             InitializeComponent();
+            Task.Run(() => updateLoop());
+        }
+
+        internal async Task updateLoop()
+        {
+            for (; ; )
+            {
+
+                bool uiAccess = testBlock.Dispatcher.CheckAccess();
+                string msg = "";
+                foreach (TankModule tank in tankList) //Update with the config files
+                {
+                    msg += "Tank Information: " + "\n";
+                    msg += "Name: " + tank.Name + "\n";
+                    msg += "Level: " + Math.Round(tank.Level, 2) + "\n";
+                    msg += "Percent: " + Math.Round(tank.LevelPercenatage, 2) + "%" +"\n";
+                    msg += "Temperature: " + Math.Round(tank.Temperature, 2) + "\n";
+                    msg += "InFlow: " + Math.Round(tank.InletFlow, 2) + "\n";
+                    msg += "InFlow Temp: " + Math.Round(tank.InFlowTemp, 2) + "\n";
+                    msg += "OutletFlow: " + Math.Round(tank.OutLetFlow, 2) + "\n";
+                    msg += "OutletFlow Temp: " + Math.Round(tank.OutFlowTemp, 2) + "\n";
+                    msg += "\n";
+                    msg += "Valve Information: " + "\n";
+                    msg += tank.Name + " Dump Valve: "  + tank.DumpValveOpen + "\n";
+                    msg += tank.Name + " Out Valve: " +  tank.OutValveOpen + "\n";
+
+                    msg += "\n";
+                }
+                if (uiAccess)
+                    testBlock.Text = msg;
+                else
+                    testBlock.Dispatcher.Invoke(() => { testBlock.Text = msg; });
+                await Task.Delay(1000);
+            }
         }
 
         private void RadioButton_Checked(object sender, RoutedEventArgs e)
