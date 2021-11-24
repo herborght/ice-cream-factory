@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Xml;
 using System.Reflection;
 using System.Configuration;
@@ -122,6 +122,58 @@ namespace ABB.InSecTT.SimulatorEnv
 
             yield return new Command("d", "d = Display parameters", displayParameters);
             yield return new Command("s", "s <parameter>:<value> = change <parameter> to <value>", changeParameters);
+
+            // DSD Course - Hardcoded "controller" behaviour
+            Action<string> mimicControllerBehaviour;
+            mimicControllerBehaviour = (m) => MimicControllerBehaviour(parameters);
+            yield return new Command("m", "m = Mimic basic controller behaviour", mimicControllerBehaviour);
+            
+        }
+
+        // DSD Course - Mimicing basic controller behaviour, used for demo purposes
+        // WARNING: Hardcoded!!! Will only work with unchanged standard tank config!!!
+        private static void MimicControllerBehaviour(IParameterDataBase parameters)
+        {
+            // "open" t1 inflow by changes its inflow value
+            ChangeParameter("T1/InFlow:0,075", parameters);
+
+            // wait while t1 is filling, total wait time is [wait] amount of seconds
+            int wait = 10;
+            for (int i = 0; i < wait; i++)
+            {
+                Thread.Sleep(1000);
+                DisplayParameters(parameters);
+            }
+
+            // "close" the t1 inflow by zeroing it, open the t1 outlet
+            ChangeParameter("T1/InFlow:0,0", parameters);
+            ChangeParameter("T1/OpenOutlet:true", parameters);
+
+            // changing the outflow rate currently does nothing, otherwise we would change the outflow here
+
+            // wait while t1 is emptying
+            wait = 20;
+            for (int i = 0; i < wait; i++)
+            {
+                Thread.Sleep(1000);
+                DisplayParameters(parameters);
+            }
+            ChangeParameter("T1/OpenOutlet:false", parameters);
+
+            ChangeParameter("T2/OpenOutlet:true", parameters);
+
+            // changing the outflow rate currently does nothing, otherwise we would change the outflow here
+
+            // wait while t2 is emptying
+            for (int i = 0; i < wait; i++)
+            {
+                Thread.Sleep(1000);
+                DisplayParameters(parameters);
+            }
+            ChangeParameter("T2/OpenOutlet:false", parameters);
+            DisplayParameters(parameters);
+
+            //finished
         }
 
         private static void ChangeParameter(string unparsed, IParameterDataBase parameters)
