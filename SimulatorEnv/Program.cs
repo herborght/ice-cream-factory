@@ -52,7 +52,7 @@ namespace ABB.InSecTT.SimulatorEnv
             var r = Task.Run(() => menuHandler.HandleCommand());
 
             // Start UI:
-            RunApplication(parameters, modules);
+            RunApplication(parameters, modules, args[0]);
 
             r.Wait();
             SimulationEventSource.Log.ExecutionStop();
@@ -103,10 +103,45 @@ namespace ABB.InSecTT.SimulatorEnv
             }
         }
 
-        private static void RunApplication(IParameterDataBase parameters, IEnumerable<IModule> modules)
+        private static void RunApplication(IParameterDataBase parameters, IEnumerable<IModule> modules, string configFilePath)
         {
             //var application = new System.Windows.Application();
             //application.Run(new SimulatorUITest.SimulationWindow(parameters, modules));
+
+            //read config to get inoutchainings etc
+            //Console.WriteLine("Load Modules");
+            //var parameters = ParameterDataBase.FromConfiguration(configFilePath);
+            //Console.WriteLine("Reading config");
+
+            XmlDocument xDoc = new XmlDocument();
+            xDoc.Load(configFilePath);
+            XmlNode config = xDoc.LastChild.ChildNodes[0];
+            //var parameters = new ParameterDataBase();
+
+
+            foreach (XmlNode mod in config)
+            {
+                Console.WriteLine("{0}", mod.Attributes["name"].Value);
+                foreach (XmlNode param in mod.ChildNodes)
+                {
+                    string name = param.InnerText;
+                    string type = param.LocalName;
+                    string from;
+
+                    switch (type)
+                    {
+                        case "InOutChaining":
+                            from = param.Attributes["from"].Value;
+                            Console.WriteLine("   Parameter name: {0}", name); //prints InFlow
+                            //Console.WriteLine("   Parameter type: {0}", type); //prints InOutChaining
+                            Console.WriteLine("   Chaining source: {0}", from); //prints T1/OutFlow
+                            break;
+                        default:
+                            continue;
+                    }                  
+                }
+            }
+
 
             var app2 = new SimulatorUI.Main(parameters, modules);
             app2.Run();
