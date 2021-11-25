@@ -3,6 +3,7 @@ using ABB.InSecTT.Common.MessageHandling;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace SimulatorUI
 {
@@ -10,13 +11,13 @@ namespace SimulatorUI
     {
         private IParameterDataBase m_parameters;
         private IEnumerable<IModule> m_modules;
-        private List<TankModule> Tanks;
+        private List<TankModule> tankList;
 
         public Main(IParameterDataBase parameters, IEnumerable<IModule> modules)
         {
             m_parameters = parameters;
             m_modules = modules;
-            Tanks = initializeTanks();
+            initializeTanks();
         }
 
         public void Run()
@@ -25,22 +26,29 @@ namespace SimulatorUI
             application.Run(new MainWindow());
         }
 
-        private List<TankModule> initializeTanks()//alternative: just add modules and assign parameters later, will also be updated when access to config files has been fixed
+        private void initializeTanks()//Will be extended later with config file
         {
-            List<TankModule> tankList = new List<TankModule>();
+            foreach(IModule module in m_modules)
+            {
+                tankList.Add(new TankModule(module.Name));
+            }
+            updateTanks();
+        }
+
+        private void updateTanks()
+        {
             foreach (var parameterKey in m_parameters.ParameterKeys)
             {
-                if(!tankList.Exists(tank => tank.Name == parameterKey.Split('/')[0]))
+                if (!tankList.Exists(tank => tank.Name == parameterKey.Split('/')[0])) //if new tank modules can be added during runtime
                 {
                     tankList.Add(new TankModule(parameterKey.Split('/')[0]));
                 }
-
                 var parameter = m_parameters.GetParameter(parameterKey);
                 if (parameter.ValueType == ParameterType.Analog)
                 {
-                    switch(parameterKey.Split('/')[1])
+                    switch (parameterKey.Split('/')[1])
                     {
-                        case "Level": 
+                        case "Level":
                             tankList.Find(tank => tank.Name == parameterKey.Split('/')[0]).Level = parameter.AnalogValue;
                             break;
                         case "LevelPercentage":
@@ -61,7 +69,7 @@ namespace SimulatorUI
                         case "OutFlow":
                             tankList.Find(tank => tank.Name == parameterKey.Split('/')[0]).OutLetFlow = parameter.AnalogValue;
                             break;
-                    }     
+                    }
                 }
                 else
                 {
@@ -76,7 +84,12 @@ namespace SimulatorUI
                     }
                 }
             }
-            return tankList;
+        }
+
+        public void accessDatabase(IParameterDataBase parameters, IEnumerable<IModule> modules)
+        {
+            m_parameters = parameters;
+            m_modules = modules;
         }
 
         //other functions etc.
