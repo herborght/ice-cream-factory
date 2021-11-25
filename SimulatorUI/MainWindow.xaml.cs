@@ -20,9 +20,35 @@ namespace SimulatorUI
     /// </summary>
     public partial class MainWindow : Window
     {
-        public MainWindow()
+        List<TankModule> tankList;
+        public MainWindow(List<TankModule> list)
         {
+            tankList = list;
             InitializeComponent();
+            Task.Run(() => updateLoop());
+        }
+
+        internal async Task updateLoop()
+        {
+            for (; ; )
+            {
+               
+                bool uiAccess = testBlock.Dispatcher.CheckAccess();
+                string msg = "";
+                foreach(TankModule tank in tankList)
+                {
+                    
+                    msg += "Name: " + tank.Name + "\n";
+                    msg += "Level: " + tank.Level + "\n";
+                    msg += "InFlow: " + tank.InletFlow + "\n";
+                    msg += "\n";
+                }
+                if (uiAccess)
+                    testBlock.Text = msg;
+                else
+                    testBlock.Dispatcher.Invoke(() => { testBlock.Text = msg; });
+                await Task.Delay(1000);
+            }
         }
     }
 }

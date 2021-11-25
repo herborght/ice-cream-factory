@@ -7,6 +7,6 @@
         mc:Ignorable="d"
         Title="Ice Cream Factory" Height="450" Width="800">
     <Grid>
-
+        <TextBlock x:Name="testBlock" TextWrapping="Wrap" Height="400" Width="750" Text="hi"/>
     </Grid>
 </Window>

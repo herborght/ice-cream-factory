@@ -23,11 +23,23 @@ namespace SimulatorUI
         public void Run()
         {
             var application = new System.Windows.Application();
-            application.Run(new MainWindow());
+            Task.Run(() => ExecuteSimulation());
+            application.Run(new MainWindow(tankList));
+
+        }
+
+        internal async Task ExecuteSimulation()
+        {
+            for (; ; )
+            {
+                updateTanks();
+                await Task.Delay(1000);
+            }
         }
 
         private void initializeTanks()//Will be extended later with config file
         {
+            tankList = new List<TankModule>();
             foreach(IModule module in m_modules)
             {
                 tankList.Add(new TankModule(module.Name));
@@ -85,13 +97,6 @@ namespace SimulatorUI
                 }
             }
         }
-
-        public void accessDatabase(IParameterDataBase parameters, IEnumerable<IModule> modules)
-        {
-            m_parameters = parameters;
-            m_modules = modules;
-        }
-
         //other functions etc.
         //like creating the other objects from our planned classes
     }
