@@ -63,7 +63,7 @@ namespace SimulatorUI
                         case "Level":
                             tankList.Find(tank => tank.Name == parameterKey.Split('/')[0]).Level = parameter.AnalogValue;
                             break;
-                        case "LevelPercentage":
+                        case "LevelPercent":
                             tankList.Find(tank => tank.Name == parameterKey.Split('/')[0]).LevelPercenatage = parameter.AnalogValue;
                             break;
                         case "InFlow":

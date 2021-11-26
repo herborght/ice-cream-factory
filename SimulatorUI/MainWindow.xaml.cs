@@ -39,13 +39,13 @@ namespace SimulatorUI
                 {
                     msg += "Tank Information: " + "\n";
                     msg += "Name: " + tank.Name + "\n";
-                    msg += "Level: " + tank.Level + "\n";
-                    msg += "Percent: " + tank.LevelPercenatage + "\n";
-                    msg += "Temperature: " + tank.Temperature + "\n";
-                    msg += "InFlow: " + tank.InletFlow + "\n";
-                    msg += "InFlow Temp: " + tank.InFlowTemp + "\n";
-                    msg += "OutletFlow: " + tank.OutLetFlow + "\n";
-                    msg += "OutletFlow Temp: " + tank.OutFlowTemp + "\n";
+                    msg += "Level: " + Math.Round(tank.Level, 2) + "\n";
+                    msg += "Percent: " + Math.Round(tank.LevelPercenatage, 2) + "%" +"\n";
+                    msg += "Temperature: " + Math.Round(tank.Temperature, 2) + "\n";
+                    msg += "InFlow: " + Math.Round(tank.InletFlow, 2) + "\n";
+                    msg += "InFlow Temp: " + Math.Round(tank.InFlowTemp, 2) + "\n";
+                    msg += "OutletFlow: " + Math.Round(tank.OutLetFlow, 2) + "\n";
+                    msg += "OutletFlow Temp: " + Math.Round(tank.OutFlowTemp, 2) + "\n";
                     msg += "\n";
                     msg += "Valve Information: " + "\n";
                     msg += tank.Name + " Dump Valve: "  + tank.DumpValveOpen + "\n";
