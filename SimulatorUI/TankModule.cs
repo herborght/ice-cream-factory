@@ -7,7 +7,6 @@ namespace SimulatorUI
     public class TankModule
     {
         public string Name { get; }
-        public double FillLevel { get; set; }
         public double InletFlow { get; set; }
         public bool OutValveOpen { get; set; }
         public bool DumpValveOpen { get; set; }
