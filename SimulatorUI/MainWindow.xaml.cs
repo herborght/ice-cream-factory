@@ -32,15 +32,25 @@ namespace SimulatorUI
         {
             for (; ; )
             {
-               
+
                 bool uiAccess = testBlock.Dispatcher.CheckAccess();
                 string msg = "";
-                foreach(TankModule tank in tankList)
+                foreach (TankModule tank in tankList) //Update with the config files
                 {
-                    
+                    msg += "Tank Information: " + "\n";
                     msg += "Name: " + tank.Name + "\n";
                     msg += "Level: " + tank.Level + "\n";
+                    msg += "Percent: " + tank.LevelPercenatage + "\n";
+                    msg += "Temperature: " + tank.Temperature + "\n";
                     msg += "InFlow: " + tank.InletFlow + "\n";
+                    msg += "InFlow Temp: " + tank.InFlowTemp + "\n";
+                    msg += "OutletFlow: " + tank.OutLetFlow + "\n";
+                    msg += "OutletFlow Temp: " + tank.OutFlowTemp + "\n";
+                    msg += "\n";
+                    msg += "Valve Information: " + "\n";
+                    msg += tank.Name + " Dump Valve: "  + tank.DumpValveOpen + "\n";
+                    msg += tank.Name + " Out Valve: " +  tank.OutValveOpen + "\n";
+
                     msg += "\n";
                 }
                 if (uiAccess)
