@@ -4,7 +4,7 @@ using System.Text;
 
 namespace SimulatorUI
 {
-    class TankModule
+    public class TankModule
     {
         public string Name { get; }
         public double FillLevel { get; set; }
