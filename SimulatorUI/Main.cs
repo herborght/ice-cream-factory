@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml;
 
 namespace SimulatorUI
 {
@@ -13,10 +14,11 @@ namespace SimulatorUI
         private IEnumerable<IModule> m_modules;
         private List<TankModule> tankList;
 
-        public Main(IParameterDataBase parameters, IEnumerable<IModule> modules)
+        public Main(IParameterDataBase parameters, IEnumerable<IModule> modules, string configFilePath)
         {
             m_parameters = parameters;
             m_modules = modules;
+            readConfig(configFilePath);
             initializeTanks();
         }
 
@@ -34,6 +36,61 @@ namespace SimulatorUI
             {
                 updateTanks();
                 await Task.Delay(1000);
+            }
+        }
+
+        private void readConfig(string configFilePath)
+        {
+            XmlDocument xDoc = new XmlDocument();
+            xDoc.Load(configFilePath);
+            XmlNode config = xDoc.LastChild.ChildNodes[0];
+            // var parameters = new ParameterDataBase(); 
+
+
+            foreach (XmlNode mod in config)
+            {
+                // outer loop runs for every module in config
+                Console.WriteLine("{0}", mod.Attributes["name"].Value);
+                foreach (XmlNode param in mod.ChildNodes)
+                {
+                    // inner loop runs for every parameter in the current module
+                    string name = param.InnerText;
+                    string type = param.LocalName;
+                    string from; // used as inoutchaining source
+
+                    switch (type)
+                    {
+                        case "AnalogInputParameter":
+                            // do stuff with parameter here, save in list etc
+                            Console.WriteLine("   Parameter name: {0}", name);
+                            Console.WriteLine("   Parameter type: {0}\n", type);
+                            break;
+                        case "AnalogOutputParameter":
+                            // do stuff with parameter here, save in list etc
+                            Console.WriteLine("   Parameter name: {0}", name);
+                            Console.WriteLine("   Parameter type: {0}\n", type);
+                            break;
+                        case "DigitalInputParameter":
+                            // do stuff with parameter here, save in list etc
+                            Console.WriteLine("   Parameter name: {0}", name);
+                            Console.WriteLine("   Parameter type: {0}\n", type);
+                            break;
+                        case "DigitalOutputParameter":
+                            // do stuff with parameter here, save in list etc
+                            Console.WriteLine("   Parameter name: {0}", name);
+                            Console.WriteLine("   Parameter type: {0}\n", type);
+                            break;
+                        case "InOutChaining":
+                            // do stuff with parameter here, save in list etc
+                            from = param.Attributes["from"].Value;
+                            Console.WriteLine("   Parameter name: {0}", name); //prints InFlow 
+                            Console.WriteLine("   Parameter type: {0}", type); //prints InOutChaining 
+                            Console.WriteLine("   Chaining source: {0}\n", from); //prints T1/OutFlow 
+                            break;
+                        default:
+                            continue;
+                    }
+                }
             }
         }
 
