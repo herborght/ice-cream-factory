@@ -16,8 +16,9 @@ namespace SimulatorUI
         public double LevelPercenatage { get; set; }
         public double Temperature { get; set; }
         public double Level { get; set; }
-        //double height { get; }
-        //double area { get; }
+        public double Height { get; set; }
+        public double BaseArea { get; set; }
+        public double OutletArea { get; set; }
         //public List<TankModule> InFlowTank; //will probably be needed later
         //public List<TankModule> OutFlowTank;
 

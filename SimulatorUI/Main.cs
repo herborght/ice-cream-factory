@@ -60,34 +60,48 @@ namespace SimulatorUI
             var tankList = new List<TankModule>();
 
             foreach (XmlNode mod in config)
-            {// outer loop runs for every module in config
+            {// Outer loop runs for every module in config
+                // Module properties
+                string m_name = mod.Attributes["name"].Value;
+                string m_baseArea = mod.Attributes["baseArea"].Value;
+                string m_outletArea = mod.Attributes["outletArea"].Value;
+                string m_height = mod.Attributes["height"].Value;
+                string m_type = mod.Attributes["type"].Value;
 
-                Console.WriteLine("Tank name: {0}", mod.Attributes["name"].Value);
-                var tank = new TankModule(mod.Attributes["name"].Value);
+                Console.WriteLine("Tank name: {0}", m_name);
+                Console.WriteLine(" baseArea: {0}", m_baseArea);
+                Console.WriteLine(" outletArea: {0}", m_outletArea);
+                Console.WriteLine(" height: {0}", m_height);
+                Console.WriteLine(" type: {0}\n", m_type);
+
+                var tank = new TankModule(m_name);
+                tank.BaseArea = double.Parse(m_baseArea);
+                tank.OutletArea = double.Parse(m_outletArea);
+                tank.Height = double.Parse(m_height);
 
                 foreach (XmlNode param in mod.ChildNodes)
-                {// inner loop runs for every parameter in the current module
+                {// Inner loop runs for every parameter in the current module
 
-                    string name = param.InnerText;
-                    string type = param.LocalName;
-                    string from; // used as inoutchaining source
+                    string p_name = param.InnerText;
+                    string p_type = param.LocalName;
+                    string from; // Used as InOutChaining source
 
-                    switch (type)
+                    switch (p_type)
                     {
                         case "AnalogInputParameter":
                         case "AnalogOutputParameter":
                         case "DigitalInputParameter":
                         case "DigitalOutputParameter":
-                            // do stuff with parameter here
-                            Console.WriteLine("   Parameter name: {0}", name);
-                            Console.WriteLine("   Parameter type: {0}\n", type);
+                            // Do stuff with parameter here
+                            Console.WriteLine("   Parameter name: {0}", p_name);
+                            Console.WriteLine("   Parameter type: {0}\n", p_type);
                             break;
                         case "InOutChaining":
-                            // do stuff with parameter here
+                            // Do stuff with parameter here
                             from = param.Attributes["from"].Value;
-                            Console.WriteLine("   Parameter name: {0}", name); //prints InFlow 
-                            Console.WriteLine("   Parameter type: {0}", type); //prints InOutChaining 
-                            Console.WriteLine("   Chaining source: {0}\n", from); //prints T1/OutFlow 
+                            Console.WriteLine("   Parameter name: {0}", p_name);
+                            Console.WriteLine("   Parameter type: {0}", p_type);
+                            Console.WriteLine("   Chaining source: {0}\n", from);
                             break;
                         default:
                             continue;
