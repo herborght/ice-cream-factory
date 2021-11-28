@@ -38,7 +38,7 @@ namespace SimulatorUI
                     msg += "Tank Information: " + "\n";
                     msg += "Name: " + tank.Name + "\n";
                     msg += "Level: " + Math.Round(tank.Level, 2) + "\n";
-                    msg += "Percent: " + Math.Round(tank.LevelPercenatage, 2) + "%" + "\n";
+                    msg += "Percent: " + Math.Round(tank.LevelPercentage, 2) + "%" + "\n";
                     msg += "Temperature: " + Math.Round(tank.Temperature, 2) + "\n";
                     msg += "InFlow: " + Math.Round(tank.InletFlow, 2) + "\n";
                     msg += "InFlow Temp: " + Math.Round(tank.InFlowTemp, 2) + "\n";

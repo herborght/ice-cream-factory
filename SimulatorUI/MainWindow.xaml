@@ -15,7 +15,6 @@
             <RowDefinition Height="30"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        <TextBlock Grid.Column="1" Grid.Row="1" x:Name="testBlock" TextWrapping="Wrap" Height="950" Width="750"/>
         <Border Grid.Column="1" Grid.RowSpan="2" BorderBrush="Black" BorderThickness="1,0,0,0"/>
         <StackPanel Orientation="Horizontal"  Background="DarkGray" Grid.Column="0" Grid.Row="0">
             <Image Width="32" Source="https://pics.freeicons.io/uploads/icons/png/17773426191535958157-512.png" />
@@ -76,11 +75,11 @@
                     </ComboBox>
                 </StackPanel>
             </StackPanel>
-            <Button Content="RawData" MinWidth="100" Click="SwitchView"/>
+            <Button Content="Switch View" MinWidth="80" Click="SwitchView" Margin="5"/>
         </StackPanel>
         <StackPanel Grid.Column="1" Grid.Row="1">
             <DockPanel>
-                <Frame x:Name="_mainFrame" />
+                <Frame x:Name="_mainFrame" NavigationUIVisibility="Hidden"/>
             </DockPanel>
         </StackPanel>
     </Grid>
