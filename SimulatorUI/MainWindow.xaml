@@ -5,8 +5,78 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SimulatorUI"
         mc:Ignorable="d"
-        Title="Ice Cream Factory" Height="1000" Width="900">
-    <Canvas x:Name="canvas">
-        
-    </Canvas>
+        Title="Ice Cream Factory" Height="1000" Width="800">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="auto"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <TextBlock Grid.Column="1" Grid.Row="1" x:Name="testBlock" TextWrapping="Wrap" Height="950" Width="750"/>
+        <Border Grid.Column="1" Grid.RowSpan="2" BorderBrush="Black" BorderThickness="1,0,0,0"/>
+        <StackPanel Orientation="Horizontal"  Background="DarkGray" Grid.Column="0" Grid.Row="0">
+            <Image Width="32" Source="https://pics.freeicons.io/uploads/icons/png/17773426191535958157-512.png" />
+            <TextBlock Text="Settings" FontSize="20" TextAlignment="Center"/>
+        </StackPanel>
+        <StackPanel Grid.Column="0" Grid.Row="1">
+            <StackPanel Orientation="Horizontal">
+                <Image Source="https://pics.freeicons.io/uploads/icons/png/2725159511543238876-512.png" Width="16"/>
+                <TextBlock 
+                Grid.Row="0" 
+                Text="Download simulation data" 
+                TextAlignment="Center"
+                />
+            </StackPanel>
+            <TextBlock 
+                Grid.Row="1" 
+                Text="-------------------------------" 
+                TextAlignment="Center"/>
+            <Border CornerRadius="10" BorderThickness="1" BorderBrush="Black" Grid.Row="2" Margin="5,5,0,5">
+                <StackPanel Orientation="Horizontal">
+                    <Image Width="15" Margin="5,0,0,0" Source="https://pics.freeicons.io/uploads/icons/png/13416400251535694869-512.png"/>
+                    <TextBox TextWrapping="Wrap" MaxWidth="120" Text="Search" BorderThickness="0"/>
+                </StackPanel>
+            </Border>
+            <StackPanel>
+                <CheckBox IsChecked="True">Tank temperature</CheckBox>
+                <CheckBox IsChecked="True">Tank capacity</CheckBox>
+                <CheckBox>Valve flowrate</CheckBox>
+                <CheckBox>Ambinent temperature</CheckBox>
+            </StackPanel>
+            <TextBlock 
+                Grid.Row="1" 
+                Text="-------------------------------" 
+                TextAlignment="Center"/>
+            <StackPanel>
+                <TextBlock Text="Simulation properties"/>
+                <RadioButton>Show more</RadioButton>
+                <RadioButton IsChecked="True">Show important</RadioButton>
+                <RadioButton>Show all</RadioButton>
+            </StackPanel>
+            <TextBlock 
+                Grid.Row="1" 
+                Text="-------------------------------" 
+                TextAlignment="Center"/>
+            <StackPanel>
+                <TextBlock Text="Other options"/>
+                <StackPanel Orientation="Horizontal">
+                    <ComboBox Margin="0,0,20,0">
+                        <ComboBoxItem IsSelected="True">Style</ComboBoxItem>
+                    </ComboBox>
+                    <ComboBox>
+                        <ComboBoxItem IsSelected="True">12px</ComboBoxItem>
+                        <ComboBoxItem IsSelected="False">14px</ComboBoxItem>
+                        <ComboBoxItem IsSelected="False">16px</ComboBoxItem>
+                        <ComboBoxItem IsSelected="False">18px</ComboBoxItem>
+                        <ComboBoxItem IsSelected="False">20px</ComboBoxItem>
+                        <ComboBoxItem IsSelected="False">22px</ComboBoxItem>
+                    </ComboBox>
+                </StackPanel>
+            </StackPanel>
+        </StackPanel>
+    </Grid>
+    
 </Window>
