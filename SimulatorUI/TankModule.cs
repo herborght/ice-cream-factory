@@ -13,7 +13,7 @@ namespace SimulatorUI
         public double InFlowTemp { get; set; }
         public double OutFlowTemp { get; set; }
         public double OutLetFlow { get; set; }
-        public double LevelPercenatage { get; set; }
+        public double LevelPercentage { get; set; }
         public double Temperature { get; set; }
         public double Level { get; set; }
         //double height { get; }
