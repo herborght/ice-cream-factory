@@ -15,7 +15,7 @@
             <RowDefinition Height="30"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        <TextBlock Grid.Column="1" Grid.Row="1" x:Name="testBlock" TextWrapping="Wrap" Height="950" Width="750"/>
+        <Canvas Grid.Column="1" Grid.Row="1" x:Name="canvas"/>
         <Border Grid.Column="1" Grid.RowSpan="2" BorderBrush="Black" BorderThickness="1,0,0,0"/>
         <StackPanel Orientation="Horizontal"  Background="DarkGray" Grid.Column="0" Grid.Row="0">
             <Image Width="32" Source="https://pics.freeicons.io/uploads/icons/png/17773426191535958157-512.png" />

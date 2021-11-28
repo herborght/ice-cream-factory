@@ -42,8 +42,8 @@ namespace SimulatorUI
             {
                 if (time == 3)
                 {
-                    fromTop += 100;
-                    time = 1;
+                    fromTop += 225;
+                    time = 0;
                 }
 
                 Rectangle rectangle = new Rectangle();
@@ -52,14 +52,14 @@ namespace SimulatorUI
                 SolidColorBrush blueBrush = new SolidColorBrush();
                 blueBrush.Color = Colors.Blue;
                 rectangle.Fill = blueBrush;
-                Canvas.SetLeft(rectangle, time * 250 + 50);
+                Canvas.SetLeft(rectangle, time * 210);
                 Canvas.SetTop(rectangle, fromTop);
 
                 TextBlock textBlock = new TextBlock();
-                textBlock.Width = 250;
+                textBlock.Width = 190;
                 textBlock.Height = height;
                 textBlock.Name = tank.Name;
-                Canvas.SetLeft(textBlock, time * 250 + 150);
+                Canvas.SetLeft(textBlock, time * 210 + 100);
                 Canvas.SetTop(textBlock, fromTop);
                 textBlock.TextWrapping = TextWrapping.Wrap;
                 textBlocks.Add(textBlock);
@@ -71,7 +71,7 @@ namespace SimulatorUI
                 SolidColorBrush red = new SolidColorBrush();
                 red.Color = Colors.White;
                 other.Fill = red;
-                Canvas.SetLeft(other, time * 250 + 50);
+                Canvas.SetLeft(other, time * 210);
                 Canvas.SetTop(other, fromTop);
                 other.StrokeThickness = 1;
                 other.Stroke = Brushes.Black;
@@ -122,12 +122,12 @@ namespace SimulatorUI
             msg += "Name: " + tank.Name + "\n";
             msg += "Level: " + Math.Round(tank.Level, 3) + "\n";
             msg += "Percent: " + Math.Round(tank.LevelPercentage, 3) + "%" + "\n";
-            msg += "Temperature: " + Math.Round(tank.Temperature, 3) + "\n";
+            msg += "Temp: " + Math.Round(tank.Temperature, 3) + "\n";
             msg += "InFlow: " + Math.Round(tank.InletFlow, 3) + "\n";
-            msg += "InFlow Temp: " + Math.Round(tank.InFlowTemp, 3) + "\n";
-            msg += "OutletFlow: " + Math.Round(tank.OutLetFlow, 3) + "\n";
-            msg += "OutletFlow Temp: " + Math.Round(tank.OutFlowTemp, 3) + "\n";
-            msg += tank.Name + " Dump Valve: " + tank.DumpValveOpen + "\n";
+            msg += "InFow Temp: " + Math.Round(tank.InFlowTemp, 3) + "\n";
+            msg += "OutFlow: " + Math.Round(tank.OutLetFlow, 3) + "\n";
+            msg += "OutFlw Temp: " + Math.Round(tank.OutFlowTemp, 3) + "\n";
+            msg += tank.Name + " Dmp. Valve: " + tank.DumpValveOpen + "\n";
             msg += tank.Name + " Out Valve: " + tank.OutValveOpen + "\n";
             msg += "\n";
             return msg;
