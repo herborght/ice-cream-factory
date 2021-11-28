@@ -18,8 +18,7 @@ namespace SimulatorUI
         {
             m_parameters = parameters;
             m_modules = modules;
-            readConfig(configFilePath);
-            initializeTanks();
+            initializeTanks(configFilePath);
         }
 
         public void Run()
@@ -37,23 +36,38 @@ namespace SimulatorUI
                 updateTanks();
                 await Task.Delay(1000);
             }
-        }
+        }      
 
-        private void readConfig(string configFilePath)
+        private void initializeTanks(string configFilePath)
+        {
+            tankList = readConfig(configFilePath);
+            
+            /*
+            tankList = new List<TankModule>();
+            foreach(IModule module in m_modules)
+            {
+                tankList.Add(new TankModule(module.Name));
+            }
+            */
+            updateTanks();
+        }
+        private List<TankModule> readConfig(string configFilePath)
         {
             XmlDocument xDoc = new XmlDocument();
             xDoc.Load(configFilePath);
             XmlNode config = xDoc.LastChild.ChildNodes[0];
-            // var parameters = new ParameterDataBase(); 
 
+            var tankList = new List<TankModule>();
 
             foreach (XmlNode mod in config)
-            {
-                // outer loop runs for every module in config
-                Console.WriteLine("{0}", mod.Attributes["name"].Value);
+            {// outer loop runs for every module in config
+
+                Console.WriteLine("Tank name: {0}", mod.Attributes["name"].Value);
+                var tank = new TankModule(mod.Attributes["name"].Value);
+
                 foreach (XmlNode param in mod.ChildNodes)
-                {
-                    // inner loop runs for every parameter in the current module
+                {// inner loop runs for every parameter in the current module
+
                     string name = param.InnerText;
                     string type = param.LocalName;
                     string from; // used as inoutchaining source
@@ -61,27 +75,15 @@ namespace SimulatorUI
                     switch (type)
                     {
                         case "AnalogInputParameter":
-                            // do stuff with parameter here, save in list etc
-                            Console.WriteLine("   Parameter name: {0}", name);
-                            Console.WriteLine("   Parameter type: {0}\n", type);
-                            break;
                         case "AnalogOutputParameter":
-                            // do stuff with parameter here, save in list etc
-                            Console.WriteLine("   Parameter name: {0}", name);
-                            Console.WriteLine("   Parameter type: {0}\n", type);
-                            break;
                         case "DigitalInputParameter":
-                            // do stuff with parameter here, save in list etc
-                            Console.WriteLine("   Parameter name: {0}", name);
-                            Console.WriteLine("   Parameter type: {0}\n", type);
-                            break;
                         case "DigitalOutputParameter":
-                            // do stuff with parameter here, save in list etc
+                            // do stuff with parameter here
                             Console.WriteLine("   Parameter name: {0}", name);
                             Console.WriteLine("   Parameter type: {0}\n", type);
                             break;
                         case "InOutChaining":
-                            // do stuff with parameter here, save in list etc
+                            // do stuff with parameter here
                             from = param.Attributes["from"].Value;
                             Console.WriteLine("   Parameter name: {0}", name); //prints InFlow 
                             Console.WriteLine("   Parameter type: {0}", type); //prints InOutChaining 
@@ -91,17 +93,9 @@ namespace SimulatorUI
                             continue;
                     }
                 }
+                tankList.Add(tank);
             }
-        }
-
-        private void initializeTanks()//Will be extended later with config file
-        {
-            tankList = new List<TankModule>();
-            foreach(IModule module in m_modules)
-            {
-                tankList.Add(new TankModule(module.Name));
-            }
-            updateTanks();
+            return tankList;
         }
 
         private void updateTanks()
