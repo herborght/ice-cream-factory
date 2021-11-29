@@ -35,6 +35,7 @@ namespace SimulatorUI
                 string msg = "";
                 foreach (TankModule tank in tankList) //Update with the config files
                 {
+                    /* Old version, doesnt display all properties correctly
                     msg += "Tank Information: " + "\n";
                     msg += "Name: " + tank.Name + "\n";
                     msg += "Level: " + Math.Round(tank.Level, 2) + "\n";
@@ -48,7 +49,24 @@ namespace SimulatorUI
                     msg += "Valve Information: " + "\n";
                     msg += tank.Name + " Dump Valve: " + tank.DumpValveOpen + "\n";
                     msg += tank.Name + " Out Valve: " + tank.OutValveOpen + "\n";
+                    */
 
+                    // Copied from SimulationPage.xaml.cs since all tanks' properties are displayed properly there
+                    msg += "\n";
+
+                    msg += "Tank Information: " + "\n";
+                    msg += "Name: " + tank.Name + "\n";
+                    msg += "Level: " + Math.Round(tank.Level, 3) + " m \n";
+                    msg += "Percent: " + Math.Round(tank.LevelPercentage, 3) + "%" + "\n";
+                    msg += "Temp: " + Math.Round(tank.Temperature, 3) + " K\n";
+                    msg += "InFlow: " + Math.Round(tank.InletFlow, 3) + " m3/s\n";
+                    msg += "InFow Temp: " + Math.Round(tank.InFlowTemp, 3) + " K \n";
+                    msg += "OutFlow: " + Math.Round(tank.OutLetFlow, 3) + " m3/s\n";
+                    msg += "OutFlw Temp: " + Math.Round(tank.OutFlowTemp, 3) + " K\n";
+                    msg += "\n";
+                    msg += "Valve Information: " + "\n";
+                    msg += tank.Name + " Dmp. Valve: " + tank.DumpValveOpen + "\n";
+                    msg += tank.Name + " Out Valve: " + tank.OutValveOpen + "\n";
                     msg += "\n";
                 }
                 if (uiAccess)
