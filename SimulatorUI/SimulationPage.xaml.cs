@@ -47,7 +47,7 @@ namespace SimulatorUI
                 }
 
                 Rectangle rectangle = new Rectangle();
-                rectangle.Width = 100;
+                rectangle.Width = 75;
                 rectangle.Height = height;
                 SolidColorBrush blueBrush = new SolidColorBrush();
                 blueBrush.Color = Colors.Blue;
@@ -59,10 +59,10 @@ namespace SimulatorUI
                 textBlock.Width = 250;
                 textBlock.Height = height;
                 textBlock.Name = tank.Name;
+                textBlock.Margin = new Thickness(5);
                 Canvas.SetLeft(textBlock, time * 190 + 75);
                 Canvas.SetTop(textBlock, fromTop);
                 textBlock.TextWrapping = TextWrapping.Wrap;
-                textBlock.Margin = new Thickness(5);
                 textBlocks.Add(textBlock);
 
                 Rectangle other = new Rectangle();
