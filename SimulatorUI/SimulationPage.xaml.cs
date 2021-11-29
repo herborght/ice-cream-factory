@@ -47,31 +47,31 @@ namespace SimulatorUI
                 }
 
                 Rectangle rectangle = new Rectangle();
-                rectangle.Width = 100;
+                rectangle.Width = 75;
                 rectangle.Height = height;
                 SolidColorBrush blueBrush = new SolidColorBrush();
                 blueBrush.Color = Colors.Blue;
                 rectangle.Fill = blueBrush;
-                Canvas.SetLeft(rectangle, time * 210);
+                Canvas.SetLeft(rectangle, time * 190);
                 Canvas.SetTop(rectangle, fromTop);
 
                 TextBlock textBlock = new TextBlock();
                 textBlock.Width = 190;
                 textBlock.Height = height;
                 textBlock.Name = tank.Name;
-                Canvas.SetLeft(textBlock, time * 210 + 100);
+                Canvas.SetLeft(textBlock, time * 190 + 75);
                 Canvas.SetTop(textBlock, fromTop);
                 textBlock.TextWrapping = TextWrapping.Wrap;
                 textBlocks.Add(textBlock);
 
                 Rectangle other = new Rectangle();
                 other.Uid = tank.Name;
-                other.Width = 100;
+                other.Width = 75;
                 other.Height = 200;
                 SolidColorBrush red = new SolidColorBrush();
                 red.Color = Colors.White;
                 other.Fill = red;
-                Canvas.SetLeft(other, time * 210);
+                Canvas.SetLeft(other, time * 190);
                 Canvas.SetTop(other, fromTop);
                 other.StrokeThickness = 1;
                 other.Stroke = Brushes.Black;
