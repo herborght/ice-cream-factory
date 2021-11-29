@@ -13,7 +13,7 @@
             <RowDefinition Height="40"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        <TextBlock Grid.Row="0" Text="Simulation" HorizontalAlignment="Center" VerticalAlignment="Top" FontSize="22" />
+        <TextBlock Grid.Row="0" Text="Simulation" HorizontalAlignment="Center" VerticalAlignment="Top" FontSize="20" Margin="10,10,0,0" />
         <Canvas Grid.Column="1" Grid.Row="1" x:Name="canvas" Margin="50 5 0 0"/>
     </Grid>
 </Page>

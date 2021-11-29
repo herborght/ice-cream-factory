@@ -15,15 +15,18 @@
             <RowDefinition Height="30"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        <Border Grid.Column="1" Grid.RowSpan="2" BorderBrush="Black" BorderThickness="1,0,0,0"/>
-        <StackPanel Orientation="Horizontal" Grid.Column="0" Grid.Row="0" Background="#f0efeb">
-            <Image Width="32" Source="https://pics.freeicons.io/uploads/icons/png/17773426191535958157-512.png" />
+        <Border Grid.Column="1" Grid.RowSpan="2" BorderBrush="Black" BorderThickness="2,0,0,0" Panel.ZIndex="1"/>
+        <Border Grid.Row="0" Grid.ColumnSpan="2" BorderBrush="Black" BorderThickness="0,0,0,2" Panel.ZIndex="1"/>
+        <StackPanel Orientation="Horizontal" Grid.Column="0" Grid.Row="0" Background="#FFCBCBCB">
+            <Image Width="25" Source="/SimulatorUI;component/assets/settings-17-512.png" Margin="5,0,5,0" />
             <TextBlock Text="Settings" FontSize="20" TextAlignment="Center"/>
         </StackPanel>
         
+        
+        
         <StackPanel Grid.Column="0" Grid.Row="1" Background="#e2ece9">
             <StackPanel Orientation="Horizontal" Margin="10">
-                <Image Source="https://pics.freeicons.io/uploads/icons/png/2725159511543238876-512.png" Width="16"/>
+                <Image Source="https://pics.freeicons.io/uploads/icons/png/2725159511543238876-512.png" Width="16" Margin="0,0,5,0"/>
                 <TextBlock 
                 Grid.Row="0" 
                 Text="Download simulation data" 
@@ -32,24 +35,24 @@
             </StackPanel>
             <TextBlock 
                 Grid.Row="1" 
-                Text="-------------------------------" 
-                TextAlignment="Center"/>
-            <Border CornerRadius="10" BorderThickness="1" BorderBrush="Black" Grid.Row="2" Margin="5,5,5,5">
+                Text="-----------------------------" 
+                TextAlignment="Center" FontSize="14" FontWeight="Bold"/>
+            <Border CornerRadius="10" BorderThickness="1.5" BorderBrush="Black" Grid.Row="2" Margin="5,5,5,5">
                 <StackPanel Orientation="Horizontal">
                     <Image Width="15" Margin="5,0,0,0" Source="https://pics.freeicons.io/uploads/icons/png/13416400251535694869-512.png"/>
-                    <TextBox TextWrapping="Wrap" MaxWidth="120" Text="Search" Background="#e2ece9" BorderThickness="0"/>
+                    <TextBox TextWrapping="Wrap" MaxWidth="120" Text="Search" Background="#e2ece9" BorderThickness="0" Opacity="0.5"/>
                 </StackPanel>
             </Border>
             <StackPanel Margin="0 10">
                 <CheckBox IsChecked="True" Margin="5 5">Tank temperature</CheckBox>
                 <CheckBox IsChecked="True" Margin="5 5 ">Tank capacity</CheckBox>
-                <CheckBox Margin="5 5">Valve flowrate</CheckBox>
+                <CheckBox IsChecked="True" Margin="5 5">Valve flowrate</CheckBox>
                 <CheckBox Margin="5 5">Ambinent temperature</CheckBox>
             </StackPanel>
             <TextBlock 
                 Grid.Row="1" 
-                Text="-------------------------------" 
-                TextAlignment="Center"/>
+                Text="-----------------------------" 
+                TextAlignment="Center" FontWeight="Bold" FontSize="14"/>
             <StackPanel Margin="0 10">
                 <TextBlock Text="Simulation properties" Margin="5 5"/>
                 <RadioButton Margin="5 5">Show more</RadioButton>
@@ -58,8 +61,8 @@
             </StackPanel>
             <TextBlock 
                 Grid.Row="1" 
-                Text="-------------------------------" 
-                TextAlignment="Center"/>
+                Text="-----------------------------" 
+                TextAlignment="Center" FontSize="14" FontWeight="Bold"/>
             <StackPanel Margin="0 10">
                 <TextBlock Text="Other options" Margin="5 5"/>
                 <StackPanel Orientation="Horizontal" Margin="5 5">
@@ -85,6 +88,13 @@
                 <Frame x:Name="_mainFrame" NavigationUIVisibility="Hidden"/>
             </DockPanel>
         </StackPanel>
+
+        
+        <StackPanel Grid.Column="1" Grid.Row="0" Background="#FFCBCBCB">
+            <TextBlock Text="Current Simulation: TankConfigSim" FontSize="20" FontWeight="Normal" Margin="8,0,0,0"/>
+            
+        </StackPanel>
+        
     </Grid>
     
 </Window>
