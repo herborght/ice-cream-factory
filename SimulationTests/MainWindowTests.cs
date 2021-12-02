@@ -24,7 +24,8 @@ namespace SimulationTests
         more advanced. */
         public void SwitchViewTest()
         {
-            MainWindow mainWindow = new MainWindow(tankList);
+            MainWindow mainWindow = new MainWindow(tankList); 
+            //denne sender jo bare innen tom liste
 
             expectedCurr = mainWindow.currentPage;
             mainWindow.SwitchView(sender, e);
