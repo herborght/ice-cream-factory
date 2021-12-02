@@ -125,11 +125,20 @@ namespace SimulatorUI
             msg += "Name: " + tank.Name + "\n";
             msg += "Level: " + Math.Round(tank.Level, 3) + " m \n";
             msg += "Percent: " + Math.Round(tank.LevelPercentage, 3) + "%" + "\n";
-            msg += "Temp: " + Math.Round(tank.Temperature, 3) + " K\n";
-            msg += "InFlow: " + Math.Round(tank.InletFlow, 3) + " m3/s\n";
-            msg += "InFow Temp: " + Math.Round(tank.InFlowTemp, 3) + " K \n";
-            msg += "OutFlow: " + Math.Round(tank.OutLetFlow, 3) + " m3/s\n";
-            msg += "OutFlw Temp: " + Math.Round(tank.OutFlowTemp, 3) + " K\n";
+            msg += "Temp: " + Math.Round(tank.Temperature, 3) + "\n";
+            if(tank.InFlowTanks.Count > 0)
+            {
+                msg += "InFlow from: ";
+                foreach(var t in tank.InFlowTanks)
+                {
+                    msg += t.Name + " ";
+                }
+                msg += "\n";
+            }
+            msg += "InFlow: " + Math.Round(tank.InletFlow, 3) + "K\n";
+            msg += "InFow Temp: " + Math.Round(tank.InFlowTemp, 3) + "m3/s\n";
+            msg += "OutFlow: " + Math.Round(tank.OutLetFlow, 3) + "K\n";
+            msg += "OutFlw Temp: " + Math.Round(tank.OutFlowTemp, 3) + "K\n";
             msg += tank.Name + " Dmp. Valve: " + tank.DumpValveOpen + "\n";
             msg += tank.Name + " Out Valve: " + tank.OutValveOpen + "\n";
             msg += "\n";

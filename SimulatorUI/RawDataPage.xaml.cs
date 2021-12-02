@@ -33,7 +33,7 @@ namespace SimulatorUI
 
                 bool uiAccess = testBlock.Dispatcher.CheckAccess();
                 string msg = "";
-                foreach (TankModule tank in tankList) //Update with the config files
+                foreach (TankModule tank in tankList)
                 {
                     /* Old version, doesnt display all properties correctly
                     msg += "Tank Information: " + "\n";
@@ -41,6 +41,15 @@ namespace SimulatorUI
                     msg += "Level: " + Math.Round(tank.Level, 2) + "\n";
                     msg += "Percent: " + Math.Round(tank.LevelPercentage, 2) + "%" + "\n";
                     msg += "Temperature: " + Math.Round(tank.Temperature, 2) + "\n";
+                    if (tank.InFlowTanks.Count > 0)
+                    {
+                        msg += "InFlow from: ";
+                        foreach (var t in tank.InFlowTanks)
+                        {
+                            msg += t.Name + " ";
+                        }
+                        msg += "\n";
+                    }
                     msg += "InFlow: " + Math.Round(tank.InletFlow, 2) + "\n";
                     msg += "InFlow Temp: " + Math.Round(tank.InFlowTemp, 2) + "\n";
                     msg += "OutletFlow: " + Math.Round(tank.OutLetFlow, 2) + "\n";

@@ -52,7 +52,7 @@ namespace ABB.InSecTT.SimulatorEnv
             var r = Task.Run(() => menuHandler.HandleCommand());
 
             // Start UI:
-            RunApplication(parameters, modules);
+            RunApplication(parameters, modules, args[0]);
 
             r.Wait();
             SimulationEventSource.Log.ExecutionStop();
@@ -103,12 +103,12 @@ namespace ABB.InSecTT.SimulatorEnv
             }
         }
 
-        private static void RunApplication(IParameterDataBase parameters, IEnumerable<IModule> modules)
+        private static void RunApplication(IParameterDataBase parameters, IEnumerable<IModule> modules, string configFilePath)
         {
             //var application = new System.Windows.Application();
             //application.Run(new SimulatorUITest.SimulationWindow(parameters, modules));
 
-            var app2 = new SimulatorUI.Main(parameters, modules);
+            var app2 = new SimulatorUI.Main(parameters, modules, configFilePath);
             app2.Run();
         }
 

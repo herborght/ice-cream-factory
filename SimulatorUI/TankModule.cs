@@ -16,14 +16,16 @@ namespace SimulatorUI
         public double LevelPercentage { get; set; }
         public double Temperature { get; set; }
         public double Level { get; set; }
-        //double height { get; }
-        //double area { get; }
-        //public List<TankModule> InFlowTank; //will probably be needed later
-        //public List<TankModule> OutFlowTank;
+        public double Height { get; set; }
+        public double BaseArea { get; set; }
+        public double OutletArea { get; set; }
+
+        public List<TankModule> InFlowTanks;
 
         public TankModule(string tankName)
         {
             Name = tankName;
+            InFlowTanks = new List<TankModule>();
         }
     }
 }
