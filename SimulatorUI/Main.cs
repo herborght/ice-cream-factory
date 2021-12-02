@@ -106,9 +106,14 @@ namespace SimulatorUI
                         case "InOutChaining":
                             // Add the chaining source tank to InFlowTanks list
                             from = param.Attributes["from"].Value;
-                            TankModule inFlowSourceTank = tankList.Find(tank => tank.Name.Equals(from.Split('/')[0]));
-                            tank.InFlowTanks.Add(inFlowSourceTank);
+                            TankModule inFlowSourceTank = tankList.Find(t => t.Name.Equals(from.Split('/')[0]));
 
+                            // First check if the inflowsource already exists in the list, to avoid duplicates
+                            if(!tank.InFlowTanks.Exists(t => t.Name.Equals(inFlowSourceTank.Name)))
+                            {
+                                tank.InFlowTanks.Add(inFlowSourceTank);
+                            }                         
+                            //Console.WriteLine("{0}", tank.InFlowTanks.Count);
                             /*
                             Console.WriteLine("   Parameter name: {0}", p_name);
                             Console.WriteLine("   Parameter type: {0}", p_type);
