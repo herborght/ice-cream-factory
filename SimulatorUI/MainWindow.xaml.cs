@@ -34,14 +34,17 @@ namespace SimulatorUI
         private void SwitchView(object sender, RoutedEventArgs e)
         {
             if (currentPage is SimulationPage) {
+
                 Page newPage = new RawDataPage(tankList);
                 currentPage = newPage;
+                Filter.Visibility = Visibility.Visible;
                 _mainFrame.Content = newPage;
             }
             else
             {
                 Page newPage = new SimulationPage(tankList);
                 currentPage = newPage;
+                Filter.Visibility = Visibility.Collapsed;
                 _mainFrame.Content = newPage;
             }
 
