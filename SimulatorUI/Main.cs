@@ -104,8 +104,11 @@ namespace SimulatorUI
                             */
                             break;
                         case "InOutChaining":
-                            // Do stuff with parameter here
+                            // Add the chaining source tank to InFlowTanks list
                             from = param.Attributes["from"].Value;
+                            TankModule inFlowSourceTank = tankList.Find(tank => tank.Name.Equals(from.Split('/')[0]));
+                            tank.InFlowTanks.Add(inFlowSourceTank);
+
                             /*
                             Console.WriteLine("   Parameter name: {0}", p_name);
                             Console.WriteLine("   Parameter type: {0}", p_type);
