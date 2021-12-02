@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
+using System.Globalization;
 
 namespace SimulatorUI
 {
@@ -63,21 +64,25 @@ namespace SimulatorUI
             {// Outer loop runs for every module in config
                 // Module properties
                 string m_name = mod.Attributes["name"].Value;
-                string m_baseArea = mod.Attributes["baseArea"].Value;
-                string m_outletArea = mod.Attributes["outletArea"].Value;
-                string m_height = mod.Attributes["height"].Value;
-                string m_type = mod.Attributes["type"].Value;
+                string m_type = mod.Attributes["type"].Value;             
+            
+                // Parse and convert values to use comma separator instead of decimal point separator
+                double.TryParse(mod.Attributes["baseArea"].Value, NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture, out double m_baseArea);
+                double.TryParse(mod.Attributes["outletArea"].Value, NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture, out double m_outletArea);
+                double.TryParse(mod.Attributes["height"].Value, NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture, out double m_height);
 
+                var tank = new TankModule(m_name);
+                tank.BaseArea = m_baseArea;
+                tank.OutletArea = m_outletArea;
+                tank.Height = m_height;             
+
+                /*
                 Console.WriteLine("Tank name: {0}", m_name);
                 Console.WriteLine(" baseArea: {0}", m_baseArea);
                 Console.WriteLine(" outletArea: {0}", m_outletArea);
                 Console.WriteLine(" height: {0}", m_height);
                 Console.WriteLine(" type: {0}\n", m_type);
-
-                var tank = new TankModule(m_name);
-                tank.BaseArea = double.Parse(m_baseArea);
-                tank.OutletArea = double.Parse(m_outletArea);
-                tank.Height = double.Parse(m_height);
+                */
 
                 foreach (XmlNode param in mod.ChildNodes)
                 {// Inner loop runs for every parameter in the current module
@@ -93,15 +98,19 @@ namespace SimulatorUI
                         case "DigitalInputParameter":
                         case "DigitalOutputParameter":
                             // Do stuff with parameter here
+                            /*
                             Console.WriteLine("   Parameter name: {0}", p_name);
                             Console.WriteLine("   Parameter type: {0}\n", p_type);
+                            */
                             break;
                         case "InOutChaining":
                             // Do stuff with parameter here
                             from = param.Attributes["from"].Value;
+                            /*
                             Console.WriteLine("   Parameter name: {0}", p_name);
                             Console.WriteLine("   Parameter type: {0}", p_type);
                             Console.WriteLine("   Chaining source: {0}\n", from);
+                            */
                             break;
                         default:
                             continue;
