@@ -138,7 +138,7 @@ namespace ABB.InSecTT.SimulatorEnv
             ChangeParameter("T1/InFlow:0,075", parameters);
 
             // wait while t1 is filling, total wait time is [wait] amount of seconds
-            int wait = 10;
+            int wait = 15;
             for (int i = 0; i < wait; i++)
             {
                 Thread.Sleep(1000);
