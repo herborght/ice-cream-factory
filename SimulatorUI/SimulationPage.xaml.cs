@@ -20,10 +20,10 @@ namespace SimulatorUI
     public partial class SimulationPage : Page
     {
         List<TankModule> tankList;
-        List<Rectangle> barList;
+        List<Rectangle> barList; //List of the rectangles visualizing the tank level
         List<TextBlock> textBlocks;
-        List<KeyValuePair<string, KeyValuePair<int, Point>>> pointList;
-        List<Ellipse> connectedValves;
+        List<KeyValuePair<string, KeyValuePair<int, Point>>> pointList; //The points of connectections for the tanks
+        List<Ellipse> connectedValves; //The visualization of the valves
         public SimulationPage(List<TankModule> list)
         {
             tankList = list;
@@ -52,7 +52,7 @@ namespace SimulatorUI
                     rows++;
                 }
 
-                Rectangle rectangle = new Rectangle();
+                Rectangle rectangle = new Rectangle(); //The rectangle for visualizing the tank level
                 rectangle.Width = 75;
                 rectangle.Height = height;
                 SolidColorBrush blueBrush = new SolidColorBrush();
@@ -63,7 +63,7 @@ namespace SimulatorUI
                 rectangle.StrokeThickness = 2;
                 rectangle.Stroke = Brushes.Black;
 
-                TextBlock textBlock = new TextBlock();
+                TextBlock textBlock = new TextBlock(); //Textblock for the raw data
                 textBlock.Width = 250;
                 textBlock.Height = height;
                 textBlock.Name = tank.Name;
@@ -73,7 +73,7 @@ namespace SimulatorUI
                 textBlock.TextWrapping = TextWrapping.Wrap;
                 textBlocks.Add(textBlock);
 
-                Rectangle other = new Rectangle();
+                Rectangle other = new Rectangle(); //The rectangle showing how empty the tank is 
                 other.Uid = tank.Name;
                 other.Width = 75;
                 other.Height = 200;
@@ -86,10 +86,10 @@ namespace SimulatorUI
                 other.Stroke = Brushes.Black;
                 barList.Add(other);
 
-                Point point = new Point();
+                Point point = new Point();//The point at which the tank will have its connections
                 point.X = time * 190 + 37.5;
                 point.Y = fromTop + height;
-                KeyValuePair<string, KeyValuePair<int, Point>> keyValuePair = new KeyValuePair<string, KeyValuePair<int, Point>>(tank.Name, new KeyValuePair<int, Point>(rows, point));
+                KeyValuePair<string, KeyValuePair<int, Point>> keyValuePair = new KeyValuePair<string, KeyValuePair<int, Point>>(tank.Name, new KeyValuePair<int, Point>(rows, point)); //Added in this way to get which row they are on
 
                 pointList.Add(keyValuePair);
 
@@ -104,7 +104,7 @@ namespace SimulatorUI
             {
                 foreach(TankModule connected in tank.InFlowTanks) //This is a bit backward initial is the destination of the connection while target is the source
                 {
-                    KeyValuePair<int, Point> initialPair = pointList.Find(x => x.Key == tank.Name).Value;
+                    KeyValuePair<int, Point> initialPair = pointList.Find(x => x.Key == tank.Name).Value; //The pairs are used to access the rows and points for the lines
                     KeyValuePair<int, Point> targetPair = pointList.Find(x => x.Key == connected.Name).Value;
                     int initialRow = initialPair.Key;
                     times[initialRow]++;
@@ -113,35 +113,40 @@ namespace SimulatorUI
                     {
                         times[targetRow]++;
                     }
-                    Polyline line = new Polyline();
+                    Polyline line = new Polyline(); //Used to visualize the connections between each tank
                     line.Stroke = Brushes.Black;
-                    PointCollection points = new PointCollection();
+                    PointCollection points = new PointCollection(); //Used to specify the points of the line
                     Point initial = initialPair.Value;
                     Point target = targetPair.Value;
                     points.Add(initial);
-                    Ellipse ellipse = new Ellipse();
+                    Ellipse ellipse = new Ellipse(); //Used to visualize the valves
                     ellipse.Width = 10;
                     ellipse.Height = 10;
                     ellipse.Fill = Brushes.Black;
                     ellipse.StrokeThickness = 2;
                     ellipse.Stroke = Brushes.Black;
-                    ellipse.Uid = tank.Name + "_" + connected.Name;
+                    ellipse.Uid = tank.Name + "_" + connected.Name; //ID for the valves
                     connectedValves.Add(ellipse);
+                    TextBlock label = new TextBlock(); //Label for which valve it is
+                    label.Text = connected.Name + "->" + tank.Name;
 
-                    if (initial.Y == target.Y)
+                    if (initialRow == targetRow)
                     {
                         Point first = new Point();
-                        first.Y = initial.Y + times[initialRow] * 10;
+                        first.Y = initial.Y + times[initialRow] * 10; //Make the lines look more seperate
                         first.X = initial.X;
                         Point second = new Point();
                         second.Y = first.Y;
                         second.X = target.X;
                         points.Add(first);
-                        points.Add(second);                    
+                        points.Add(second);
+
                         Canvas.SetLeft(ellipse, first.X + (second.X - first.X) / 2);
                         Canvas.SetTop(ellipse, first.Y - 5);
+                        Canvas.SetLeft(label, first.X + (second.X - first.X) / 2 - 15);
+                        Canvas.SetTop(label, first.Y - 20);
                     }
-                    else
+                    else //if the target is not in the same row it will use 4 points instead of 2
                     {
                         Point first = new Point();
                         first.Y = initial.Y + times[initialRow] * 10;
@@ -161,11 +166,14 @@ namespace SimulatorUI
                         points.Add(fourth);
                         Canvas.SetLeft(ellipse, third.X - 5);
                         Canvas.SetTop(ellipse, second.Y + (third.Y - second.Y) / 2);
+                        Canvas.SetLeft(label, third.X + 10);
+                        Canvas.SetTop(label, second.Y + (third.Y - second.Y) / 2); ;
                     }
                     points.Add(target);
                     line.Points = points;
                     canvas.Children.Add(line);
                     canvas.Children.Add(ellipse);
+                    canvas.Children.Add(label);
                 }
             }
         }
