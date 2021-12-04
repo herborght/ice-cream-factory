@@ -24,6 +24,7 @@ namespace SimulatorUI
         List<TextBlock> textBlocks;
         List<KeyValuePair<string, KeyValuePair<int, Point>>> pointList; //The points of connectections for the tanks
         List<Ellipse> connectedValves; //The visualization of the valves
+        List<Ellipse> dumpValves; 
         public SimulationPage(List<TankModule> list)
         {
             tankList = list;
@@ -43,6 +44,7 @@ namespace SimulatorUI
             textBlocks = new List<TextBlock>();
             pointList = new List<KeyValuePair<string, KeyValuePair<int, Point>>>();
             connectedValves = new List<Ellipse>();
+            dumpValves = new List<Ellipse>();
             foreach (TankModule tank in tankList)
             {
                 if (time == 3)
@@ -91,11 +93,23 @@ namespace SimulatorUI
                 point.Y = fromTop + height;
                 KeyValuePair<string, KeyValuePair<int, Point>> keyValuePair = new KeyValuePair<string, KeyValuePair<int, Point>>(tank.Name, new KeyValuePair<int, Point>(rows, point)); //Added in this way to get which row they are on
 
+                Ellipse dumpValve = new Ellipse(); //Dump valves will probably have to improve the visuals of these, or change their position not really intuitive 
+                dumpValve.Width = 10;
+                dumpValve.Height = 10;
+                dumpValve.Fill = Brushes.Black;
+                dumpValve.StrokeThickness = 2;
+                dumpValve.Stroke = Brushes.Black;
+                dumpValve.Uid = "d_"+tank.Name;
+                Canvas.SetLeft(dumpValve, time * 190 - 10);
+                Canvas.SetTop(dumpValve, fromTop + height / 2);
+                dumpValves.Add(dumpValve);
+
                 pointList.Add(keyValuePair);
 
                 canvas.Children.Add(rectangle);
                 canvas.Children.Add(other);
                 canvas.Children.Add(textBlock);
+                canvas.Children.Add(dumpValve);
 
                 time++;
             }
@@ -184,29 +198,25 @@ namespace SimulatorUI
             {
                 foreach (Rectangle r in barList)
                 {
-                    bool uiAccess = r.Dispatcher.CheckAccess();
-                    if (uiAccess)// as it is a async task it needs to check permissions
+                    r.Dispatcher.Invoke(() =>
                     {
                         string name = r.Uid;
                         TankModule current = tankList.Find(x => x.Name == name);
-                        r.Height = 200 - 200 * current.LevelPercentage / 100;//Canvas seems to see height from top to down
-                    }
-                    else
-                    {
-                        r.Dispatcher.Invoke(() => { r.Height = 200 - 200 * tankList.Find(x => x.Name == r.Uid).LevelPercentage / 100; });
-                    }
+                        r.Height = 200 - 200 * current.LevelPercentage / 100;
+                    });
+
                 }
                 foreach (Ellipse v in connectedValves)
                 {
-                    bool uiAccess = v.Dispatcher.CheckAccess();
-                    if (uiAccess)// as it is a async task it needs to check permissions
+
+                    v.Dispatcher.Invoke(() =>
                     {
                         string name = v.Uid;
                         TankModule target = tankList.Find(x => x.Name == name.Split('_')[0]);
                         TankModule source = target.InFlowTanks.Find(x => x.Name == name.Split('_')[1]);
                         if (source != null)
                         {
-                            if(source.OutValveOpen && target.InletFlow > 0)
+                            if (source.OutValveOpen && target.InletFlow > 0)
                             {
                                 v.Fill = Brushes.White;
                             }
@@ -215,62 +225,69 @@ namespace SimulatorUI
                                 v.Fill = Brushes.Black;
                             }
                         }
-
-                    }
-                    else
-                    {
-                        v.Dispatcher.Invoke(() => {
-                            string name = v.Uid;
-                            TankModule target = tankList.Find(x => x.Name == name.Split('_')[0]);
-                            TankModule source = target.InFlowTanks.Find(x => x.Name == name.Split('_')[1]);
-                            if (source != null)
-                            {
-                                if (source.OutValveOpen && target.InletFlow > 0)
-                                {
-                                    v.Fill = Brushes.White;
-                                }
-                                else
-                                {
-                                    v.Fill = Brushes.Black;
-                                }
-                            }
-                        });
-                    }
+                    });
                 }
-                //foreach (TextBlock textBlock in textBlocks)
-                //{
-                //    bool uiAccess = textBlock.Dispatcher.CheckAccess();
-                //    if (uiAccess)
-                //        textBlock.Text = getTankInfo(textBlock.Name);
-                //    else
-                //        textBlock.Dispatcher.Invoke(() => { textBlock.Text = getTankInfo(textBlock.Name); });
-                //}
-                await Task.Delay(1000);
+                foreach (Ellipse v in dumpValves)
+                {
+
+                    v.Dispatcher.Invoke(() =>
+                    {
+                        string name = v.Uid;
+                        TankModule target = tankList.Find(x => x.Name == name.Split('_')[1]);
+                        if (target.DumpValveOpen)
+                        {
+                            v.Fill = Brushes.White;
+                        }
+                        else
+                        {
+                            v.Fill = Brushes.Black;
+                        }
+                    });
+                }
             }
+            //foreach (TextBlock textBlock in textBlocks)
+            //{
+            //    bool uiAccess = textBlock.Dispatcher.CheckAccess();
+            //    if (uiAccess)
+            //        textBlock.Text = getTankInfo(textBlock.Name);
+            //    else
+            //        textBlock.Dispatcher.Invoke(() => { textBlock.Text = getTankInfo(textBlock.Name); });
+            //}
+            await Task.Delay(1000);
         }
         private string getTankInfo(string name)
         {
+            //string msg = "";
+            //TankModule tank = tankList.Find(x => x.Name == name);
+            //msg += "Name: " + tank.Name + "\n";
+            //msg += "Level: " + Math.Round(tank.Level, 3) + " m \n";
+            //msg += "Percent: " + Math.Round(tank.LevelPercentage, 3) + "%" + "\n";
+            //msg += "Temp: " + Math.Round(tank.Temperature, 3) + "\n";
+            //if(tank.InFlowTanks.Count > 0)
+            //{
+            //    msg += "InFlow from: ";
+            //    foreach(var t in tank.InFlowTanks)
+            //    {
+            //        msg += t.Name + " ";
+            //    }
+            //    msg += "\n";
+            //}
+            //msg += "InFlow: " + Math.Round(tank.InletFlow, 3) + "m3/s\n"; 
+            //msg += "InFow Temp: " + Math.Round(tank.InFlowTemp, 3) + "K\n";
+            //msg += "OutFlow: " + Math.Round(tank.OutLetFlow, 3) + "K\n";
+            //msg += "OutFlw Temp: " + Math.Round(tank.OutFlowTemp, 3) + "K\n";
+            //msg += tank.Name + " Dmp. Valve: " + tank.DumpValveOpen + "\n";
+            //msg += tank.Name + " Out Valve: " + tank.OutValveOpen + "\n";
+            //msg += "\n";
+            //return msg;
             string msg = "";
             TankModule tank = tankList.Find(x => x.Name == name);
             msg += "Name: " + tank.Name + "\n";
-            msg += "Level: " + Math.Round(tank.Level, 3) + " m \n";
             msg += "Percent: " + Math.Round(tank.LevelPercentage, 3) + "%" + "\n";
             msg += "Temp: " + Math.Round(tank.Temperature, 3) + "\n";
-            if(tank.InFlowTanks.Count > 0)
-            {
-                msg += "InFlow from: ";
-                foreach(var t in tank.InFlowTanks)
-                {
-                    msg += t.Name + " ";
-                }
-                msg += "\n";
-            }
-            msg += "InFlow: " + Math.Round(tank.InletFlow, 3) + "m3/s\n"; 
-            msg += "InFow Temp: " + Math.Round(tank.InFlowTemp, 3) + "K\n";
-            msg += "OutFlow: " + Math.Round(tank.OutLetFlow, 3) + "K\n";
-            msg += "OutFlw Temp: " + Math.Round(tank.OutFlowTemp, 3) + "K\n";
+            msg += "InFlow: " + Math.Round(tank.InletFlow, 3) + "m3/s\n";
+            msg += "OutFlow: " + Math.Round(tank.OutLetFlow, 3) + "m3/s\n";
             msg += tank.Name + " Dmp. Valve: " + tank.DumpValveOpen + "\n";
-            msg += tank.Name + " Out Valve: " + tank.OutValveOpen + "\n";
             msg += "\n";
             return msg;
         }
