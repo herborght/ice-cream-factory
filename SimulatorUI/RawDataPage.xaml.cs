@@ -76,6 +76,15 @@ namespace SimulatorUI
                     msg += "Valve Information: " + "\n";
                     msg += tank.Name + " Dmp. Valve: " + tank.DumpValveOpen + "\n";
                     msg += tank.Name + " Out Valve: " + tank.OutValveOpen + "\n";
+                    if (tank.InFlowTanks.Count > 0)
+                    {
+                        msg += "InFlow from: ";
+                        foreach (var t in tank.InFlowTanks)
+                        {
+                            msg += t.Name + " ";
+                        }
+                        msg += "\n";
+                    }
                     msg += "\n";
                 }
                 if (uiAccess)
