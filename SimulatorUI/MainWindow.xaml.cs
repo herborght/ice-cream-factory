@@ -49,6 +49,12 @@ namespace SimulatorUI
             }
 
         }
+        private void Download(object sender, RoutedEventArgs e)
+        {
+            //Add functionality to download
+            String firstDate = fromDate.SelectedDate.ToString();
+            String SecondDate = toDate.SelectedDate.ToString();
+        }
 
     }
 }

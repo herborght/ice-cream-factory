@@ -63,41 +63,35 @@
                 Grid.Row="1" 
                 Text="-----------------------------" 
                 TextAlignment="Center" FontSize="14" FontWeight="Bold"/>
+            
+            
             <StackPanel Visibility="Collapsed" x:Name="Filter">
                 <StackPanel>
                     <TextBlock
                     Grid.Row="1"
-                    Text="Filtering Options"
+                    Text="Download history"
                     TextAlignment="Center" FontSize="12"/>
                 </StackPanel>
-                <StackPanel Orientation="Horizontal" Margin="5 5" HorizontalAlignment="Center">
-                    <ComboBox Margin="0,0,5,0">
-                        <ComboBoxItem IsSelected="True">Option 1</ComboBoxItem>
-                        <ComboBoxItem IsSelected="False">Option 2</ComboBoxItem>
-                        <ComboBoxItem IsSelected="False">Option 3</ComboBoxItem>
-                        <ComboBoxItem IsSelected="False">Option 4</ComboBoxItem>
-                    </ComboBox>
-                    <ComboBox Margin="0,0,0,0">
-                        <ComboBoxItem IsSelected="True">Option 1</ComboBoxItem>
-                        <ComboBoxItem IsSelected="False">Option 2</ComboBoxItem>
-                        <ComboBoxItem IsSelected="False">Option 3</ComboBoxItem>
-                        <ComboBoxItem IsSelected="False">Option 4</ComboBoxItem>
-                    </ComboBox>
+                <StackPanel Orientation="Horizontal" Margin="5 5" HorizontalAlignment="Left">
+                    <StackPanel Orientation="Vertical" Margin="0 0 0 2" Width="50" HorizontalAlignment="Left">
+                        <TextBlock
+                            Grid.Row="1"
+                            Text="From:      "
+                            TextAlignment="Left"
+                            FontSize="12"
+                            Margin="0 2 0 10"/>
+                        <TextBlock
+                            Grid.Row="1"
+                            Text="To:           "
+                            TextAlignment="Left"
+                            FontSize="12"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Vertical" HorizontalAlignment="Right">
+                        <DatePicker x:Name="fromDate" HorizontalAlignment="Right"></DatePicker>
+                        <DatePicker x:Name="toDate" HorizontalAlignment="Right"></DatePicker>
+                    </StackPanel>
                 </StackPanel>
-                <StackPanel Visibility="Visible" Orientation="Horizontal" Margin="5 5" HorizontalAlignment="Center">
-                    <ComboBox Margin="0,0,5,0">
-                        <ComboBoxItem IsSelected="True">Option 1</ComboBoxItem>
-                        <ComboBoxItem IsSelected="False">Option 2</ComboBoxItem>
-                        <ComboBoxItem IsSelected="False">Option 3</ComboBoxItem>
-                        <ComboBoxItem IsSelected="False">Option 4</ComboBoxItem>
-                    </ComboBox>
-                    <ComboBox Margin="0,0,0,0">
-                        <ComboBoxItem IsSelected="True">Option 1</ComboBoxItem>
-                        <ComboBoxItem IsSelected="False">Option 2</ComboBoxItem>
-                        <ComboBoxItem IsSelected="False">Option 3</ComboBoxItem>
-                        <ComboBoxItem IsSelected="False">Option 4</ComboBoxItem>
-                    </ComboBox>
-                </StackPanel>
+                <Button Content="Download" MinWidth="80" Click="Download" Margin="5 5"/>      
             </StackPanel>
             <StackPanel Margin="0 10">
                 <TextBlock Text="Other options" Margin="5 5"/>
