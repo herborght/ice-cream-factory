@@ -24,7 +24,7 @@
         
         
         
-        <StackPanel Grid.Column="0" Grid.Row="1" Background="#e2ece9">
+        <StackPanel Grid.Column="0" Grid.Row="1" Background="#e2ece9" x:Name="SideBar">
             <StackPanel Orientation="Horizontal" Margin="10">
                 <Image Source="https://pics.freeicons.io/uploads/icons/png/2725159511543238876-512.png" Width="16" Margin="0,0,5,0"/>
                 <TextBlock 
@@ -63,6 +63,36 @@
                 Grid.Row="1" 
                 Text="-----------------------------" 
                 TextAlignment="Center" FontSize="14" FontWeight="Bold"/>
+            
+            
+            <StackPanel Visibility="Collapsed" x:Name="Filter">
+                <StackPanel>
+                    <TextBlock
+                    Grid.Row="1"
+                    Text="Download history"
+                    TextAlignment="Center" FontSize="12"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" Margin="5 5" HorizontalAlignment="Left">
+                    <StackPanel Orientation="Vertical" Margin="0 0 0 2" Width="50" HorizontalAlignment="Left">
+                        <TextBlock
+                            Grid.Row="1"
+                            Text="From:      "
+                            TextAlignment="Left"
+                            FontSize="12"
+                            Margin="0 2 0 10"/>
+                        <TextBlock
+                            Grid.Row="1"
+                            Text="To:           "
+                            TextAlignment="Left"
+                            FontSize="12"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Vertical" HorizontalAlignment="Right">
+                        <DatePicker x:Name="fromDate" HorizontalAlignment="Right"></DatePicker>
+                        <DatePicker x:Name="toDate" HorizontalAlignment="Right"></DatePicker>
+                    </StackPanel>
+                </StackPanel>
+                <Button Content="Download" MinWidth="80" Click="Download" Margin="5 5"/>      
+            </StackPanel>
             <StackPanel Margin="0 10">
                 <TextBlock Text="Other options" Margin="5 5"/>
                 <StackPanel Orientation="Horizontal" Margin="5 5">

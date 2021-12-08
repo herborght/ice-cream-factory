@@ -31,7 +31,6 @@ namespace ABB.InSecTT.Common.MessageHandling
             m_parameters = parameters;
             this.MsgCycleDelay = msgCycleDelay;
             SetupSubscriptions();
-            
         }
 
         public void Disconnect()
