@@ -31,7 +31,7 @@ namespace SimulatorUI
             for (; ; )
             {
 
-                bool uiAccess = testBlock.Dispatcher.CheckAccess();
+                bool uiAccess = Tanks.Dispatcher.CheckAccess();
                 string msg = "";
                 foreach (TankModule tank in tankList)
                 {
@@ -88,9 +88,9 @@ namespace SimulatorUI
                     msg += "\n";
                 }
                 if (uiAccess)
-                    testBlock.Text = msg;
+                    Tanks.ItemsSource = tankList;
                 else
-                    testBlock.Dispatcher.Invoke(() => { testBlock.Text = msg; });
+                    Tanks.Dispatcher.Invoke(() => { Tanks.ItemsSource = tankList; });
                 await Task.Delay(1000);
             }
         }
