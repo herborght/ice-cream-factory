@@ -8,43 +8,5 @@
       d:DesignHeight="950" d:DesignWidth="750"
       Title="RawDataPage">
 
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="40"/>
-            <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
-        <TextBlock Grid.Row="0" Text="Raw Data" HorizontalAlignment="Center" VerticalAlignment="Top" FontSize="20" Margin="10,10,0,0"/>
-        <ScrollViewer Grid.Row="1" HorizontalAlignment="Stretch" VerticalScrollBarVisibility="Visible" Margin="50 0 0 0" Height="900">
-            
-            <ListBox Margin="20" Name="Tanks">
-                <ListBox.ItemTemplate>
-                    <DataTemplate>
-                        <StackPanel Orientation="Vertical">
-                            <StackPanel>
-                                <TextBlock Text="{Binding Name}" />
-                                <TextBlock Text="Level  | Level (%) |   Temp    |   InletFlow   |   InFlowTemperature   |   OutletFlow  |   OutflowTemp"/>
-                            </StackPanel>
-                            <StackPanel Orientation="Horizontal">
-                                <TextBlock Text="{Binding Level}"/>
-                                <TextBlock Text="        |      "/>
-                                <TextBlock Text="{Binding LevelPercentage}"/>
-                                <TextBlock Text="         |     "/>
-                                <TextBlock Text="{Binding Temperature}"/>
-                                <TextBlock Text="     |      "/>
-                                <TextBlock Text="{Binding InletFlow}"/>
-                                <TextBlock Text="            |                "/>
-                                <TextBlock Text="{Binding InFlowTemp}"/>
-                                <TextBlock Text="               |           "/>
-                                <TextBlock Text="{Binding OutLetFlow}"/>
-                                <TextBlock Text="         |             "/>
-                                <TextBlock Text="{Binding OutFlowTemp}"/>
-                            </StackPanel>
-                            <TextBlock Text="---------------------------------------------------------------------------------------------------------"/>
-                        </StackPanel>
-                    </DataTemplate>
-                </ListBox.ItemTemplate>
-                
-            </ListBox>
-        </ScrollViewer>
-    </Grid>
+
 </Page>
