@@ -34,17 +34,26 @@ namespace SimulatorUI
         public void SwitchView(object sender, RoutedEventArgs e)
         {
             if (currentPage is SimulationPage) {
+
                 Page newPage = new RawDataPage(tankList);
                 currentPage = newPage;
+                Filter.Visibility = Visibility.Visible;
                 _mainFrame.Content = newPage;
             }
             else
             {
                 Page newPage = new SimulationPage(tankList);
                 currentPage = newPage;
+                Filter.Visibility = Visibility.Collapsed;
                 _mainFrame.Content = newPage;
             }
 
+        }
+        private void Download(object sender, RoutedEventArgs e)
+        {
+            //Add functionality to download
+            String firstDate = fromDate.SelectedDate.ToString();
+            String SecondDate = toDate.SelectedDate.ToString();
         }
 
     }

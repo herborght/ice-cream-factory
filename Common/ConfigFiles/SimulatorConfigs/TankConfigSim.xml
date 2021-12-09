@@ -46,5 +46,27 @@
       <AnalogOutputParameter>Temperature</AnalogOutputParameter>
       <AnalogOutputParameter>OutFlowTemp</AnalogOutputParameter>
     </module>
+    <module name="T5" baseArea="0.5" outletArea="0.004" height="2" type="TankModule" >
+      <DigitalInputParameter>OpenDumpValve</DigitalInputParameter>
+      <AnalogOutputParameter>Level</AnalogOutputParameter>
+      <AnalogOutputParameter>LevelPercent</AnalogOutputParameter>
+      <InOutChaining from="T4/OutFlow">InFlow</InOutChaining>
+      <DigitalInputParameter>OpenOutlet</DigitalInputParameter>
+      <AnalogOutputParameter>OutFlow</AnalogOutputParameter>
+      <InOutChaining from= "T4/OutFlowTemp">InFlowTemp</InOutChaining >
+      <AnalogOutputParameter>Temperature</AnalogOutputParameter>
+      <AnalogOutputParameter>OutFlowTemp</AnalogOutputParameter>
+    </module>
+    <module name="T6" baseArea="0.5" outletArea="0.004" height="2" type="TankModule" >
+      <DigitalInputParameter>OpenDumpValve</DigitalInputParameter>
+      <AnalogOutputParameter>Level</AnalogOutputParameter>
+      <AnalogOutputParameter>LevelPercent</AnalogOutputParameter>
+      <InOutChaining from="T5/OutFlow">InFlow</InOutChaining>
+      <DigitalInputParameter>OpenOutlet</DigitalInputParameter>
+      <AnalogOutputParameter>OutFlow</AnalogOutputParameter>
+      <InOutChaining from= "T5/OutFlowTemp">InFlowTemp</InOutChaining >
+      <AnalogOutputParameter>Temperature</AnalogOutputParameter>
+      <AnalogOutputParameter>OutFlowTemp</AnalogOutputParameter>
+    </module>
 	</modules>
 </config>
