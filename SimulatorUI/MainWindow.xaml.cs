@@ -1,17 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Windows;
 using System.Windows.Controls;
-using System.Threading.Tasks;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+using System.IO.Compression;
 
 namespace SimulatorUI
 {
@@ -51,9 +42,21 @@ namespace SimulatorUI
         }
         private void Download(object sender, RoutedEventArgs e)
         {
+
+            string startPath = @"..\..\..\..\LogData";
+            string zipPath = @"..\..\..\..\ZippedLog\test2.zip";
+
+            ZipFile.CreateFromDirectory(startPath, zipPath);
+
+            //ZipFile.ExtractToDirectory(zipPath, extractPath);
             //Add functionality to download
-            String firstDate = fromDate.SelectedDate.ToString();
-            String SecondDate = toDate.SelectedDate.ToString();
+            DateTime? firstDate = fromDate.SelectedDate;
+            DateTime? lastDate = toDate.SelectedDate;
+            if (firstDate.HasValue && lastDate.HasValue)
+            {
+                string formattedFirstDate = firstDate.Value.ToString("dd.MM.yyyy", System.Globalization.CultureInfo.InvariantCulture);
+                string formattedLastDate = lastDate.Value.ToString("dd.MM.yyyy", System.Globalization.CultureInfo.InvariantCulture);
+            }
         }
 
     }
