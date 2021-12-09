@@ -8,14 +8,5 @@
       d:DesignHeight="950" d:DesignWidth="750"
       Title="RawDataPage">
 
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="40"/>
-            <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
-        <TextBlock Grid.Row="0" Text="Raw Data" HorizontalAlignment="Center" VerticalAlignment="Top" FontSize="20" Margin="10,10,0,0"/>
-        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Visible" Margin="50 0 0 0" Height="900" Width="750">
-            <TextBlock  x:Name="testBlock" TextWrapping="Wrap" />
-         </ScrollViewer>
-    </Grid>
+
 </Page>
