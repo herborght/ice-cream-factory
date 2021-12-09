@@ -5,8 +5,126 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SimulatorUI"
         mc:Ignorable="d"
-        Title="Ice Cream Factory" Height="450" Width="800">
-    <Grid>
+        Title="Ice Cream Factory" Height="1000" Width="850">
+    <Grid Background="#FFE4E4E4">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="auto"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Border Grid.Column="1" Grid.RowSpan="2" BorderBrush="Black" BorderThickness="2,0,0,0" Panel.ZIndex="1"/>
+        <Border Grid.Row="0" Grid.ColumnSpan="2" BorderBrush="Black" BorderThickness="0,0,0,2" Panel.ZIndex="1"/>
+        <StackPanel Orientation="Horizontal" Grid.Column="0" Grid.Row="0" Background="#FFCBCBCB">
+            <Image Width="25" Source="/SimulatorUI;component/assets/settings-17-512.png" Margin="5,0,5,0" />
+            <TextBlock Text="Settings" FontSize="20" TextAlignment="Center"/>
+        </StackPanel>
+        
+        
+        
+        <StackPanel Grid.Column="0" Grid.Row="1" Background="#e2ece9" x:Name="SideBar">
+            <StackPanel Orientation="Horizontal" Margin="10">
+                <Image Source="https://pics.freeicons.io/uploads/icons/png/2725159511543238876-512.png" Width="16" Margin="0,0,5,0"/>
+                <TextBlock 
+                Grid.Row="0" 
+                Text="Download simulation data" 
+                TextAlignment="Center"
+                />
+            </StackPanel>
+            <TextBlock 
+                Grid.Row="1" 
+                Text="-----------------------------" 
+                TextAlignment="Center" FontSize="14" FontWeight="Bold"/>
+            <Border CornerRadius="10" BorderThickness="1.5" BorderBrush="Black" Grid.Row="2" Margin="5,5,5,5">
+                <StackPanel Orientation="Horizontal">
+                    <Image Width="15" Margin="5,0,0,0" Source="https://pics.freeicons.io/uploads/icons/png/13416400251535694869-512.png"/>
+                    <TextBox TextWrapping="Wrap" MaxWidth="120" Text="Search" BorderThickness="0" Opacity="0.5" Background="{x:Null}"/>
+                </StackPanel>
+            </Border>
+            <StackPanel Margin="0 10">
+                <CheckBox IsChecked="True" Margin="5 5">Tank temperature</CheckBox>
+                <CheckBox IsChecked="True" Margin="5 5 ">Tank capacity</CheckBox>
+                <CheckBox IsChecked="True" Margin="5 5">Valve flowrate</CheckBox>
+                <CheckBox Margin="5 5">Ambinent temperature</CheckBox>
+            </StackPanel>
+            <TextBlock 
+                Grid.Row="1" 
+                Text="-----------------------------" 
+                TextAlignment="Center" FontWeight="Bold" FontSize="14"/>
+            <StackPanel Margin="0 10">
+                <TextBlock Text="Simulation properties" Margin="5 5"/>
+                <RadioButton Margin="5 5">Show more</RadioButton>
+                <RadioButton IsChecked="True" Margin="5 5">Show important</RadioButton>
+                <RadioButton Margin="5 5">Show all</RadioButton>
+            </StackPanel>
+            <TextBlock 
+                Grid.Row="1" 
+                Text="-----------------------------" 
+                TextAlignment="Center" FontSize="14" FontWeight="Bold"/>
+            
+            
+            <StackPanel Visibility="Collapsed" x:Name="Filter">
+                <StackPanel>
+                    <TextBlock
+                    Grid.Row="1"
+                    Text="Download history"
+                    TextAlignment="Center" FontSize="12"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" Margin="5 5" HorizontalAlignment="Left">
+                    <StackPanel Orientation="Vertical" Margin="0 0 0 2" Width="50" HorizontalAlignment="Left">
+                        <TextBlock
+                            Grid.Row="1"
+                            Text="From:      "
+                            TextAlignment="Left"
+                            FontSize="12"
+                            Margin="0 2 0 10"/>
+                        <TextBlock
+                            Grid.Row="1"
+                            Text="To:           "
+                            TextAlignment="Left"
+                            FontSize="12"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Vertical" HorizontalAlignment="Right">
+                        <DatePicker x:Name="fromDate" HorizontalAlignment="Right"></DatePicker>
+                        <DatePicker x:Name="toDate" HorizontalAlignment="Right"></DatePicker>
+                    </StackPanel>
+                </StackPanel>
+                <Button Content="Download" MinWidth="80" Click="Download" Margin="5 5"/>      
+            </StackPanel>
+            <StackPanel Margin="0 10">
+                <TextBlock Text="Other options" Margin="5 5"/>
+                <StackPanel Orientation="Horizontal" Margin="5 5">
+                    <ComboBox Margin="0,0,20,0">
+                        <ComboBoxItem IsSelected="True">Style</ComboBoxItem>
+                    </ComboBox>
+                    <ComboBox>
+                        <ComboBoxItem IsSelected="True">12px</ComboBoxItem>
+                        <ComboBoxItem IsSelected="False">14px</ComboBoxItem>
+                        <ComboBoxItem IsSelected="False">16px</ComboBoxItem>
+                        <ComboBoxItem IsSelected="False">18px</ComboBoxItem>
+                        <ComboBoxItem IsSelected="False">20px</ComboBoxItem>
+                        <ComboBoxItem IsSelected="False">22px</ComboBoxItem>
+                    </ComboBox>
+                </StackPanel>
+            </StackPanel>
+            <Button Content="Switch View" MinWidth="80" Click="SwitchView" Margin="5 5"/>
+        </StackPanel>
+        
+        
+        <StackPanel Grid.Column="1" Grid.Row="1">
+            <DockPanel>
+                <Frame x:Name="_mainFrame" NavigationUIVisibility="Hidden"/>
+            </DockPanel>
+        </StackPanel>
 
+        
+        <StackPanel Grid.Column="1" Grid.Row="0" Background="#FFCBCBCB">
+            <TextBlock Text="Current Simulation: TankConfigSim" FontSize="20" FontWeight="Normal" Margin="8,0,0,0"/>
+            
+        </StackPanel>
+        
     </Grid>
+    
 </Window>

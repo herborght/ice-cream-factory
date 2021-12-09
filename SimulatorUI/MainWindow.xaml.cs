@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Threading.Tasks;
 using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
@@ -20,9 +20,41 @@ namespace SimulatorUI
     /// </summary>
     public partial class MainWindow : Window
     {
-        public MainWindow()
+        List<TankModule> tankList;
+        Page currentPage; 
+
+        public MainWindow(List<TankModule> list)
         {
+            tankList = list;
             InitializeComponent();
+            currentPage = new SimulationPage(tankList);
+            _mainFrame.Content = currentPage;
         }
+
+        private void SwitchView(object sender, RoutedEventArgs e)
+        {
+            if (currentPage is SimulationPage) {
+
+                Page newPage = new RawDataPage(tankList);
+                currentPage = newPage;
+                Filter.Visibility = Visibility.Visible;
+                _mainFrame.Content = newPage;
+            }
+            else
+            {
+                Page newPage = new SimulationPage(tankList);
+                currentPage = newPage;
+                Filter.Visibility = Visibility.Collapsed;
+                _mainFrame.Content = newPage;
+            }
+
+        }
+        private void Download(object sender, RoutedEventArgs e)
+        {
+            //Add functionality to download
+            String firstDate = fromDate.SelectedDate.ToString();
+            String SecondDate = toDate.SelectedDate.ToString();
+        }
+
     }
 }
