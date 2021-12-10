@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <config>
 	<modules>
+    <module name="SimEnv" baseArea="0.0" outletArea="0.0" height="0" type="SimEnv" >
+      <AnalogOutputParameter>Temperature</AnalogOutputParameter>
+    </module>
 		<module name="T1" baseArea="0.5" outletArea="0.004" height="2" type="TankModule" >
 			<DigitalInputParameter>OpenDumpValve</DigitalInputParameter>
 			<AnalogOutputParameter>Level</AnalogOutputParameter>

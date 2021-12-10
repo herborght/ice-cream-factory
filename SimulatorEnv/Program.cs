@@ -242,6 +242,10 @@ namespace ABB.InSecTT.SimulatorEnv
 
                 switch (mod.Attributes["type"].Value)
                 {
+                    case "SimEnv":
+                        // DSD Emil - "module" for environment parameters, used for adding ambient temp to DB
+                        module = new SimEnv(name);
+                        break;
                     case "TankModule":
                         module = new TankModule(name, baseArea, outletArea, height);
                         break;
