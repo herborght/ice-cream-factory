@@ -14,7 +14,6 @@ namespace ABB.InSecTT.SimulatorEnv.Modules
         {
         }
 
-        // State
         IParameter m_ambientTemperature;
 
         public override void TieParameters(IParameterDataBase parameters)
