@@ -52,6 +52,8 @@ namespace SimulatorUI
             */
             updateTanks();
         }
+
+        // DSD Emil - reads all modules from config and adds them to list
         private List<TankModule> readConfig(string configFilePath)
         {
             XmlDocument xDoc = new XmlDocument();
@@ -70,6 +72,14 @@ namespace SimulatorUI
                 double.TryParse(mod.Attributes["baseArea"].Value, NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture, out double m_baseArea);
                 double.TryParse(mod.Attributes["outletArea"].Value, NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture, out double m_outletArea);
                 double.TryParse(mod.Attributes["height"].Value, NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture, out double m_height);
+
+                // To avoid adding simulator environment as a tank, skip the current iteration of the loop,
+                // will need to be changed/extended when we expand for more module types.
+                if (m_type.Equals("SimEnv"))
+                {
+                    continue;
+                }
+                    
 
                 var tank = new TankModule(m_name);
                 tank.BaseArea = m_baseArea;
