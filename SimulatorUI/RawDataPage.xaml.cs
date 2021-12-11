@@ -11,41 +11,26 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Collections.ObjectModel;
 
 namespace SimulatorUI
 {
     
     public partial class RawDataPage : Page
     {
-        List<TankModule> tankList;
+        public ObservableCollection<TankModule> TankList { get; set; }
         public RawDataPage(List<TankModule> list)
         {
-            tankList = list;
+            TankList = new ObservableCollection<TankModule>(list);
+            DataContext = this; //Binding this instancde as the datacontext for the view
             InitializeComponent();
-            dataTable.ItemsSource = loadTable();
-            Task.Run(() => updateLoop());
-            
+            Task.Run(() => updateLoop());   
         }
-        public List<displayModule> loadTable()
-        {
-            List<displayModule> modules = new List<displayModule>();
-            foreach(TankModule tank in tankList)
-            {
-                modules.Add(new displayModule(tank));
-            }
-            return modules;
-        }
-        
         internal async Task updateLoop()
         {
             for (; ; )
             {
-                foreach(displayModule mod in dataTable.ItemsSource)
-                {
-                    mod.updateVals();
-                }
-                dataTable.ItemsSource = null;
-                dataTable.ItemsSource = loadTable();
+                
                 await Task.Delay(1000);
             }
         }

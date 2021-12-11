@@ -21,7 +21,7 @@ namespace SimulatorUI
 
 
         public void updateVals()
-        {
+        {   
             this.Outflowfrom = "None";
             this.Name = this.lockedTank.Name;
             this.Level = Math.Round(lockedTank.Level, 3).ToString();
