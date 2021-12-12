@@ -71,9 +71,16 @@ namespace SimulatorUI
 
                 Expander detailsExpander = new Expander(); // DSD Emil - Expander used for details dropdown
                 detailsExpander.Uid = tank.Name;
-                detailsExpander.Header = "Name: "+tank.Name;
-                Canvas.SetLeft(detailsExpander, time * distance+75);
-                Canvas.SetTop(detailsExpander, fromTop);
+                TextBlock headerText = new TextBlock();
+                headerText.Text = "Name: " + tank.Name;
+                headerText.Margin = new Thickness(0, 0, 3, 0);
+                detailsExpander.Header = headerText;
+                detailsExpander.Background = Brushes.White;
+                detailsExpander.BorderBrush = Brushes.Black;
+                detailsExpander.BorderThickness = new Thickness(2);
+                Canvas.SetZIndex(detailsExpander, 10); // Set z-index to draw ontop ofother elements (such as tank connections)
+                Canvas.SetLeft(detailsExpander, time * distance+80);
+                Canvas.SetTop(detailsExpander, fromTop-1); // yeah its stupid, but the expander box was visually a tiny bit under the top of the tank
                 detailsExpanders.Add(detailsExpander);
 
                 Rectangle other = new Rectangle(); //The rectangle showing how empty the tank is 
@@ -251,6 +258,7 @@ namespace SimulatorUI
                         string name = expander.Uid;
                         TextBlock content = new TextBlock();
                         content.Text = getTankInfo(name);
+                        content.Padding = new Thickness(5, 0, 5, 0);
                         expander.Content = content;
                     });
                 }
@@ -290,18 +298,30 @@ namespace SimulatorUI
             //msg += "InFlow: " + Math.Round(tank.InletFlow, 3) + "m3/s\n"; 
             //msg += "InFow Temp: " + Math.Round(tank.InFlowTemp, 3) + "K\n";
             //msg += "OutFlow: " + Math.Round(tank.OutLetFlow, 3) + "K\n";
-            //msg += "OutFlw Temp: " + Math.Round(tank.OutFlowTemp, 3) + "K\n";
+            //msg += "OutFlow Temp: " + Math.Round(tank.OutFlowTemp, 3) + "K\n";
             //msg += tank.Name + " Dmp. Valve: " + tank.DumpValveOpen + "\n";
             //msg += tank.Name + " Out Valve: " + tank.OutValveOpen + "\n";
             //msg += "\n";
             //return msg;
+
             string msg = "";
             TankModule tank = tankList.Find(x => x.Name == name);
-            msg += "Name: " + tank.Name + "\n"; //Could go over the tank
-            msg += "Percent: " + Math.Round(tank.LevelPercentage, 3) + "%" + "\n"; //Could go inside the tank
-            msg += "Temp: " + Math.Round(tank.Temperature, 3) + "\n"; //The same as name maybe?
-            //msg += "InFlow: " + Math.Round(tank.InletFlow, 3) + "m3/s\n"; //Could reassign these to the valves
-            //msg += "OutFlow: " + Math.Round(tank.OutLetFlow, 3) + "m3/s\n"; //Then one of these could be skipped
+            msg += "Level: " + Math.Round(tank.Level, 3) + " m \n";
+            msg += "Percent: " + Math.Round(tank.LevelPercentage, 3) + "%" + "\n";
+            msg += "Temp: " + Math.Round(tank.Temperature, 3) + "\n";
+            msg += "InFlow: " + Math.Round(tank.InletFlow, 3) + "m3/s\n";
+            msg += "InFow Temp: " + Math.Round(tank.InFlowTemp, 3) + "K\n";
+            msg += "OutFlow: " + Math.Round(tank.OutLetFlow, 3) + "m3/s\n";
+            msg += "OutFlow Temp: " + Math.Round(tank.OutFlowTemp, 3) + "K\n";
+            if (tank.DumpValveOpen)
+            {
+                msg += "Dump Valve: Open\n";
+            }
+            else
+            {
+                msg += "Dump Valve: Closed\n";
+            }
+            
             return msg;
         }
     }
