@@ -79,17 +79,34 @@ namespace SimulatorUI
                 }
                 else if(m_type == "PasteurizationModule")
                 {
-                    var temp = new PasteurizationModule(m_name);
+                    
                     double.TryParse(mod.Attributes["heaterTemp"].Value, NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture, out double m_HeaterTemp);
                     double.TryParse(mod.Attributes["coolerTemp"].Value, NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture, out double m_CoolerTemp);
                     double.TryParse(mod.Attributes["thickness"].Value, NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture, out double m_Thickness);
                     double.TryParse(mod.Attributes["HTC"].Value, NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture, out double m_HTC);
                     double.TryParse(mod.Attributes["CTC"].Value, NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture, out double m_CTC);
-                    temp.HeaterTemp = m_HeaterTemp;
-                    temp.CoolerTemp = m_CoolerTemp;
-                    temp.Thickness = m_Thickness;
-                    temp.HeaterConductivity = m_HTC; //Unsure if these values are needed
-                    temp.CoolerConductivity = m_CTC;
+                    var temp = new PasteurizationModule(m_name, m_HeaterTemp, m_CoolerTemp, m_Thickness, m_HTC, m_CTC);
+                    tank = temp;
+                }
+                else if(m_type == "HomogenizationModule")
+                {
+                    double.TryParse(mod.Attributes["stage1Pressure"].Value, NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture, out double m_S1Pressure);
+                    double.TryParse(mod.Attributes["stage2Pressure"].Value, NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture, out double m_S2Pressure);
+                    var temp = new HomogenizationModule(m_name, m_S1Pressure, m_S2Pressure);
+                    tank = temp;
+                }
+                else if (m_type == "FreezingModule")
+                {
+                    double.TryParse(mod.Attributes["freezerTemp"].Value, NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture, out double m_FreezerTemp);
+                    double.TryParse(mod.Attributes["barrelRotationSpeed"].Value, NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture, out double m_BRSpeed);
+                    var temp = new FreezingModule(m_name, m_FreezerTemp, m_BRSpeed);
+                    tank = temp;
+                }
+                else if (m_type == "FlavoringPackagingModule")
+                {
+                    string m_PType = mod.Attributes["packagingType"].Value;
+                    double.TryParse(mod.Attributes["coolerTemperature"].Value, NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture, out double m_CoolerTemp);
+                    var temp = new FlavoringHardeningPackingModule(m_name, m_PType, m_CoolerTemp);
                     tank = temp;
                 }
                 else
@@ -166,6 +183,15 @@ namespace SimulatorUI
                     case PasteurizationModule p:
                         updatePasteurizationTank(parameterKey, p);
                         break;
+                    case HomogenizationModule h:
+                        updateHomogenizationTank(parameterKey, h);
+                        break;
+                    case FreezingModule f:
+                        updateFreezingModule(parameterKey, f);
+                        break;
+                    case FlavoringHardeningPackingModule fhp:
+                        updateFlavoringPackagingModuleModule(parameterKey, fhp);
+                        break;
                     default:
                         break;
                 }
@@ -231,6 +257,109 @@ namespace SimulatorUI
                     case "CoolerOn":
                         current.CoolerOn = parameter.DigitalValue;
                         break;
+                }
+            }
+        }
+
+        private void updateHomogenizationTank(string parameterKey, HomogenizationModule current)
+        {
+            var parameter = m_parameters.GetParameter(parameterKey);
+            if (parameter.ValueType == ParameterType.Digital)
+            {
+                switch (parameterKey.Split('/')[1])
+                {
+                    case "HomogenizationOn":
+                        current.HomogenizationOn = parameter.DigitalValue;
+                        break;
+                    case "AgeingCoolingOn":
+                        current.AgeingCoolingOn = parameter.DigitalValue;
+                        break;
+                }
+            }
+            else
+            {
+                switch (parameterKey.Split('/')[1])
+                {
+                    case "ParticleSize":
+                        current.ParticleSize = parameter.AnalogValue;
+                        break;
+                    case "MixTemperature":
+                        current.MixTemperature = parameter.AnalogValue;
+                        break;
+                }
+            }
+        }
+
+        private void updateFreezingModule(string parameterKey, FreezingModule current)
+        {
+            var parameter = m_parameters.GetParameter(parameterKey);
+            if (parameter.ValueType == ParameterType.Analog)
+            {
+                switch (parameterKey.Split('/')[1])
+                {
+                    case "ParticleSize":
+                        current.ParticleSize = parameter.AnalogValue;
+                        break;
+                    case "MixTemperature":
+                        current.MixTemperature = parameter.AnalogValue;
+                        break;
+                    case "Overrun":
+                        current.Overrun = parameter.AnalogValue;
+                        break;
+                    case "PasteurizationUnits":
+                        current.PasteurizationUnits = parameter.AnalogValue;
+                        break;
+                }
+            }
+            else
+            {
+                switch (parameterKey.Split('/')[1])
+                {
+                    case "FreezingOn":
+                        current.FreezingOn = parameter.DigitalValue;
+                        break;
+                    case "DasherOn":
+                        current.DasherOn = parameter.DigitalValue;
+                        break;
+                    case "StartLiquidFlavoring":
+                        current.StartLiquidFlavoring = parameter.DigitalValue;
+                        break;
+                    case "SendTestValues":
+                        current.SendTestValues = parameter.DigitalValue;
+                        break;
+
+                }
+            }
+        }
+        private void updateFlavoringPackagingModuleModule(string parameterKey, FlavoringHardeningPackingModule current)
+        {
+            var parameter = m_parameters.GetParameter(parameterKey);
+            if (parameter.ValueType == ParameterType.Analog)
+            {
+                switch (parameterKey.Split('/')[1])
+                {
+                    case "MixTemperature":
+                        current.MixTemperature = parameter.AnalogValue;
+                        break;
+                }
+            }
+            else
+            {
+                switch (parameterKey.Split('/')[1])
+                {
+                    case "StartFlavoring":
+                        current.StartFlavoring = parameter.DigitalValue;
+                        break;
+                    case "StartHardening":
+                        current.StartHardening = parameter.DigitalValue;
+                        break;
+                    case "StartPackaging":
+                        current.StartPackaging = parameter.DigitalValue;
+                        break;
+                    case "FinishBatch":
+                        current.FinishBatch = parameter.DigitalValue;
+                        break;
+
                 }
             }
         }
