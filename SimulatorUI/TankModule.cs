@@ -24,7 +24,7 @@ namespace SimulatorUI
         private double inletflow; // created by Bendik
         public double InletFlow
         {
-            get { return inletflow; }
+            get { return Math.Round(inletflow, 2); }
             set { SetField(ref inletflow, value, "InLetFlow"); }
         }
         private bool outvalveopen;
@@ -42,55 +42,55 @@ namespace SimulatorUI
         private double inflowtemp;
         public double InFlowTemp
         {
-            get { return inflowtemp; }
+            get { return Math.Round(inflowtemp); }
             set { SetField(ref inflowtemp, value, "InFlowTemp"); }
         }
         private double outflowtemp;
         public double OutFlowTemp
         {
-            get { return outflowtemp; }
+            get { return Math.Round(outflowtemp, 2); }
             set { SetField(ref outflowtemp, value, "OutFlowTemp"); }
         }
         private double outletflow;
         public double OutLetFlow
         {
-            get { return outletflow; }
+            get { return Math.Round(outletflow, 2); }
             set { SetField(ref outletflow, value, "OutLetFlow"); }
         }
         private double levelpercentage;
         public double LevelPercentage
         {
-            get { return levelpercentage; }
+            get { return Math.Round(levelpercentage, 2); }
             set { SetField(ref levelpercentage, value, "LevelPercentage"); }
         }
         public double temperature;
         public double Temperature 
         {
-            get { return temperature; }
+            get { return Math.Round(temperature, 2); }
             set { SetField(ref temperature, value, "Temperature"); }
         }
         public double level;
         public double Level
         {
-            get { return level; }
+            get { return Math.Round(level, 2); }
             set { SetField(ref level, value, "Level"); }
         }
         private double height;
         public double Height
         {
-            get { return height; }
+            get { return Math.Round(height, 2); }
             set { SetField(ref height, value, "Height"); }
         }
         private double basearea;
         public double BaseArea
         {
-            get { return basearea; }
+            get { return Math.Round(basearea, 2); }
             set { SetField(ref basearea, value, "BaseArea"); }
         }
         public double outletarea;
         public double OutletArea
         {
-            get { return outletarea; }
+            get { return Math.Round(outletarea, 2); }
             set { SetField(ref outletarea, value, "OutLetArea"); }
         }
 
