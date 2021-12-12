@@ -21,7 +21,6 @@ namespace SimulatorUI
     {
         List<TankModule> tankList;
         List<Rectangle> barList; //List of the rectangles visualizing the tank level
-        List<TextBlock> textBlocks;
         List<KeyValuePair<string, KeyValuePair<int, Point>>> pointList; //The points of connectections for the tanks
         List<Ellipse> connectedValves; //The visualization of the valves
         List<Ellipse> dumpValves;
@@ -44,7 +43,6 @@ namespace SimulatorUI
             int rows = 0; //Shows which row is the current
             int distance = 230; //Distance between each tank
             barList = new List<Rectangle>();
-            textBlocks = new List<TextBlock>();
             pointList = new List<KeyValuePair<string, KeyValuePair<int, Point>>>();
             connectedValves = new List<Ellipse>();
             dumpValves = new List<Ellipse>();
@@ -70,16 +68,6 @@ namespace SimulatorUI
                 Canvas.SetTop(rectangle, fromTop);
                 rectangle.StrokeThickness = 2;
                 rectangle.Stroke = Brushes.Black;
-
-                TextBlock textBlock = new TextBlock(); //Textblock for the raw data
-                textBlock.Width = 250;
-                textBlock.Height = height;
-                textBlock.Name = tank.Name;
-                textBlock.Margin = new Thickness(5);
-                Canvas.SetLeft(textBlock, time * distance);
-                Canvas.SetTop(textBlock, fromTop - 60);
-                textBlock.TextWrapping = TextWrapping.Wrap;
-                textBlocks.Add(textBlock);
 
                 Expander detailsExpander = new Expander(); // DSD Emil - Expander used for details dropdown
                 detailsExpander.Uid = tank.Name;
@@ -120,7 +108,6 @@ namespace SimulatorUI
 
                 canvas.Children.Add(rectangle); //Draw the elements
                 canvas.Children.Add(other);
-                canvas.Children.Add(textBlock);
                 canvas.Children.Add(dumpValve);
                 canvas.Children.Add(detailsExpander);
 
@@ -219,7 +206,6 @@ namespace SimulatorUI
                         TankModule current = tankList.Find(x => x.Name == name);
                         r.Height = 200 - 200 * current.LevelPercentage / 100;
                     });
-
                 }
                 foreach (Ellipse v in connectedValves) //White means open, black closed
                 {
@@ -259,11 +245,6 @@ namespace SimulatorUI
                         }
                     });
                 }
-                /*
-                foreach (TextBlock textBlock in textBlocks)
-                {
-                    textBlock.Dispatcher.Invoke(() => { textBlock.Text = getTankInfo(textBlock.Name); });
-                }*/
                 foreach (Expander expander in detailsExpanders)
                 {
                     expander.Dispatcher.Invoke(()=> {
