@@ -19,6 +19,7 @@ namespace SimulationTests
         RoutedEventArgs e;
         List<TankModule> tankList = new List<TankModule>();
 
+
         [TestMethod]
         public void SwitchViewTest()
         {
@@ -41,6 +42,20 @@ namespace SimulationTests
                 result = mainWindow.currentPage;
 
                 Microsoft.VisualStudio.TestTools.UnitTesting.Assert.AreNotEqual(expectedCurr, result);
+            });
+        }
+
+        [TestMethod]
+        public void SimulationPage_HeightTest()
+        {
+            Application.Current.Dispatcher.Invoke(delegate
+            {
+                MainWindow mainWindow = new MainWindow(tankList)
+                {
+                    currentPage = new SimulationPage(tankList)
+                };
+
+                Microsoft.VisualStudio.TestTools.UnitTesting.Assert.AreEqual(mainWindow.currentPage.Height, 200);
             });
         }
     }
