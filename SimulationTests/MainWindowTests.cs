@@ -44,21 +44,6 @@ namespace SimulationTests
                 Microsoft.VisualStudio.TestTools.UnitTesting.Assert.AreNotEqual(expectedCurr, result);
             });
         }
-<<<<<<< HEAD
-
-        [TestMethod]
-        public void SimulationPage_HeightTest()
-        {
-            Application.Current.Dispatcher.Invoke(delegate
-            {
-                MainWindow mainWindow = new MainWindow(tankList)
-                {
-                    currentPage = new SimulationPage(tankList)
-                };
-
-                Microsoft.VisualStudio.TestTools.UnitTesting.Assert.AreEqual(mainWindow.currentPage.Height, 200);
-            });
-=======
         [TestMethod]
         public void ConstructorTest()
         {
@@ -91,7 +76,6 @@ namespace SimulationTests
             Microsoft.VisualStudio.TestTools.UnitTesting.Assert.AreEqual(T1.OutValveOpen, false);
             T1.Temperature = 277;
             Microsoft.VisualStudio.TestTools.UnitTesting.Assert.AreEqual(T1.Temperature, 277);
->>>>>>> 458b8fce68653296a1ddfa74d35109186b001540
         }
     }
 }
