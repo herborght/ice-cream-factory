@@ -198,8 +198,6 @@ namespace SimulationTests
             var sep = Path.DirectorySeparatorChar;
             return $"IngredientRecipe{sep}IngredientRecipe.xml";
         }
-
-        
     }
 
 }
