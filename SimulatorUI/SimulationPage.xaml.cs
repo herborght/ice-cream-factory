@@ -26,6 +26,7 @@ namespace SimulatorUI
         List<Ellipse> connectedValves; //The visualization of the valves
         List<Ellipse> dumpValves;
         List<TextBlock> labels;
+        List<Expander> detailsExpanders;
         public SimulationPage(List<TankModule> list)
         {
             tankList = list;
@@ -39,7 +40,7 @@ namespace SimulatorUI
         {
             int height = 200; //General height of the tank elements
             int time = 0; //How many tanks are in this row
-            int fromTop = 60; //The height of the row
+            int fromTop = 0; //The height of the row
             int rows = 0; //Shows which row is the current
             int distance = 230; //Distance between each tank
             barList = new List<Rectangle>();
@@ -48,6 +49,8 @@ namespace SimulatorUI
             connectedValves = new List<Ellipse>();
             dumpValves = new List<Ellipse>();
             labels = new List<TextBlock>();
+            detailsExpanders = new List<Expander>();
+
             foreach (TankModule tank in tankList)
             {
                 if (time == 3)
@@ -77,6 +80,13 @@ namespace SimulatorUI
                 Canvas.SetTop(textBlock, fromTop - 60);
                 textBlock.TextWrapping = TextWrapping.Wrap;
                 textBlocks.Add(textBlock);
+
+                Expander detailsExpander = new Expander(); // DSD Emil - Expander used for details dropdown
+                detailsExpander.Uid = tank.Name;
+                detailsExpander.Header = "Name: "+tank.Name;
+                Canvas.SetLeft(detailsExpander, time * distance+75);
+                Canvas.SetTop(detailsExpander, fromTop);
+                detailsExpanders.Add(detailsExpander);
 
                 Rectangle other = new Rectangle(); //The rectangle showing how empty the tank is 
                 other.Uid = tank.Name;
@@ -112,6 +122,7 @@ namespace SimulatorUI
                 canvas.Children.Add(other);
                 canvas.Children.Add(textBlock);
                 canvas.Children.Add(dumpValve);
+                canvas.Children.Add(detailsExpander);
 
                 time++;
             }
@@ -248,9 +259,19 @@ namespace SimulatorUI
                         }
                     });
                 }
+                /*
                 foreach (TextBlock textBlock in textBlocks)
                 {
                     textBlock.Dispatcher.Invoke(() => { textBlock.Text = getTankInfo(textBlock.Name); });
+                }*/
+                foreach (Expander expander in detailsExpanders)
+                {
+                    expander.Dispatcher.Invoke(()=> {
+                        string name = expander.Uid;
+                        TextBlock content = new TextBlock();
+                        content.Text = getTankInfo(name);
+                        expander.Content = content;
+                    });
                 }
                 foreach (TextBlock label in labels)
                 {
