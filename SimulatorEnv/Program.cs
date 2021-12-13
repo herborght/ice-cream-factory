@@ -155,8 +155,23 @@ namespace ABB.InSecTT.SimulatorEnv
                 Thread.Sleep(1000);
                 DisplayParameters(parameters);
             }
-            ChangeParameter("T1/OpenOutlet:false", parameters);
-            ChangeParameter("T2/OpenOutlet:true", parameters);
+            ChangeParameter("T1/OpenOutlet:false", parameters); // some changes for the pasteurization module
+            ChangeParameter("T2/HeaterOn:True", parameters); //Heat for 20s
+            wait = 20;
+            for (int i = 0; i < wait; i++)
+            {
+                Thread.Sleep(1000);
+                DisplayParameters(parameters);
+            }
+            ChangeParameter("T2/HeaterOn:False", parameters);
+            ChangeParameter("T2/CoolerOn:True", parameters);//Cool for 20s
+            for (int i = 0; i < wait; i++)
+            {
+                Thread.Sleep(1000);
+                DisplayParameters(parameters);
+            }
+            ChangeParameter("T2/CoolerOn:False", parameters);
+            ChangeParameter("T2/OpenOutlet:true", parameters); //Let it out
 
             for (int i = 0; i < wait; i++)
             {
