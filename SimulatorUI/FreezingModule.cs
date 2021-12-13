@@ -16,10 +16,10 @@ namespace SimulatorUI
         public double FreezerTemp { get; }
         public double BarrelRotationSpeed { get; }
         public bool SendTestValues { get; set; }
-        public FreezingModule(string name, double fTemp, double BRSpeed) : base(name)
+        public FreezingModule(string name, double freezerTemp, double barrelRotationSpeed) : base(name)
         {
-            FreezerTemp = fTemp;
-            BarrelRotationSpeed = BRSpeed;
+            FreezerTemp = freezerTemp;
+            BarrelRotationSpeed = barrelRotationSpeed;
         }
     }
 }
