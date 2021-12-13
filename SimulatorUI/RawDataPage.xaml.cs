@@ -11,24 +11,34 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Collections.ObjectModel;
 
 namespace SimulatorUI
 {
-    
+
     public partial class RawDataPage : Page
     {
-        List<TankModule> tankList;
+        public ObservableCollection<TankModule> TankList { get; set; }
         public RawDataPage(List<TankModule> list)
         {
-            tankList = list;
+            TankList = new ObservableCollection<TankModule>(list);
+            DataContext = this; //Binding this instance as the datacontext for the view
             InitializeComponent();
             Task.Run(() => updateLoop());
-            
-        }       
+        }
+        public void DataGridCell_load(object sender, RoutedEventArgs e)
+        {
+            DataGridCell cell = sender as DataGridCell;
+            if (cell.Column.Header.ToString() == "InLetFlow")
+            {
+                ((TextBlock)cell.Content).Text = "Lol";
+            }
+        }
         internal async Task updateLoop()
         {
             for (; ; )
             {
+
                 await Task.Delay(1000);
             }
         }
