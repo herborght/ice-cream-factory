@@ -22,30 +22,13 @@ namespace SimulatorUI
         {
             tankList = list;
             InitializeComponent();
-            dataTable.ItemsSource = loadTable();
             Task.Run(() => updateLoop());
             
-        }
-        public List<displayModule> loadTable()
-        {
-            List<displayModule> modules = new List<displayModule>();
-            foreach(TankModule tank in tankList)
-            {
-                modules.Add(new displayModule(tank));
-            }
-            return modules;
-        }
-        
+        }       
         internal async Task updateLoop()
         {
             for (; ; )
             {
-                foreach(displayModule mod in dataTable.ItemsSource)
-                {
-                    mod.updateVals();
-                }
-                dataTable.ItemsSource = null;
-                dataTable.ItemsSource = loadTable();
                 await Task.Delay(1000);
             }
         }
