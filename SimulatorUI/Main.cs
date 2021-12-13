@@ -52,7 +52,6 @@ namespace SimulatorUI
             XmlDocument xDoc = new XmlDocument();
             xDoc.Load(configFilePath);
             XmlNode config = xDoc.LastChild.ChildNodes[0];
-
             var tankList = new List<TankModule>();
 
             foreach (XmlNode mod in config)
