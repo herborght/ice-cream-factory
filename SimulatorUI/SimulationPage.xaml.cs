@@ -349,9 +349,9 @@ namespace SimulatorUI
 
             string msg = "";
             TankModule tank = tankList.Find(x => x.Name == name);
-            msg += "Level: " + Math.Round(tank.Level, 3) + " m \n";
+            msg += "Level: " + Math.Round(tank.Level, 3) + "m\n";
             msg += "Percent: " + Math.Round(tank.LevelPercentage, 3) + "%" + "\n";
-            msg += "Temp: " + Math.Round(tank.Temperature, 3) + "\n";
+            msg += "Temp: " + Math.Round(tank.Temperature, 3) + "K\n";
             msg += "InFlow: " + Math.Round(tank.InletFlow, 3) + "m3/s\n";
             msg += "InFow Temp: " + Math.Round(tank.InFlowTemp, 3) + "K\n";
             msg += "OutFlow: " + Math.Round(tank.OutLetFlow, 3) + "m3/s\n";
