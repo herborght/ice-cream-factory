@@ -26,6 +26,14 @@ namespace SimulatorUI
             InitializeComponent();
             Task.Run(() => updateLoop());   
         }
+        public void DataGridCell_load(object sender, RoutedEventArgs e)
+        {
+            DataGridCell cell = sender as DataGridCell;
+            if (cell.Column.Header.ToString() == "InLetFlow")
+            {
+                ((TextBlock)cell.Content).Text = "Lol";
+            }
+        }
         internal async Task updateLoop()
         {
             for (; ; )

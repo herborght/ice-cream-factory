@@ -24,8 +24,17 @@ namespace SimulatorUI
         private double inletflow; // created by Bendik
         public double InletFlow
         {
-            get { return inletflow; }
-            set { SetField(ref inletflow, value, "InLetFlow"); }
+            get { return Math.Round(inletflow, 3); }
+            set { if (Math.Round(value, 3).Equals(0.000))
+                    {
+                        SetField(ref outletflow, value, "OutLetFlow");
+                    }
+                else
+                    {
+                        SetField(ref inletflow, Math.Round(value, 3), "InLetFlow");
+                    }
+
+                }
         }
         private bool outvalveopen;
         public bool OutValveOpen 
@@ -42,7 +51,7 @@ namespace SimulatorUI
         private double inflowtemp;
         public double InFlowTemp
         {
-            get { return Math.Round(inflowtemp); }
+            get { return Math.Round(inflowtemp, 2); }
             set { SetField(ref inflowtemp, value, "InFlowTemp"); }
         }
         private double outflowtemp;
@@ -54,8 +63,15 @@ namespace SimulatorUI
         private double outletflow;
         public double OutLetFlow
         {
-            get { return outletflow; }
-            set { SetField(ref outletflow, value, "OutLetFlow"); }
+            get { return Math.Round(outletflow, 3); }
+            set { if (Math.Round(value, 3).Equals(0.000))
+                {
+                    SetField(ref outletflow, Math.Round(value, 3), "OutLetFlow");
+                } else
+                {
+                    SetField(ref outletflow, Math.Round(value, 3), "OutLetFlow");
+                }
+                }
         }
         private double levelpercentage;
         public double LevelPercentage

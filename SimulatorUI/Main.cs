@@ -57,7 +57,6 @@ namespace SimulatorUI
             XmlDocument xDoc = new XmlDocument();
             xDoc.Load(configFilePath);
             XmlNode config = xDoc.LastChild.ChildNodes[0];
-
             var tankList = new List<TankModule>();
 
             foreach (XmlNode mod in config)
@@ -74,8 +73,7 @@ namespace SimulatorUI
                 var tank = new TankModule(m_name);
                 tank.BaseArea = m_baseArea;
                 tank.OutletArea = m_outletArea;
-                tank.Height = m_height;             
-
+                tank.Height = m_height;
                 /*
                 Console.WriteLine("Tank name: {0}", m_name);
                 Console.WriteLine(" baseArea: {0}", m_baseArea);
