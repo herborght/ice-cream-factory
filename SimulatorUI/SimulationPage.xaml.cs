@@ -26,6 +26,7 @@ namespace SimulatorUI
         List<Ellipse> connectedValves; //The visualization of the valves
         List<Ellipse> dumpValves;
         List<TextBlock> labels;
+        List<TextBlock> symbols; //Could be replaced with images, for example pasteurization could use a snowflake and a flame
         public SimulationPage(List<TankModule> list)
         {
             tankList = list;
@@ -48,6 +49,7 @@ namespace SimulatorUI
             connectedValves = new List<Ellipse>();
             dumpValves = new List<Ellipse>();
             labels = new List<TextBlock>();
+            symbols = new List<TextBlock>();
             foreach (TankModule tank in tankList)
             {
                 if (time == 3)
@@ -69,7 +71,7 @@ namespace SimulatorUI
                 rectangle.Stroke = Brushes.Black;
 
                 TextBlock textBlock = new TextBlock(); //Textblock for the raw data
-                textBlock.Width = 250;
+                textBlock.Width = 100;
                 textBlock.Height = height;
                 textBlock.Name = tank.Name;
                 textBlock.Margin = new Thickness(5);
@@ -112,6 +114,21 @@ namespace SimulatorUI
                 canvas.Children.Add(other);
                 canvas.Children.Add(textBlock);
                 canvas.Children.Add(dumpValve);
+
+                if (tank is PasteurizationModule)
+                {
+                    TextBlock symbol = new TextBlock();
+                    symbol.Text = "+/-";
+                    symbol.Width = 40;
+                    symbol.Height = 100;
+                    symbol.Name = "symbols_" + tank.Name;
+                    symbol.FontSize = 20;
+                    Canvas.SetLeft(symbol, time * distance + 35);
+                    Canvas.SetTop(symbol, fromTop);
+                    symbol.TextWrapping = TextWrapping.Wrap;
+                    symbols.Add(symbol);
+                    canvas.Children.Add(symbol);
+                }
 
                 time++;
             }
@@ -251,6 +268,32 @@ namespace SimulatorUI
                 foreach (TextBlock textBlock in textBlocks)
                 {
                     textBlock.Dispatcher.Invoke(() => { textBlock.Text = getTankInfo(textBlock.Name); });
+                }
+                foreach (TextBlock textBlock in symbols)
+                {
+                    textBlock.Dispatcher.Invoke(() => {
+                        TankModule tank = tankList.Find(x => x.Name == textBlock.Name.Split('_')[1]);
+                        if(tank is PasteurizationModule)
+                        {
+                            PasteurizationModule temp = (PasteurizationModule)tank;
+                            if(temp.HeaterOn)
+                            {
+                                textBlock.Text = "+";
+                                if(temp.CoolerOn)
+                                {
+                                    textBlock.Text += "/-"; //Not really sure if this should be possible, as the result is NaN
+                                }
+                            }
+                            else if(temp.CoolerOn)
+                            {
+                                textBlock.Text = "-";
+                            }
+                            else
+                            {
+                                textBlock.Text = "";
+                            }
+                        }
+                    });
                 }
                 foreach (TextBlock label in labels)
                 {

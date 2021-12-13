@@ -7,4 +7,6 @@
       mc:Ignorable="d" 
       d:DesignHeight="950" d:DesignWidth="750"
       Title="RawDataPage">
+
+    <DataGrid Name="dataTable" MinWidth="500" Margin="10 10 10 10" HorizontalContentAlignment="Center" HorizontalAlignment="Center"/>
 </Page>
