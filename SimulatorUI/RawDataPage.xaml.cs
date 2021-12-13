@@ -24,7 +24,7 @@ namespace SimulatorUI
             TankList = new ObservableCollection<TankModule>(list);
             DataContext = this; //Binding this instance as the datacontext for the view
             InitializeComponent();
-            Task.Run(() => updateLoop());
+            Task.Run(() => updateLoop());   
         }
         public void DataGridCell_load(object sender, RoutedEventArgs e)
         {
@@ -38,7 +38,6 @@ namespace SimulatorUI
         {
             for (; ; )
             {
-
                 await Task.Delay(1000);
             }
         }

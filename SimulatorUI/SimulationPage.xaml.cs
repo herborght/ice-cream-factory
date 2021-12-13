@@ -21,11 +21,12 @@ namespace SimulatorUI
     {
         List<TankModule> tankList;
         List<Rectangle> barList; //List of the rectangles visualizing the tank level
-        List<TextBlock> textBlocks;
         List<KeyValuePair<string, KeyValuePair<int, Point>>> pointList; //The points of connectections for the tanks
         List<Ellipse> connectedValves; //The visualization of the valves
         List<Ellipse> dumpValves;
         List<TextBlock> labels;
+        List<Expander> detailsExpanders;
+        List<TextBlock> symbols; //Could be replaced with images, for example pasteurization could use a snowflake and a flame
         public SimulationPage(List<TankModule> list)
         {
             tankList = list;
@@ -39,15 +40,17 @@ namespace SimulatorUI
         {
             int height = 200; //General height of the tank elements
             int time = 0; //How many tanks are in this row
-            int fromTop = 60; //The height of the row
+            int fromTop = 0; //The height of the row
             int rows = 0; //Shows which row is the current
             int distance = 230; //Distance between each tank
             barList = new List<Rectangle>();
-            textBlocks = new List<TextBlock>();
             pointList = new List<KeyValuePair<string, KeyValuePair<int, Point>>>();
             connectedValves = new List<Ellipse>();
             dumpValves = new List<Ellipse>();
             labels = new List<TextBlock>();
+            symbols = new List<TextBlock>();
+            detailsExpanders = new List<Expander>();
+
             foreach (TankModule tank in tankList)
             {
                 if (time == 3)
@@ -68,15 +71,19 @@ namespace SimulatorUI
                 rectangle.StrokeThickness = 2;
                 rectangle.Stroke = Brushes.Black;
 
-                TextBlock textBlock = new TextBlock(); //Textblock for the raw data
-                textBlock.Width = 250;
-                textBlock.Height = height;
-                textBlock.Name = tank.Name;
-                textBlock.Margin = new Thickness(5);
-                Canvas.SetLeft(textBlock, time * distance);
-                Canvas.SetTop(textBlock, fromTop - 60);
-                textBlock.TextWrapping = TextWrapping.Wrap;
-                textBlocks.Add(textBlock);
+                Expander detailsExpander = new Expander(); // DSD Emil - Expander used for details dropdown
+                detailsExpander.Uid = tank.Name;
+                TextBlock headerText = new TextBlock();
+                headerText.Text = "Name: " + tank.Name;
+                headerText.Margin = new Thickness(0, 0, 3, 0);
+                detailsExpander.Header = headerText;
+                detailsExpander.Background = Brushes.White;
+                detailsExpander.BorderBrush = Brushes.Black;
+                detailsExpander.BorderThickness = new Thickness(2);
+                Canvas.SetZIndex(detailsExpander, 10); // Set z-index to draw ontop ofother elements (such as tank connections)
+                Canvas.SetLeft(detailsExpander, time * distance+80);
+                Canvas.SetTop(detailsExpander, fromTop-1); // yeah its stupid, but the expander box was visually a tiny bit under the top of the tank
+                detailsExpanders.Add(detailsExpander);
 
                 Rectangle other = new Rectangle(); //The rectangle showing how empty the tank is 
                 other.Uid = tank.Name;
@@ -110,8 +117,23 @@ namespace SimulatorUI
 
                 canvas.Children.Add(rectangle); //Draw the elements
                 canvas.Children.Add(other);
-                canvas.Children.Add(textBlock);
                 canvas.Children.Add(dumpValve);
+                canvas.Children.Add(detailsExpander);
+
+                if (tank is PasteurizationModule)
+                {
+                    TextBlock symbol = new TextBlock();
+                    symbol.Text = "+/-";
+                    symbol.Width = 40;
+                    symbol.Height = 100;
+                    symbol.Name = "symbols_" + tank.Name;
+                    symbol.FontSize = 20;
+                    Canvas.SetLeft(symbol, time * distance + 35);
+                    Canvas.SetTop(symbol, fromTop);
+                    symbol.TextWrapping = TextWrapping.Wrap;
+                    symbols.Add(symbol);
+                    canvas.Children.Add(symbol);
+                }
 
                 time++;
             }
@@ -208,7 +230,6 @@ namespace SimulatorUI
                         TankModule current = tankList.Find(x => x.Name == name);
                         r.Height = 200 - 200 * current.LevelPercentage / 100;
                     });
-
                 }
                 foreach (Ellipse v in connectedValves) //White means open, black closed
                 {
@@ -248,9 +269,41 @@ namespace SimulatorUI
                         }
                     });
                 }
-                foreach (TextBlock textBlock in textBlocks)
+                foreach (Expander expander in detailsExpanders)
                 {
-                    textBlock.Dispatcher.Invoke(() => { textBlock.Text = getTankInfo(textBlock.Name); });
+                    expander.Dispatcher.Invoke(()=> {
+                        string name = expander.Uid;
+                        TextBlock content = new TextBlock();
+                        content.Text = getTankInfo(name);
+                        content.Padding = new Thickness(5, 0, 5, 0);
+                        expander.Content = content;
+                    });
+                }
+                foreach (TextBlock textBlock in symbols)
+                {
+                    textBlock.Dispatcher.Invoke(() => {
+                        TankModule tank = tankList.Find(x => x.Name == textBlock.Name.Split('_')[1]);
+                        if(tank is PasteurizationModule)
+                        {
+                            PasteurizationModule temp = (PasteurizationModule)tank;
+                            if(temp.HeaterOn)
+                            {
+                                textBlock.Text = "+";
+                                if(temp.CoolerOn)
+                                {
+                                    textBlock.Text += "/-"; //Not really sure if this should be possible, as the result is NaN
+                                }
+                            }
+                            else if(temp.CoolerOn)
+                            {
+                                textBlock.Text = "-";
+                            }
+                            else
+                            {
+                                textBlock.Text = "";
+                            }
+                        }
+                    });
                 }
                 foreach (TextBlock label in labels)
                 {
@@ -288,18 +341,30 @@ namespace SimulatorUI
             //msg += "InFlow: " + Math.Round(tank.InletFlow, 3) + "m3/s\n"; 
             //msg += "InFow Temp: " + Math.Round(tank.InFlowTemp, 3) + "K\n";
             //msg += "OutFlow: " + Math.Round(tank.OutLetFlow, 3) + "K\n";
-            //msg += "OutFlw Temp: " + Math.Round(tank.OutFlowTemp, 3) + "K\n";
+            //msg += "OutFlow Temp: " + Math.Round(tank.OutFlowTemp, 3) + "K\n";
             //msg += tank.Name + " Dmp. Valve: " + tank.DumpValveOpen + "\n";
             //msg += tank.Name + " Out Valve: " + tank.OutValveOpen + "\n";
             //msg += "\n";
             //return msg;
+
             string msg = "";
             TankModule tank = tankList.Find(x => x.Name == name);
-            msg += "Name: " + tank.Name + "\n"; //Could go over the tank
-            msg += "Percent: " + Math.Round(tank.LevelPercentage, 3) + "%" + "\n"; //Could go inside the tank
-            msg += "Temp: " + Math.Round(tank.Temperature, 3) + "\n"; //The same as name maybe?
-            //msg += "InFlow: " + Math.Round(tank.InletFlow, 3) + "m3/s\n"; //Could reassign these to the valves
-            //msg += "OutFlow: " + Math.Round(tank.OutLetFlow, 3) + "m3/s\n"; //Then one of these could be skipped
+            msg += "Level: " + Math.Round(tank.Level, 3) + "m\n";
+            msg += "Percent: " + Math.Round(tank.LevelPercentage, 3) + "%" + "\n";
+            msg += "Temp: " + Math.Round(tank.Temperature, 3) + "K\n";
+            msg += "InFlow: " + Math.Round(tank.InletFlow, 3) + "m3/s\n";
+            msg += "InFow Temp: " + Math.Round(tank.InFlowTemp, 3) + "K\n";
+            msg += "OutFlow: " + Math.Round(tank.OutLetFlow, 3) + "m3/s\n";
+            msg += "OutFlow Temp: " + Math.Round(tank.OutFlowTemp, 3) + "K\n";
+            if (tank.DumpValveOpen)
+            {
+                msg += "Dump Valve: Open\n";
+            }
+            else
+            {
+                msg += "Dump Valve: Closed\n";
+            }
+            
             return msg;
         }
     }
