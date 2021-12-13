@@ -70,10 +70,34 @@ namespace SimulatorUI
                 double.TryParse(mod.Attributes["outletArea"].Value, NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture, out double m_outletArea);
                 double.TryParse(mod.Attributes["height"].Value, NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture, out double m_height);
 
-                var tank = new TankModule(m_name);
+                TankModule tank;
+
+                if(m_type == "TankModule")
+                {
+                    tank = new TankModule(m_name);
+                }
+                else if(m_type == "PasteurizationModule")
+                {
+                    var temp = new PasteurizationModule(m_name);
+                    double.TryParse(mod.Attributes["heaterTemp"].Value, NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture, out double m_HeaterTemp);
+                    double.TryParse(mod.Attributes["coolerTemp"].Value, NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture, out double m_CoolerTemp);
+                    double.TryParse(mod.Attributes["thickness"].Value, NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture, out double m_Thickness);
+                    double.TryParse(mod.Attributes["HTC"].Value, NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture, out double m_HTC);
+                    double.TryParse(mod.Attributes["CTC"].Value, NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture, out double m_CTC);
+                    temp.HeaterTemp = m_HeaterTemp;
+                    temp.CoolerTemp = m_CoolerTemp;
+                    temp.Thickness = m_Thickness;
+                    temp.HeaterConductivity = m_HTC; //Unsure if these values are needed
+                    temp.CoolerConductivity = m_CTC;
+                    tank = temp;
+                }
+                else
+                {
+                    throw new NotImplementedException();
+                }
                 tank.BaseArea = m_baseArea;
                 tank.OutletArea = m_outletArea;
-                tank.Height = m_height;
+                tank.Height = m_height;             
                 /*
                 Console.WriteLine("Tank name: {0}", m_name);
                 Console.WriteLine(" baseArea: {0}", m_baseArea);
@@ -131,49 +155,78 @@ namespace SimulatorUI
         {
             foreach (var parameterKey in m_parameters.ParameterKeys)
             {
-                if (!tankList.Exists(tank => tank.Name == parameterKey.Split('/')[0])) //if new tank modules can be added during runtime
+                var current = tankList.Find(tank => tank.Name == parameterKey.Split('/')[0]);
+                updateBase(parameterKey, current);
+                switch (current)
                 {
-                    tankList.Add(new TankModule(parameterKey.Split('/')[0]));
+                    case PasteurizationModule p:
+                        updatePasteurizationTank(parameterKey, p);
+                        break;
+                    default:
+                        break;
                 }
-                var parameter = m_parameters.GetParameter(parameterKey);
-                if (parameter.ValueType == ParameterType.Analog)
+
+
+            }
+        }
+
+        private void updateBase(string parameterKey, TankModule current)
+        {
+            var parameter = m_parameters.GetParameter(parameterKey);
+            if (parameter.ValueType == ParameterType.Analog)
+            {
+                switch (parameterKey.Split('/')[1])
                 {
-                    switch (parameterKey.Split('/')[1])
-                    {
-                        case "Level":
-                            tankList.Find(tank => tank.Name == parameterKey.Split('/')[0]).Level = parameter.AnalogValue;
-                            break;
-                        case "LevelPercent":
-                            tankList.Find(tank => tank.Name == parameterKey.Split('/')[0]).LevelPercentage = parameter.AnalogValue;
-                            break;
-                        case "InFlow":
-                            tankList.Find(tank => tank.Name == parameterKey.Split('/')[0]).InletFlow = parameter.AnalogValue;
-                            break;
-                        case "InFlowTemp":
-                            tankList.Find(tank => tank.Name == parameterKey.Split('/')[0]).InFlowTemp = parameter.AnalogValue;
-                            break;
-                        case "Temperature":
-                            tankList.Find(tank => tank.Name == parameterKey.Split('/')[0]).Temperature = parameter.AnalogValue;
-                            break;
-                        case "OutFlowTemp":
-                            tankList.Find(tank => tank.Name == parameterKey.Split('/')[0]).OutFlowTemp = parameter.AnalogValue;
-                            break;
-                        case "OutFlow":
-                            tankList.Find(tank => tank.Name == parameterKey.Split('/')[0]).OutLetFlow = parameter.AnalogValue;
-                            break;
-                    }
+                    case "Level":
+                        current.Level = parameter.AnalogValue;
+                        break;
+                    case "LevelPercent":
+                        current.LevelPercentage = parameter.AnalogValue;
+                        break;
+                    case "InFlow":
+                        current.InletFlow = parameter.AnalogValue;
+                        break;
+                    case "InFlowTemp":
+                        current.InFlowTemp = parameter.AnalogValue;
+                        break;
+                    case "Temperature":
+                        current.Temperature = parameter.AnalogValue;
+                        break;
+                    case "OutFlowTemp":
+                        current.OutFlowTemp = parameter.AnalogValue;
+                        break;
+                    case "OutFlow":
+                        current.OutLetFlow = parameter.AnalogValue;
+                        break;
                 }
-                else
+            }
+            else
+            {
+                switch (parameterKey.Split('/')[1])
                 {
-                    switch (parameterKey.Split('/')[1])
-                    {
-                        case "OpenDumpValve":
-                            tankList.Find(tank => tank.Name == parameterKey.Split('/')[0]).DumpValveOpen = parameter.DigitalValue;
-                            break;
-                        case "OpenOutlet":
-                            tankList.Find(tank => tank.Name == parameterKey.Split('/')[0]).OutValveOpen = parameter.DigitalValue;
-                            break;
-                    }
+                    case "OpenDumpValve":
+                        current.DumpValveOpen = parameter.DigitalValue;
+                        break;
+                    case "OpenOutlet":
+                        current.OutValveOpen = parameter.DigitalValue;
+                        break;
+                }
+            }
+        }
+
+        private void updatePasteurizationTank(string parameterKey, PasteurizationModule current)
+        {
+            var parameter = m_parameters.GetParameter(parameterKey);
+            if (parameter.ValueType == ParameterType.Digital)
+            {
+                switch (parameterKey.Split('/')[1])
+                {
+                    case "HeaterOn":
+                        current.HeaterOn = parameter.DigitalValue;
+                        break;
+                    case "CoolerOn":
+                        current.CoolerOn = parameter.DigitalValue;
+                        break;
                 }
             }
         }
