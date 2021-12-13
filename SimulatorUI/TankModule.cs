@@ -27,7 +27,7 @@ namespace SimulatorUI
             get { return Math.Round(inletflow, 3); }
             set { if (Math.Round(value, 3).Equals(0.000))
                     {
-                        SetField(ref outletflow, value, "OutLetFlow");
+                        SetField(ref inletflow, value, "InLetFlow");
                     }
                 else
                     {
