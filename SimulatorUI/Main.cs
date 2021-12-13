@@ -42,16 +42,11 @@ namespace SimulatorUI
         private void initializeTanks(string configFilePath)
         {
             tankList = readConfig(configFilePath);
-            
-            /*
-            tankList = new List<TankModule>();
-            foreach(IModule module in m_modules)
-            {
-                tankList.Add(new TankModule(module.Name));
-            }
-            */
+
             updateTanks();
         }
+
+        // DSD Emil - reads all modules from config and adds them to list
         private List<TankModule> readConfig(string configFilePath)
         {
             XmlDocument xDoc = new XmlDocument();
@@ -60,7 +55,7 @@ namespace SimulatorUI
             var tankList = new List<TankModule>();
 
             foreach (XmlNode mod in config)
-            {// Outer loop runs for every module in config
+            {
                 // Module properties
                 string m_name = mod.Attributes["name"].Value;
                 string m_type = mod.Attributes["type"].Value;             
@@ -69,6 +64,12 @@ namespace SimulatorUI
                 double.TryParse(mod.Attributes["baseArea"].Value, NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture, out double m_baseArea);
                 double.TryParse(mod.Attributes["outletArea"].Value, NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture, out double m_outletArea);
                 double.TryParse(mod.Attributes["height"].Value, NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture, out double m_height);
+
+                // To avoid adding simulator environment as a tank, skip the current iteration of the loop,
+                if (m_type.Equals("SimEnv"))
+                {
+                    continue;
+                }                
 
                 TankModule tank;
 
@@ -98,17 +99,9 @@ namespace SimulatorUI
                 tank.BaseArea = m_baseArea;
                 tank.OutletArea = m_outletArea;
                 tank.Height = m_height;             
-                /*
-                Console.WriteLine("Tank name: {0}", m_name);
-                Console.WriteLine(" baseArea: {0}", m_baseArea);
-                Console.WriteLine(" outletArea: {0}", m_outletArea);
-                Console.WriteLine(" height: {0}", m_height);
-                Console.WriteLine(" type: {0}\n", m_type);
-                */
 
                 foreach (XmlNode param in mod.ChildNodes)
-                {// Inner loop runs for every parameter in the current module
-
+                {
                     string p_name = param.InnerText;
                     string p_type = param.LocalName;
                     string from; // Used as InOutChaining source
@@ -119,11 +112,6 @@ namespace SimulatorUI
                         case "AnalogOutputParameter":
                         case "DigitalInputParameter":
                         case "DigitalOutputParameter":
-                            // Do stuff with parameter here
-                            /*
-                            Console.WriteLine("   Parameter name: {0}", p_name);
-                            Console.WriteLine("   Parameter type: {0}\n", p_type);
-                            */
                             break;
                         case "InOutChaining":
                             // Add the chaining source tank to InFlowTanks list
@@ -135,12 +123,6 @@ namespace SimulatorUI
                             {
                                 tank.InFlowTanks.Add(inFlowSourceTank);
                             }                         
-                            //Console.WriteLine("{0}", tank.InFlowTanks.Count);
-                            /*
-                            Console.WriteLine("   Parameter name: {0}", p_name);
-                            Console.WriteLine("   Parameter type: {0}", p_type);
-                            Console.WriteLine("   Chaining source: {0}\n", from);
-                            */
                             break;
                         default:
                             continue;
@@ -155,6 +137,11 @@ namespace SimulatorUI
         {
             foreach (var parameterKey in m_parameters.ParameterKeys)
             {
+                if (parameterKey.Split('/')[0] == "SimEnv") // DSD Emil - SimEnv is not a tank, it only exists in the DB for visualization purposes.
+                {
+                    //add code for updating displayed ambient temp here, currently empty since amb temp is not visualized yet
+                    continue; 
+                }
                 var current = tankList.Find(tank => tank.Name == parameterKey.Split('/')[0]);
                 updateBase(parameterKey, current);
                 switch (current)
