@@ -36,8 +36,8 @@ namespace SimulationTests
             double pres = 1.5 / 2;
             T1.LevelPercentage = pres;
             Assert.AreEqual(T1.LevelPercentage, pres);
-            T1.InletFlow = 0.0075;
-            Assert.AreEqual(T1.InletFlow, 0.0075);
+            T1.InletFlow = 0.008;
+            Assert.AreEqual(T1.InletFlow, 0.008);
             T1.OutFlowTemp = 277;
             Assert.AreEqual(T1.OutFlowTemp, 277);
             T1.OutValveOpen = false;

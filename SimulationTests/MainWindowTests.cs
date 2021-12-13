@@ -36,8 +36,7 @@ namespace SimulationTests
         public void SwitchViewTest()
         {
             /*This test is currently just checking if the currentPage i different 
-            before and after running switchView. Should probably be made a little
-            more advanced. */
+            before and after running switchView. */
 
             T1 = new TankModule("T1");
             T2 = new TankModule("T2");
@@ -50,7 +49,6 @@ namespace SimulationTests
                 {
                     currentPage = new SimulationPage(tankList)
                 };
-                //denne sender jo bare innen tom liste, får nullreferene exception
                 //assuming tanklist cant be empty, but it is set in Main and it feels
                 // wrong to use Main in this testclass as well.
 
@@ -62,7 +60,7 @@ namespace SimulationTests
             });
         }
 
-        [TestMethod]
+       /* [TestMethod]
         public void GetTnkInfoTest()
         {
             T1 = new TankModule("T1");
@@ -71,8 +69,6 @@ namespace SimulationTests
             tankList.Add(T1);
             tankList.Add(T2);
 
-            Microsoft.VisualStudio.TestTools.UnitTesting.Assert.AreEqual(1, 1);
-
-        }
+        }*/
     }
 }
