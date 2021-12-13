@@ -22,7 +22,7 @@ namespace SimulatorUI
         public RawDataPage(List<TankModule> list)
         {
             TankList = new ObservableCollection<TankModule>(list);
-            DataContext = this; //Binding this instancde as the datacontext for the view
+            DataContext = this; //Binding this instance as the datacontext for the view
             InitializeComponent();
             Task.Run(() => updateLoop());   
         }
