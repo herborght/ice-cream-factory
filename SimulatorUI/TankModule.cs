@@ -24,7 +24,12 @@ namespace SimulatorUI
         private double inletflow; // created by Bendik
         public double InletFlow
         {
-            get { return Math.Round(inletflow, 3); }
+            get {
+                if (inletflow < 0.001 && inletflow > 0)
+                {
+                    return 0.001;
+                }
+                return Math.Round(inletflow, 3); }
             set { if (Math.Round(value, 3).Equals(0.000))
                     {
                         SetField(ref inletflow, value, "InLetFlow");
@@ -63,7 +68,14 @@ namespace SimulatorUI
         private double outletflow;
         public double OutLetFlow
         {
-            get { return Math.Round(outletflow, 3); }
+            get 
+            {
+                if (outletflow < 0.001 && outletflow > 0)
+                {
+                    return 0.001;
+                }
+                return Math.Round(outletflow, 3); 
+            }
             set { if (Math.Round(value, 3).Equals(0.000))
                 {
                     SetField(ref outletflow, Math.Round(value, 3), "OutLetFlow");
