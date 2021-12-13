@@ -24,7 +24,6 @@ namespace SimulatorUI
             InitializeComponent();
             currentPage = new SimulationPage(tankList);
             _mainFrame.Content = currentPage;
-            counter = 0;
         }
 
         private void SwitchView(object sender, RoutedEventArgs e)
@@ -48,11 +47,13 @@ namespace SimulatorUI
         }
         private void Download(object sender, RoutedEventArgs e)
         {
+            var timeStamp = new DateTimeOffset(DateTime.UtcNow).ToUnixTimeSeconds();
+
+
             // Extracting the data from here
             string startPath = @"..\..\..\..\LogData\EventLogData";
             // Where the zipped file is sent
-            string zipPath = @"..\..\..\..\ZippedLog\download" + counter + ".zip";
-            counter++;
+            string zipPath = @"..\..\..\..\ZippedLog\download" +timeStamp + ".zip";
 
             // Getting the selected dates
             DateTime? firstDate = fromDate.SelectedDate;
