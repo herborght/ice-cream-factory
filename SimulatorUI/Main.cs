@@ -138,6 +138,11 @@ namespace SimulatorUI
         {
             foreach (var parameterKey in m_parameters.ParameterKeys)
             {
+                if (parameterKey.Split('/')[0] == "SimEnv") // DSD Emil - SimEnv is not a tank, it only exists in the DB for visualization purposes.
+                {
+                    //add code for updating displayed ambient temp here, currently empty since amb temp is not visualized yet
+                    continue; 
+                }
                 var current = tankList.Find(tank => tank.Name == parameterKey.Split('/')[0]);
                 updateBase(parameterKey, current);
                 switch (current)

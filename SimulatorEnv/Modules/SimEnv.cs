@@ -18,7 +18,7 @@ namespace ABB.InSecTT.SimulatorEnv.Modules
 
         public override void TieParameters(IParameterDataBase parameters)
         {
-            string ambientTemp = string.Format("{0}/Temperature", this.Name);
+            string ambientTemp = string.Format("{0}/AmbientTemp", this.Name);
 
             m_ambientTemperature = parameters.GetParameter(ambientTemp);
         }
