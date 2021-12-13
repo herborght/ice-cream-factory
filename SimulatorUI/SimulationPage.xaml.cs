@@ -26,6 +26,7 @@ namespace SimulatorUI
         List<Ellipse> dumpValves;
         List<TextBlock> labels;
         List<Expander> detailsExpanders;
+        List<TextBlock> symbols; //Could be replaced with images, for example pasteurization could use a snowflake and a flame
         public SimulationPage(List<TankModule> list)
         {
             tankList = list;
@@ -47,6 +48,7 @@ namespace SimulatorUI
             connectedValves = new List<Ellipse>();
             dumpValves = new List<Ellipse>();
             labels = new List<TextBlock>();
+            symbols = new List<TextBlock>();
             detailsExpanders = new List<Expander>();
 
             foreach (TankModule tank in tankList)
@@ -117,6 +119,21 @@ namespace SimulatorUI
                 canvas.Children.Add(other);
                 canvas.Children.Add(dumpValve);
                 canvas.Children.Add(detailsExpander);
+
+                if (tank is PasteurizationModule)
+                {
+                    TextBlock symbol = new TextBlock();
+                    symbol.Text = "+/-";
+                    symbol.Width = 40;
+                    symbol.Height = 100;
+                    symbol.Name = "symbols_" + tank.Name;
+                    symbol.FontSize = 20;
+                    Canvas.SetLeft(symbol, time * distance + 35);
+                    Canvas.SetTop(symbol, fromTop);
+                    symbol.TextWrapping = TextWrapping.Wrap;
+                    symbols.Add(symbol);
+                    canvas.Children.Add(symbol);
+                }
 
                 time++;
             }
@@ -260,6 +277,32 @@ namespace SimulatorUI
                         content.Text = getTankInfo(name);
                         content.Padding = new Thickness(5, 0, 5, 0);
                         expander.Content = content;
+                    });
+                }
+                foreach (TextBlock textBlock in symbols)
+                {
+                    textBlock.Dispatcher.Invoke(() => {
+                        TankModule tank = tankList.Find(x => x.Name == textBlock.Name.Split('_')[1]);
+                        if(tank is PasteurizationModule)
+                        {
+                            PasteurizationModule temp = (PasteurizationModule)tank;
+                            if(temp.HeaterOn)
+                            {
+                                textBlock.Text = "+";
+                                if(temp.CoolerOn)
+                                {
+                                    textBlock.Text += "/-"; //Not really sure if this should be possible, as the result is NaN
+                                }
+                            }
+                            else if(temp.CoolerOn)
+                            {
+                                textBlock.Text = "-";
+                            }
+                            else
+                            {
+                                textBlock.Text = "";
+                            }
+                        }
                     });
                 }
                 foreach (TextBlock label in labels)
