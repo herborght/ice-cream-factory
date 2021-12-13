@@ -51,7 +51,7 @@ namespace ABB.InSecTT.SimulatorEnv
             var q = Task.Run(() => messageHandler.SendMessages(token1), token1);
             var r = Task.Run(() => menuHandler.HandleCommand());
 
-            // Start UI:
+            // DSD - Start UI
             RunApplication(parameters, modules, args[0]);
 
             r.Wait();
@@ -108,6 +108,7 @@ namespace ABB.InSecTT.SimulatorEnv
             //var application = new System.Windows.Application();
             //application.Run(new SimulatorUITest.SimulationWindow(parameters, modules));
 
+            // DSD Emil - SimulatorUI.Main is a replacement for standard WPF App.xaml
             var app2 = new SimulatorUI.Main(parameters, modules, configFilePath);
             app2.Run();
         }
@@ -130,8 +131,7 @@ namespace ABB.InSecTT.SimulatorEnv
             
         }
 
-        // DSD Course - Mimicing basic controller behaviour, used for demo purposes
-        // WARNING: Hardcoded!!! Will only work with unchanged standard tank config!!!
+        // DSD Emil - Hardcoded to mimic some controller behaviour for TankConfig
         private static void MimicControllerBehaviour(IParameterDataBase parameters)
         {
             // "open" t1 inflow by changes its inflow value
@@ -149,22 +149,30 @@ namespace ABB.InSecTT.SimulatorEnv
             ChangeParameter("T1/InFlow:0,0", parameters);
             ChangeParameter("T1/OpenOutlet:true", parameters);
 
-            // changing the outflow rate currently does nothing, otherwise we would change the outflow here
-
-            // wait while t1 is emptying
             wait = 20;
             for (int i = 0; i < wait; i++)
             {
                 Thread.Sleep(1000);
                 DisplayParameters(parameters);
             }
-            ChangeParameter("T1/OpenOutlet:false", parameters);
+            ChangeParameter("T1/OpenOutlet:false", parameters); // some changes for the pasteurization module
+            ChangeParameter("T2/HeaterOn:True", parameters); //Heat for 20s
+            wait = 20;
+            for (int i = 0; i < wait; i++)
+            {
+                Thread.Sleep(1000);
+                DisplayParameters(parameters);
+            }
+            ChangeParameter("T2/HeaterOn:False", parameters);
+            ChangeParameter("T2/CoolerOn:True", parameters);//Cool for 20s
+            for (int i = 0; i < wait; i++)
+            {
+                Thread.Sleep(1000);
+                DisplayParameters(parameters);
+            }
+            ChangeParameter("T2/CoolerOn:False", parameters);
+            ChangeParameter("T2/OpenOutlet:true", parameters); //Let it out
 
-            ChangeParameter("T2/OpenOutlet:true", parameters);
-
-            // changing the outflow rate currently does nothing, otherwise we would change the outflow here
-
-            // wait while t2 is emptying
             for (int i = 0; i < wait; i++)
             {
                 Thread.Sleep(1000);
@@ -172,8 +180,6 @@ namespace ABB.InSecTT.SimulatorEnv
             }
             ChangeParameter("T2/OpenOutlet:false", parameters);
             DisplayParameters(parameters);
-
-            //finished
         }
 
         private static void ChangeParameter(string unparsed, IParameterDataBase parameters)
@@ -242,6 +248,10 @@ namespace ABB.InSecTT.SimulatorEnv
 
                 switch (mod.Attributes["type"].Value)
                 {
+                    case "SimEnv":
+                        // DSD Emil - "module" for environment parameters, used for adding ambient temp to DB
+                        module = new SimEnv(name);
+                        break;
                     case "TankModule":
                         module = new TankModule(name, baseArea, outletArea, height);
                         break;
