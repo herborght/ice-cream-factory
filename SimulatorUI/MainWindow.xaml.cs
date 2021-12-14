@@ -1,17 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Windows;
 using System.Windows.Controls;
-using System.Threading.Tasks;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+using System.IO.Compression;
+using System.IO;
+using System.Linq;
+using System.Globalization;
 
 namespace SimulatorUI
 {
@@ -21,7 +15,8 @@ namespace SimulatorUI
     public partial class MainWindow : Window
     {
         List<TankModule> tankList;
-        Page currentPage; 
+        Page currentPage;
+        private static int counter;
 
         public MainWindow(List<TankModule> list)
         {
@@ -33,7 +28,8 @@ namespace SimulatorUI
 
         private void SwitchView(object sender, RoutedEventArgs e)
         {
-            if (currentPage is SimulationPage) {
+            if (currentPage is SimulationPage)
+            {
 
                 Page newPage = new RawDataPage(tankList);
                 currentPage = newPage;
@@ -51,10 +47,74 @@ namespace SimulatorUI
         }
         private void Download(object sender, RoutedEventArgs e)
         {
-            //Add functionality to download
-            String firstDate = fromDate.SelectedDate.ToString();
-            String SecondDate = toDate.SelectedDate.ToString();
-        }
+            var timeStamp = new DateTimeOffset(DateTime.UtcNow).ToUnixTimeSeconds();
 
+
+            // Extracting the data from here
+            string startPath = @"..\..\..\..\LogData\EventLogData";
+            // Where the zipped file is sent
+            string zipPath = @"..\..\..\..\ZippedLog\download" +timeStamp + ".zip";
+
+            // Getting the selected dates
+            DateTime? firstDate = fromDate.SelectedDate;
+            DateTime? lastDate = toDate.SelectedDate;
+
+            // Checking if the user has inputed values
+            if (firstDate.HasValue && lastDate.HasValue)
+            {
+                // Initalizes a temporary subdirectory
+                DirectoryInfo di = new DirectoryInfo(startPath);
+                DirectoryInfo sdi = di.CreateSubdirectory("subdir");
+                string targetPath = @"..\..\..\..\LogData\EventLogData\subdir";
+
+                // Iterate over the files in startpath
+                foreach (FileInfo file in di.EnumerateFiles())
+                {
+                    // Filter the relevant files
+                    if (file.CreationTime.Date >= firstDate && file.CreationTime.Date <= lastDate)
+                    {
+                        // Copy the file into the subdir
+                        File.Copy(Path.Combine(startPath, file.Name), Path.Combine(targetPath, file.Name), true);
+                    }
+                }
+                // Creates the zipfile and deletes the subdir
+                ZipFile.CreateFromDirectory(targetPath, zipPath);
+                sdi.Delete(true);
+            } else if (firstDate.HasValue) {
+                DirectoryInfo di = new DirectoryInfo(startPath);
+                DirectoryInfo sdi = di.CreateSubdirectory("subdir");
+                string targetPath = @"..\..\..\..\LogData\EventLogData\subdir";
+                foreach (FileInfo file in di.EnumerateFiles())
+                {
+                    if (file.CreationTime.Date >= firstDate)
+                    {
+                        File.Copy(Path.Combine(startPath, file.Name), Path.Combine(targetPath, file.Name), true);
+                    }
+                }
+                ZipFile.CreateFromDirectory(targetPath, zipPath);
+                sdi.Delete(true);
+
+            }
+            else if (lastDate.HasValue) {
+                DirectoryInfo di = new DirectoryInfo(startPath);
+                DirectoryInfo sdi = di.CreateSubdirectory("subdir");
+                string targetPath = @"..\..\..\..\LogData\EventLogData\subdir";
+                foreach (FileInfo file in di.EnumerateFiles())
+                {
+                    if (file.CreationTime.Date >= firstDate && file.CreationTime.Date <= lastDate)
+                    {
+                        File.Copy(Path.Combine(startPath, file.Name), Path.Combine(targetPath, file.Name), true);
+                    }
+                }
+                ZipFile.CreateFromDirectory(targetPath, zipPath);
+                sdi.Delete(true);
+            }
+            else
+            {
+                ZipFile.CreateFromDirectory(startPath, zipPath);
+
+            }
+
+        }
     }
 }
