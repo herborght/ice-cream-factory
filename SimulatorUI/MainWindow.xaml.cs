@@ -15,7 +15,7 @@ namespace SimulatorUI
     public partial class MainWindow : Window
     {
         List<TankModule> tankList;
-        Page currentPage;
+        public Page currentPage; 
         private static int counter;
 
         public MainWindow(List<TankModule> list)
@@ -26,7 +26,7 @@ namespace SimulatorUI
             _mainFrame.Content = currentPage;
         }
 
-        private void SwitchView(object sender, RoutedEventArgs e)
+        public void SwitchView(object sender, RoutedEventArgs e)
         {
             if (currentPage is SimulationPage)
             {

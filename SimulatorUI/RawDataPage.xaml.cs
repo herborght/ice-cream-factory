@@ -15,7 +15,7 @@ using System.Collections.ObjectModel;
 
 namespace SimulatorUI
 {
-    
+
     public partial class RawDataPage : Page
     {
         public ObservableCollection<TankModule> TankList { get; set; }
@@ -38,7 +38,6 @@ namespace SimulatorUI
         {
             for (; ; )
             {
-                
                 await Task.Delay(1000);
             }
         }
