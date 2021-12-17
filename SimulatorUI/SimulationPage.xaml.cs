@@ -241,7 +241,7 @@ namespace SimulatorUI
                         TankModule source = target.InFlowTanks.Find(x => x.Name == name.Split('_')[1]);
                         if (source != null)
                         {
-                            if (source.OutValveOpen && target.InletFlow > 0)
+                            if (source.OutValveOpen)
                             {
                                 v.Fill = Brushes.White; 
                             }

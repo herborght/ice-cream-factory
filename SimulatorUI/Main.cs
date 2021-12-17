@@ -12,13 +12,11 @@ namespace SimulatorUI
     public class Main
     {
         private IParameterDataBase m_parameters;
-        private IEnumerable<IModule> m_modules;
         private List<TankModule> tankList;
 
-        public Main(IParameterDataBase parameters, IEnumerable<IModule> modules, string configFilePath)
+        public Main(IParameterDataBase parameters, string configFilePath)
         {
             m_parameters = parameters;
-            m_modules = modules;
             initializeTanks(configFilePath);
         }
 
@@ -29,7 +27,7 @@ namespace SimulatorUI
             application.Run(new MainWindow(tankList));
 
         }
-
+        // DSD Joakim Update loop for values
         internal async Task ExecuteSimulation()
         {
             for (; ; )
@@ -37,8 +35,8 @@ namespace SimulatorUI
                 updateTanks();
                 await Task.Delay(1000);
             }
-        }      
-
+        }
+        // DSD Joakim Initializing the tanks
         private void initializeTanks(string configFilePath)
         {
             tankList = readConfig(configFilePath);
@@ -133,6 +131,8 @@ namespace SimulatorUI
             return tankList;
         }
 
+        //DSD Joakim Main update function, goes thorugh different functions depending on the type
+        //As all tanks are tank modules all will go through updateBase
         private void updateTanks()
         {
             foreach (var parameterKey in m_parameters.ParameterKeys)
@@ -156,7 +156,7 @@ namespace SimulatorUI
 
             }
         }
-
+        //DSD Joakim Update the basic values each tank has
         private void updateBase(string parameterKey, TankModule current)
         {
             var parameter = m_parameters.GetParameter(parameterKey);
@@ -200,7 +200,7 @@ namespace SimulatorUI
                 }
             }
         }
-
+        //DSD Joakim Update the dynamic values of the pasteurization tank
         private void updatePasteurizationTank(string parameterKey, PasteurizationModule current)
         {
             var parameter = m_parameters.GetParameter(parameterKey);

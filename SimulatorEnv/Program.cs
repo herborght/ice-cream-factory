@@ -32,7 +32,7 @@ namespace ABB.InSecTT.SimulatorEnv
             ConfigureLogging(parameters);
             SimulationEventSource.Log.Startup();
 
-            MenuHandler menuHandler = new MenuHandler(CreateCommands(parameters));
+            MenuHandler menuHandler = new MenuHandler(CreateCommands(parameters, args[0]));
             ExecEngine execEngine = new ExecEngine();
             string host = ConfigurationManager.AppSettings.Get("BrokerAddress");
             int.TryParse(ConfigurationManager.AppSettings.Get("MsgCycleDelay"), out int msgCycleDelay);
@@ -52,7 +52,7 @@ namespace ABB.InSecTT.SimulatorEnv
             var r = Task.Run(() => menuHandler.HandleCommand());
 
             // DSD - Start UI
-            RunApplication(parameters, modules, args[0]);
+            RunApplication(parameters, args[0]);
 
             r.Wait();
             SimulationEventSource.Log.ExecutionStop();
@@ -103,17 +103,17 @@ namespace ABB.InSecTT.SimulatorEnv
             }
         }
 
-        private static void RunApplication(IParameterDataBase parameters, IEnumerable<IModule> modules, string configFilePath)
+        private static void RunApplication(IParameterDataBase parameters, string configFilePath)
         {
             //var application = new System.Windows.Application();
             //application.Run(new SimulatorUITest.SimulationWindow(parameters, modules));
 
             // DSD Emil - SimulatorUI.Main is a replacement for standard WPF App.xaml
-            var app2 = new SimulatorUI.Main(parameters, modules, configFilePath);
+            var app2 = new SimulatorUI.Main(parameters, configFilePath);
             app2.Run();
         }
 
-        private static IEnumerable<ICmd> CreateCommands(IParameterDataBase parameters)
+        private static IEnumerable<ICmd> CreateCommands(IParameterDataBase parameters, string arg)
         {
             Action<string> displayParameters;
             Action<string> changeParameters;
@@ -128,7 +128,7 @@ namespace ABB.InSecTT.SimulatorEnv
             Action<string> mimicControllerBehaviour;
             mimicControllerBehaviour = (m) => MimicControllerBehaviour(parameters);
             yield return new Command("m", "m = Mimic basic controller behaviour", mimicControllerBehaviour);
-            
+
         }
 
         // DSD Emil - Hardcoded to mimic some controller behaviour for TankConfig
@@ -207,6 +207,8 @@ namespace ABB.InSecTT.SimulatorEnv
             }
 
         }
+
+        
 
         private static void DisplayParameters(IParameterDataBase parameters)
         {

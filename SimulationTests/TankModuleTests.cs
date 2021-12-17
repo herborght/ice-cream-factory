@@ -45,5 +45,37 @@ namespace SimulationTests
             T1.Temperature = 277;
             Assert.AreEqual(T1.Temperature, 277);
         }
+
+
+        [TestMethod]
+        public void ConnectionTest()
+        {
+            //Adds tanks and assigns them as the inflow for others, test if they exist.
+            //Cannot test if value for inflow and outflow is the same as this is not handled by TankModule
+            //As it the simulator itself assigns this.
+            TankModule Tank1 = new TankModule("Tank1");
+            TankModule Tank2 = new TankModule("Tank2");
+            TankModule Tank3 = new TankModule("Tank3");
+
+            Assert.AreEqual(0, Tank1.InFlowTanks.Count);
+
+
+            Tank1.InFlowTanks.Add(Tank2);
+            Tank1.InFlowTanks.Add(Tank3);
+            Tank3.InFlowTanks.Add(Tank2);
+
+            Tank2.OutLetFlow = 0.01;
+
+            Tank1.InletFlow = Tank1.InFlowTanks.Find(x=>x.Name == Tank2.Name).OutLetFlow;
+
+            Assert.AreEqual(2, Tank1.InFlowTanks.Count);
+            Assert.IsTrue(Tank1.InFlowTanks.Exists(x => x.Name == Tank2.Name));
+            Assert.IsTrue(Tank1.InFlowTanks.Exists(x => x.Name == Tank3.Name));
+            Assert.IsTrue(Tank3.InFlowTanks.Exists(x => x.Name == Tank2.Name));
+            Assert.AreEqual(1, Tank3.InFlowTanks.Count);
+            Assert.AreEqual(Tank1.InletFlow, Tank2.OutLetFlow);
+        }
     }
+
+
 }
