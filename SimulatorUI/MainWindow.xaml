@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SimulatorUI"
         mc:Ignorable="d"
-        Title="Ice Cream Factory" Height="1000" Width="850">
+        Title="Ice Cream Factory" Height="1000" Width="1000">
     <Grid Background="#FFE4E4E4">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="auto"/>

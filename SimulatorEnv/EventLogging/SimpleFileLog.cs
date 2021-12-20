@@ -11,7 +11,7 @@ namespace ABB.InSecTT.SimulatorEnv
 {
     internal static class SimpleFileLog
     {
-        private static readonly string fPath = ConfigurationManager.AppSettings.Get("LogFilePath"); //change path in app.config if needed
+        private static readonly string fPath = ConfigurationManager.AppSettings.Get("SimpleLogPath"); //change path in app.config if needed
         private static string fileName;
         private static IParameterDataBase m_parameters;
 
