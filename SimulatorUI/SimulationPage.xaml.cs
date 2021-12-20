@@ -27,6 +27,10 @@ namespace SimulatorUI
         List<TextBlock> labels;
         List<Expander> detailsExpanders;
         List<TextBlock> symbols; //Could be replaced with images, for example pasteurization could use a snowflake and a flame
+        List<Line> arrowshafts;
+        List<Line> arrowheads;
+        List<TextBlock> levelTextBlocks;
+
         public SimulationPage(List<TankModule> list)
         {
             tankList = list;
@@ -50,6 +54,9 @@ namespace SimulatorUI
             labels = new List<TextBlock>();
             symbols = new List<TextBlock>();
             detailsExpanders = new List<Expander>();
+            arrowshafts = new List<Line>();
+            arrowheads = new List<Line>();
+            levelTextBlocks = new List<TextBlock>();
 
             foreach (TankModule tank in tankList)
             {
@@ -115,10 +122,59 @@ namespace SimulatorUI
                 Canvas.SetTop(dumpValve, fromTop + height / 2);
                 dumpValves.Add(dumpValve);
 
+                // DSD Emil - Lines used for creating arrows
+                Line arrowshaft = new Line();
+                arrowshaft.X1 = time * distance + 20;
+                arrowshaft.Y1 = fromTop + 1;
+                arrowshaft.X2 = time * distance + 20;
+                arrowshaft.Y2 = fromTop + height;
+                arrowshaft.StrokeThickness = 2;
+                arrowshaft.Stroke = Brushes.Black;
+                arrowshaft.Uid = "as_" + tank.Name;
+                Canvas.SetZIndex(arrowshaft,10);
+                arrowshafts.Add(arrowshaft);
+
+                Line arrowhead = new Line();
+                arrowhead.X1 = time * distance + 20;
+                arrowhead.Y1 = fromTop + 7;
+                arrowhead.X2 = time * distance + 20;
+                arrowhead.Y2 = fromTop + 8;
+                arrowhead.StrokeThickness = 13;
+                arrowhead.Stroke = Brushes.Black;
+                arrowhead.StrokeStartLineCap = PenLineCap.Triangle;
+                arrowhead.Uid = "ah1_" + tank.Name;
+                Canvas.SetZIndex(arrowhead, 11);
+                arrowheads.Add(arrowhead);
+
+                Line arrowhead2 = new Line();
+                arrowhead2.X1 = time * distance + 20;
+                arrowhead2.Y1 = fromTop + height - 8;
+                arrowhead2.X2 = time * distance + 20;
+                arrowhead2.Y2 = fromTop + height - 9;
+                arrowhead2.StrokeThickness = 13;
+                arrowhead2.Stroke = Brushes.Black;
+                arrowhead2.StrokeStartLineCap = PenLineCap.Triangle;
+                arrowhead2.Uid = "ah2_" + tank.Name;
+                Canvas.SetZIndex(arrowhead2, 11);
+                arrowheads.Add(arrowhead2);
+
+                TextBlock levelText = new TextBlock();
+                levelText.Text = "0%";
+                levelText.Width = 40;
+                levelText.Height = 20;
+                levelText.Uid = tank.Name;
+                Canvas.SetLeft(levelText, time * distance + 30);
+                Canvas.SetTop(levelText, fromTop + 100);
+                levelTextBlocks.Add(levelText);
+
                 canvas.Children.Add(rectangle); //Draw the elements
                 canvas.Children.Add(other);
                 canvas.Children.Add(dumpValve);
                 canvas.Children.Add(detailsExpander);
+                canvas.Children.Add(arrowshaft);
+                canvas.Children.Add(arrowhead);
+                canvas.Children.Add(arrowhead2);
+                canvas.Children.Add(levelText);
 
                 if (tank is PasteurizationModule)
                 {
@@ -128,7 +184,7 @@ namespace SimulatorUI
                     symbol.Height = 100;
                     symbol.Name = "symbols_" + tank.Name;
                     symbol.FontSize = 20;
-                    Canvas.SetLeft(symbol, time * distance + 35);
+                    Canvas.SetLeft(symbol, time * distance + 25);
                     Canvas.SetTop(symbol, fromTop);
                     symbol.TextWrapping = TextWrapping.Wrap;
                     symbols.Add(symbol);
@@ -229,6 +285,43 @@ namespace SimulatorUI
                         string name = r.Uid;
                         TankModule current = tankList.Find(x => x.Name == name);
                         r.Height = 200 - 200 * current.LevelPercentage / 100;
+
+                        // DSD Emil - Update the level indicator arrows here since their level is dependant on the current tank level
+                        Line arrow = arrowshafts.Find(x => x.Uid.Split('_')[1] == name);
+                        arrow.Y1 = arrow.Y2 - 200 + r.Height;
+
+                        List<Line> arrowheadlist = arrowheads.FindAll(x => x.Uid.Split('_')[1] == name);
+
+                        Line arrowhead1 = arrowheadlist.Find(x => x.Uid.Split('_')[0] == "ah1");
+                        Line arrowhead2 = arrowheadlist.Find(x => x.Uid.Split('_')[0] == "ah2");
+
+                        TextBlock leveltext = levelTextBlocks.Find(x => x.Uid == name);
+                        leveltext.Text = Math.Round(current.LevelPercentage, 3) + "%";
+                        
+                        if (r.Height < 187)
+                        {
+                            arrowhead1.Visibility = Visibility.Visible;
+                            arrowhead2.Visibility = Visibility.Visible;
+
+                            arrowhead1.Y1 = arrow.Y1 + 6;
+                            arrowhead1.Y2 = arrow.Y1 + 7;
+
+                            if (r.Height < 200 - leveltext.Height)
+                            {
+                                Canvas.SetTop(leveltext, (arrow.Y1 + arrow.Y2 - leveltext.Height) / 2);                             
+                            }
+                            else
+                            {
+                                Canvas.SetTop(leveltext, arrow.Y1 - leveltext.Height);
+                            }                            
+                        }
+                        else
+                        {
+                            arrowhead1.Visibility = Visibility.Hidden;
+                            arrowhead2.Visibility = Visibility.Hidden;
+
+                            Canvas.SetTop(leveltext, arrow.Y1 - leveltext.Height);
+                        }
                     });
                 }
                 foreach (Ellipse v in connectedValves) //White means open, black closed
