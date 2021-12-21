@@ -21,29 +21,14 @@
             <Image Width="25" Source="/SimulatorUI;component/assets/settings-17-512.png" Margin="5,0,5,0" />
             <TextBlock Text="Settings" FontSize="20" TextAlignment="Center"/>
         </StackPanel>
-        
-        
-        
+
+
+
         <StackPanel Grid.Column="0" Grid.Row="1" Background="#e2ece9" x:Name="SideBar">
-            <StackPanel Orientation="Horizontal" Margin="10">
-                <Image Source="https://pics.freeicons.io/uploads/icons/png/2725159511543238876-512.png" Width="16" Margin="0,0,5,0"/>
+            <StackPanel Margin="0 0">
                 <TextBlock 
-                Grid.Row="0" 
-                Text="Download simulation data" 
-                TextAlignment="Center"
-                />
-            </StackPanel>
-            <TextBlock 
                 Grid.Row="1" 
-                Text="-----------------------------" 
-                TextAlignment="Center" FontSize="14" FontWeight="Bold"/>
-            <Border CornerRadius="10" BorderThickness="1.5" BorderBrush="Black" Grid.Row="2" Margin="5,5,5,5">
-                <StackPanel Orientation="Horizontal">
-                    <Image Width="15" Margin="5,0,0,0" Source="https://pics.freeicons.io/uploads/icons/png/13416400251535694869-512.png"/>
-                    <TextBox TextWrapping="Wrap" MaxWidth="120" Text="Search" BorderThickness="0" Opacity="0.5" Background="{x:Null}"/>
-                </StackPanel>
-            </Border>
-            <StackPanel Margin="0 10">
+                Text="Properties" Margin="5 5" />
                 <CheckBox IsChecked="True" Margin="5 5">Tank temperature</CheckBox>
                 <CheckBox IsChecked="True" Margin="5 5 ">Tank capacity</CheckBox>
                 <CheckBox IsChecked="True" Margin="5 5">Valve flowrate</CheckBox>
@@ -53,7 +38,7 @@
                 Grid.Row="1" 
                 Text="-----------------------------" 
                 TextAlignment="Center" FontWeight="Bold" FontSize="14"/>
-            <StackPanel Margin="0 10">
+            <StackPanel Margin="0 0">
                 <TextBlock Text="Simulation properties" Margin="5 5"/>
                 <RadioButton Margin="5 5">Show more</RadioButton>
                 <RadioButton IsChecked="True" Margin="5 5">Show important</RadioButton>
