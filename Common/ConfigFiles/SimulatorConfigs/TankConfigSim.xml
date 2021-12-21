@@ -74,6 +74,5 @@
       <AnalogOutputParameter>Temperature</AnalogOutputParameter>
       <AnalogOutputParameter>OutFlowTemp</AnalogOutputParameter>
     </module>
-
 	</modules>
 </config>
