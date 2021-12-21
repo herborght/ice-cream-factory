@@ -12,11 +12,13 @@ namespace SimulatorUI
     public class Main
     {
         private IParameterDataBase m_parameters;
+        private IEnumerable<IModule> m_modules;
         private List<TankModule> tankList;
 
-        public Main(IParameterDataBase parameters, string configFilePath)
+        public Main(IParameterDataBase parameters, IEnumerable<IModule> modules, string configFilePath)
         {
             m_parameters = parameters;
+            m_modules = modules;
             initializeTanks(configFilePath);
         }
 
