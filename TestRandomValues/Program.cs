@@ -14,7 +14,7 @@ namespace TestRandomValues
         static void Main(string[] args)
         {
             IParameterDataBase parameters = ParameterDataBase.FromConfiguration("ConfigFiles/SimulatorConfigs/TankConfigSim.xml");
-            Task.Run(() => ExecuteSimulation(parameters));
+            Task.Run(() => ExecuteSimulation(parameters)); 
             var app2 = new Main(parameters, "ConfigFiles/SimulatorConfigs/TankConfigSim.xml");
             app2.Run();
         }
