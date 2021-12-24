@@ -6,7 +6,6 @@ namespace SimulatorUI
 {
     public class TankModule : INotifyPropertyChanged
     {
-        //EDITED BY DSD under:
         public event PropertyChangedEventHandler PropertyChanged;
         protected virtual void OnPropertyChanged(string propertyname)
         {

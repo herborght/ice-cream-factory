@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SimulatorUI"
         mc:Ignorable="d"
+        x:Name="mainwindow"
         Title="Ice Cream Factory" Height="1000" Width="1000">
     <Grid Background="#FFE4E4E4">
         <Grid.ColumnDefinitions>
@@ -25,13 +26,13 @@
 
 
         <StackPanel Grid.Column="0" Grid.Row="1" Background="#e2ece9" x:Name="SideBar">
-            <StackPanel Margin="0 0">
+            <StackPanel Margin="0 0" x:Name="checkboxes">
                 <TextBlock 
                 Grid.Row="1" 
                 Text="Properties" Margin="5 5" />
                 <CheckBox IsChecked="True" Margin="5 5">Tank temperature</CheckBox>
                 <CheckBox IsChecked="True" Margin="5 5 ">Tank capacity</CheckBox>
-                <CheckBox IsChecked="True" Margin="5 5">Valve flowrate</CheckBox>
+                <CheckBox IsChecked="True" Margin="5 5" Checked="CheckBoxChanged" Unchecked="CheckBoxChanged" x:Name="valveflowrate">Valve flowrate</CheckBox>
                 <CheckBox Margin="5 5">Ambinent temperature</CheckBox>
             </StackPanel>
             <TextBlock 
@@ -86,7 +87,7 @@
         
         <StackPanel Grid.Column="1" Grid.Row="1">
             <DockPanel>
-                <Frame x:Name="_mainFrame" NavigationUIVisibility="Hidden"/>
+                <Frame x:Name="_mainFrame" NavigationUIVisibility="Hidden" LoadCompleted="Frame_LoadCompleted"/>
             </DockPanel>
         </StackPanel>
 

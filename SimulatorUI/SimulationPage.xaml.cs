@@ -27,6 +27,7 @@ namespace SimulatorUI
         List<TextBlock> labels;
         List<Expander> detailsExpanders;
         List<TextBlock> symbols; //Could be replaced with images, for example pasteurization could use a snowflake and a flame
+        Boolean valvef; 
         public SimulationPage(List<TankModule> list)
         {
             tankList = list;
@@ -35,7 +36,14 @@ namespace SimulatorUI
             Task.Run(() => UpdateVisuals());
 
         }
-
+        public void setValve(Boolean check)
+        {
+            this.valvef = check;
+        }
+        public void PassData(bool data)
+        {
+            this.valvef = data;
+        }
         private void createTanks()
         {
             int height = 200; //General height of the tank elements
@@ -166,6 +174,7 @@ namespace SimulatorUI
                     ellipse.Uid = tank.Name + "_" + connected.Name; //ID for the valves
                     connectedValves.Add(ellipse);
                     TextBlock label = new TextBlock(); //Label for which valve it is
+                    //Sets text for the valveconnection
                     label.Text = connected.Name + "->" + tank.Name + "\n";
                     label.Name = tank.Name + "_"  + connected.Name;
                     labels.Add(label);
@@ -313,7 +322,11 @@ namespace SimulatorUI
                         {
                             TankModule connected = tank.InFlowTanks.Find(x => x.Name == label.Name.Split('_')[1]);
                             string msg = connected.Name + "->" + tank.Name + "\n";
-                            msg += "InFlow: " + Math.Round(tank.InletFlow, 3) + "m3/s\n"; //Could also add the temperatures, will probably have to divide what each shows in other functions, as we should be able to select the details
+                            valvef = (this.Tag as MainWindow).getValvef();
+                            if (valvef)
+                            {
+                                msg += "InFlow: " + Math.Round(tank.InletFlow, 3) + "m3/s\n"; //Could also add the temperatures, will probably have to divide what each shows in other functions, as we should be able to select the 
+                            } 
                             label.Text = msg;
                         }
                     });
@@ -321,7 +334,7 @@ namespace SimulatorUI
                 await Task.Delay(1000);
             }
         }
-        private string getTankInfo(string name)
+        public string getTankInfo(string name)
         {
             //string msg = ""; //Old with all of the info
             //TankModule tank = tankList.Find(x => x.Name == name);

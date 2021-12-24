@@ -17,15 +17,40 @@ namespace SimulatorUI
         List<TankModule> tankList;
         public Page currentPage; 
         private static int counter;
-
+        public CheckBox valveCheckBox;
+        public TextBlock test;
         public MainWindow(List<TankModule> list)
         {
             tankList = list;
             InitializeComponent();
+            //valveCheckBox = new CheckBox();
+            //valveCheckBox.Content = "Valve flowrate";
+            //valveCheckBox.IsChecked = true;
+            //valveCheckBox.Margin = new Thickness(5, 5, 5, 5);
+            //Application.Current.Resources["valvechekbox"] = valveflowrate;
+            TextBlock test = new TextBlock();
             currentPage = new SimulationPage(tankList);
             _mainFrame.Content = currentPage;
         }
-
+        public void CheckBoxChanged(object sender, RoutedEventArgs e)
+        {
+            
+        }
+        private void Frame_LoadCompleted(object sender, System.Windows.Navigation.NavigationEventArgs e)
+        {
+            if (currentPage is SimulationPage)
+            {
+                (e.Content as SimulationPage).Tag = this;
+            }
+            else
+            {
+                (e.Content as SimulationPage).Tag = this;
+            }
+        }
+        public bool getValvef()
+        {
+            return valveflowrate.IsChecked ?? false;
+        }
         public void SwitchView(object sender, RoutedEventArgs e)
         {
             if (currentPage is SimulationPage)
