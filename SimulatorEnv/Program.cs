@@ -138,7 +138,7 @@ namespace ABB.InSecTT.SimulatorEnv
             ChangeParameter("T1/InFlow:0,075", parameters);
 
             // wait while t1 is filling, total wait time is [wait] amount of seconds
-            int wait = 15;
+            int wait = 10;
             for (int i = 0; i < wait; i++)
             {
                 Thread.Sleep(1000);
@@ -149,20 +149,21 @@ namespace ABB.InSecTT.SimulatorEnv
             ChangeParameter("T1/InFlow:0,0", parameters);
             ChangeParameter("T1/OpenOutlet:true", parameters);
 
-            wait = 20;
+            wait = 10;
             for (int i = 0; i < wait; i++)
             {
                 Thread.Sleep(1000);
                 DisplayParameters(parameters);
             }
             ChangeParameter("T1/OpenOutlet:false", parameters); // some changes for the pasteurization module
-            ChangeParameter("T2/HeaterOn:True", parameters); //Heat for 20s
-            wait = 20;
+            ChangeParameter("T2/HeaterOn:True", parameters); //Heat for 10s
+            wait = 10;
             for (int i = 0; i < wait; i++)
             {
                 Thread.Sleep(1000);
                 DisplayParameters(parameters);
             }
+            wait = 20;
             ChangeParameter("T2/HeaterOn:False", parameters);
             ChangeParameter("T2/CoolerOn:True", parameters);//Cool for 20s
             for (int i = 0; i < wait; i++)
@@ -179,6 +180,89 @@ namespace ABB.InSecTT.SimulatorEnv
                 DisplayParameters(parameters);
             }
             ChangeParameter("T2/OpenOutlet:false", parameters);
+            wait = 10;
+            ChangeParameter("T3/HomogenizationOn:True", parameters);
+            for (int i = 0; i < wait; i++)
+            {
+                Thread.Sleep(1000);
+                DisplayParameters(parameters);
+            }
+            ChangeParameter("T3/HomogenizationOn:False", parameters);
+            ChangeParameter("T3/AgeingCoolingOn:True", parameters);
+            wait = 20;
+            for (int i = 0; i < wait; i++)
+            {
+                Thread.Sleep(1000);
+                DisplayParameters(parameters);
+            }
+            ChangeParameter("T3/AgeingCoolingOn:False", parameters);
+            ChangeParameter("T3/OpenOutlet:True", parameters);
+            wait = 20;
+            for (int i = 0; i < wait; i++)
+            {
+                Thread.Sleep(1000);
+                DisplayParameters(parameters);
+            }
+            ChangeParameter("T3/OpenOutlet:False", parameters);
+            ChangeParameter("T3/OpenDumpValves:True", parameters);
+            wait = 20;
+
+            ChangeParameter("T4/FreezingOn:True", parameters);
+            ChangeParameter("T4/PasteurizationUnits:1,0", parameters);
+            for (int i = 0; i < wait; i++)
+            {
+                Thread.Sleep(1000);
+                DisplayParameters(parameters);
+            }
+            ChangeParameter("T4/DasherOn:True", parameters);
+            for (int i = 0; i < wait; i++)
+            {
+                Thread.Sleep(1000);
+                DisplayParameters(parameters);
+            }
+            ChangeParameter("T4/StartLiquidFlavoring:True", parameters);
+            for (int i = 0; i < wait; i++)
+            {
+                Thread.Sleep(1000);
+                DisplayParameters(parameters);
+            }
+            ChangeParameter("T4/DasherOn:False", parameters);
+            ChangeParameter("T4/StartLiquidFlavoring:False", parameters);
+            ChangeParameter("T4/FreezingOn:False", parameters);
+            ChangeParameter("T4/OpenOutlet:True", parameters);
+            wait = 20;
+            for (int i = 0; i < wait; i++)
+            {
+                Thread.Sleep(1000);
+                DisplayParameters(parameters);
+            }
+            ChangeParameter("T4/OpenOutlet:False", parameters);
+            ChangeParameter("T5/StartFlavoring:True", parameters);
+            for (int i = 0; i < wait; i++)
+            {
+                Thread.Sleep(1000);
+                DisplayParameters(parameters);
+            }
+            ChangeParameter("T5/StartFlavoring:False", parameters);
+            wait = 10;
+            ChangeParameter("T5/StartPackaging:True", parameters);
+            wait = 20;
+            for (int i = 0; i < wait; i++)
+            {
+                Thread.Sleep(1000);
+                DisplayParameters(parameters);
+            }
+            ChangeParameter("T5/StartPackaging:False", parameters);
+            
+            ChangeParameter("T5/StartHardening:True", parameters); //Temp turns into NaN here
+            for (int i = 0; i < wait; i++)
+            {
+                Thread.Sleep(1000);
+                DisplayParameters(parameters);
+            }
+            ChangeParameter("T5/StartHardening:False", parameters);
+            ChangeParameter("T5/FinishedBatch:True", parameters);
+            ChangeParameter("T5/OpenOutlet:True", parameters); //Probably needs to add visuals to the last valve
             DisplayParameters(parameters);
         }
 
