@@ -29,6 +29,7 @@ namespace SimulatorUI
             application.Run(new MainWindow(tankList));
 
         }
+
         // DSD Joakim Update loop for values
         internal async Task ExecuteSimulation()
         {
@@ -38,6 +39,7 @@ namespace SimulatorUI
                 await Task.Delay(1000);
             }
         }
+
         // DSD Joakim Initializing the tanks
         private void initializeTanks(string configFilePath)
         {
@@ -65,54 +67,46 @@ namespace SimulatorUI
                 double.TryParse(mod.Attributes["outletArea"].Value, NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture, out double m_outletArea);
                 double.TryParse(mod.Attributes["height"].Value, NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture, out double m_height);
 
-                // To avoid adding simulator environment as a tank, skip the current iteration of the loop,
-                if (m_type.Equals("SimEnv"))
+                // To avoid adding simulator environment as a tank, skip the current iteration of the loop
+                if (m_type == "SimEnv")
                 {
                     continue;
                 }                
 
                 TankModule tank;
 
-                if(m_type == "TankModule")
+                switch (m_type)
                 {
-                    tank = new TankModule(m_name);
+                    case "TankModule":
+                        tank = new TankModule(m_name);
+                        break;
+                    case "PasteurizationModule":
+                        double.TryParse(mod.Attributes["heaterTemp"].Value, NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture, out double m_HeaterTemp);
+                        double.TryParse(mod.Attributes["coolerTemp"].Value, NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture, out double m_CoolerTemp);
+                        double.TryParse(mod.Attributes["thickness"].Value, NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture, out double m_Thickness);
+                        double.TryParse(mod.Attributes["HTC"].Value, NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture, out double m_HTC);
+                        double.TryParse(mod.Attributes["CTC"].Value, NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture, out double m_CTC);
+                        tank = new PasteurizationModule(m_name, m_HeaterTemp, m_CoolerTemp, m_Thickness, m_HTC, m_CTC);
+                        break;
+                    case "HomogenizationModule":
+                        double.TryParse(mod.Attributes["stage1Pressure"].Value, NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture, out double m_S1Pressure);
+                        double.TryParse(mod.Attributes["stage2Pressure"].Value, NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture, out double m_S2Pressure);
+                        tank = new HomogenizationModule(m_name, m_S1Pressure, m_S2Pressure);                    
+                        break;
+                    case "FreezingModule":
+                        double.TryParse(mod.Attributes["freezerTemp"].Value, NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture, out double m_FreezerTemp);
+                        double.TryParse(mod.Attributes["barrelRotationSpeed"].Value, NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture, out double m_BRSpeed);
+                        tank = new FreezingModule(m_name, m_FreezerTemp, m_BRSpeed);
+                        break;
+                    case "FlavoringPackagingModule":
+                        string m_PType = mod.Attributes["packagingType"].Value;
+                        double.TryParse(mod.Attributes["coolerTemperature"].Value, NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture, out double m_CoolerTemp2);
+                        tank= new FlavoringHardeningPackingModule(m_name, m_PType, m_CoolerTemp2);
+                        break;
+                    default:
+                        throw new NotImplementedException();
                 }
-                else if(m_type == "PasteurizationModule")
-                {
-                    
-                    double.TryParse(mod.Attributes["heaterTemp"].Value, NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture, out double m_HeaterTemp);
-                    double.TryParse(mod.Attributes["coolerTemp"].Value, NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture, out double m_CoolerTemp);
-                    double.TryParse(mod.Attributes["thickness"].Value, NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture, out double m_Thickness);
-                    double.TryParse(mod.Attributes["HTC"].Value, NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture, out double m_HTC);
-                    double.TryParse(mod.Attributes["CTC"].Value, NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture, out double m_CTC);
-                    var temp = new PasteurizationModule(m_name, m_HeaterTemp, m_CoolerTemp, m_Thickness, m_HTC, m_CTC);
-                    tank = temp;
-                }
-                else if(m_type == "HomogenizationModule")
-                {
-                    double.TryParse(mod.Attributes["stage1Pressure"].Value, NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture, out double m_S1Pressure);
-                    double.TryParse(mod.Attributes["stage2Pressure"].Value, NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture, out double m_S2Pressure);
-                    var temp = new HomogenizationModule(m_name, m_S1Pressure, m_S2Pressure);
-                    tank = temp;
-                }
-                else if (m_type == "FreezingModule")
-                {
-                    double.TryParse(mod.Attributes["freezerTemp"].Value, NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture, out double m_FreezerTemp);
-                    double.TryParse(mod.Attributes["barrelRotationSpeed"].Value, NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture, out double m_BRSpeed);
-                    var temp = new FreezingModule(m_name, m_FreezerTemp, m_BRSpeed);
-                    tank = temp;
-                }
-                else if (m_type == "FlavoringPackagingModule")
-                {
-                    string m_PType = mod.Attributes["packagingType"].Value;
-                    double.TryParse(mod.Attributes["coolerTemperature"].Value, NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture, out double m_CoolerTemp);
-                    var temp = new FlavoringHardeningPackingModule(m_name, m_PType, m_CoolerTemp);
-                    tank = temp;
-                }
-                else
-                {
-                    throw new NotImplementedException();
-                }
+
                 tank.BaseArea = m_baseArea;
                 tank.OutletArea = m_outletArea;
                 tank.Height = m_height;             
@@ -142,7 +136,7 @@ namespace SimulatorUI
                             }                         
                             break;
                         default:
-                            continue;
+                            throw new NotImplementedException();
                     }
                 }
                 tankList.Add(tank);

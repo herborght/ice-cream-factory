@@ -16,7 +16,6 @@ namespace SimulatorUI
     {
         List<TankModule> tankList;
         public Page currentPage; 
-        private static int counter;
 
         public MainWindow(List<TankModule> list)
         {
