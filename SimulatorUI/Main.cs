@@ -12,13 +12,11 @@ namespace SimulatorUI
     public class Main
     {
         private IParameterDataBase m_parameters;
-        //private IEnumerable<IModule> m_modules;
         private List<TankModule> tankList;
 
-        public Main(IParameterDataBase parameters/*, IEnumerable<IModule> modules*/, string configFilePath)
+        public Main(IParameterDataBase parameters, string configFilePath)
         {
             m_parameters = parameters;
-            //m_modules = modules;
             initializeTanks(configFilePath);
         }
 
@@ -27,10 +25,9 @@ namespace SimulatorUI
             var application = new System.Windows.Application();
             Task.Run(() => ExecuteSimulation());
             application.Run(new MainWindow(tankList));
-
         }
 
-        // DSD Joakim Update loop for values
+        // DSD Joakim - Update loop for values
         internal async Task ExecuteSimulation()
         {
             for (; ; )
@@ -40,7 +37,7 @@ namespace SimulatorUI
             }
         }
 
-        // DSD Joakim Initializing the tanks
+        // DSD Joakim - Initializing the tanks
         private void initializeTanks(string configFilePath)
         {
             tankList = readConfig(configFilePath);
@@ -48,7 +45,7 @@ namespace SimulatorUI
             updateTanks();
         }
 
-        // DSD Emil - reads all modules from config and adds them to list
+        // DSD Emil - Reads all modules from config and adds them to list
         private List<TankModule> readConfig(string configFilePath)
         {
             XmlDocument xDoc = new XmlDocument();
@@ -115,7 +112,8 @@ namespace SimulatorUI
                 {
                     string p_name = param.InnerText;
                     string p_type = param.LocalName;
-                    string from; // Used as InOutChaining source
+                    // Used as InOutChaining source
+                    string from; 
 
                     switch (p_type)
                     {
@@ -144,8 +142,8 @@ namespace SimulatorUI
             return tankList;
         }
 
-        //DSD Joakim Main update function, goes thorugh different functions depending on the type
-        //As all tanks are tank modules all will go through updateBase
+        // DSD Joakim - Main update function, goes thorugh different functions depending on the type,
+        // as all tanks are tank modules all will go through updateBase
         private void updateTanks()
         {
             foreach (var parameterKey in m_parameters.ParameterKeys)
@@ -157,6 +155,7 @@ namespace SimulatorUI
                 }
                 var current = tankList.Find(tank => tank.Name == parameterKey.Split('/')[0]);
                 updateBase(parameterKey, current);
+
                 switch (current)
                 {
                     case PasteurizationModule p:
@@ -169,16 +168,15 @@ namespace SimulatorUI
                         updateFreezingModule(parameterKey, f);
                         break;
                     case FlavoringHardeningPackingModule fhp:
-                        updateFlavoringPackagingModuleModule(parameterKey, fhp);
+                        updateFlavoringPackagingModule(parameterKey, fhp);
                         break;
                     default:
                         break;
                 }
-
-
             }
         }
-        //DSD Joakim Update the basic values each tank has
+
+        // DSD Joakim - Update the basic values each tank has
         private void updateBase(string parameterKey, TankModule current)
         {
             var parameter = m_parameters.GetParameter(parameterKey);
@@ -222,7 +220,8 @@ namespace SimulatorUI
                 }
             }
         }
-        //DSD Joakim Update the dynamic values of the pasteurization tank
+
+        // DSD Joakim - Update the dynamic values of the pasteurization tank
         private void updatePasteurizationTank(string parameterKey, PasteurizationModule current)
         {
             var parameter = m_parameters.GetParameter(parameterKey);
@@ -240,6 +239,7 @@ namespace SimulatorUI
             }
         }
 
+        // DSD Joakim - Update the dynamic values of the homogenization tank
         private void updateHomogenizationTank(string parameterKey, HomogenizationModule current)
         {
             var parameter = m_parameters.GetParameter(parameterKey);
@@ -269,6 +269,7 @@ namespace SimulatorUI
             }
         }
 
+        // DSD Joakim - Update the dynamic values of the freezing module
         private void updateFreezingModule(string parameterKey, FreezingModule current)
         {
             var parameter = m_parameters.GetParameter(parameterKey);
@@ -310,7 +311,9 @@ namespace SimulatorUI
                 }
             }
         }
-        private void updateFlavoringPackagingModuleModule(string parameterKey, FlavoringHardeningPackingModule current)
+
+        // DSD Joakim - Update the dynamic values of the flavoringhardeningpackaging module
+        private void updateFlavoringPackagingModule(string parameterKey, FlavoringHardeningPackingModule current)
         {
             var parameter = m_parameters.GetParameter(parameterKey);
             if (parameter.ValueType == ParameterType.Analog)
@@ -342,7 +345,5 @@ namespace SimulatorUI
                 }
             }
         }
-        //other functions etc.
-        //like creating the other objects from our planned classes
     }
 }

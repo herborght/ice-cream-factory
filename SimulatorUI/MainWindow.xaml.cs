@@ -25,11 +25,11 @@ namespace SimulatorUI
             _mainFrame.Content = currentPage;
         }
 
+        // DSD Yrjar - Switch the view displayed in the mainframe
         public void SwitchView(object sender, RoutedEventArgs e)
         {
             if (currentPage is SimulationPage)
             {
-
                 Page newPage = new RawDataPage(tankList);
                 currentPage = newPage;
                 Filter.Visibility = Visibility.Visible;
@@ -42,12 +42,12 @@ namespace SimulatorUI
                 Filter.Visibility = Visibility.Collapsed;
                 _mainFrame.Content = newPage;
             }
-
         }
+
+        // DSD Yrjar - Create a zipfile with all simulation data between the two chosen dates
         private void Download(object sender, RoutedEventArgs e)
         {
             var timeStamp = new DateTimeOffset(DateTime.UtcNow).ToUnixTimeSeconds();
-
 
             // Extracting the data from here
             string startPath = @"..\..\..\..\LogData\EventLogData";
@@ -113,7 +113,6 @@ namespace SimulatorUI
                 ZipFile.CreateFromDirectory(startPath, zipPath);
 
             }
-
         }
     }
 }

@@ -10,6 +10,7 @@ namespace TestRandomValues
 {
     class Program
     {
+        // DSD Joakim - Separate program.cs used for testing UI in isolation from simulation, with random values
         [STAThread]
         static void Main(string[] args)
         {
@@ -99,8 +100,6 @@ namespace TestRandomValues
                     Console.WriteLine($"Parameter not changed {key}:{unparsedValue}");
                 }
             }
-
         }
     }
-
 }

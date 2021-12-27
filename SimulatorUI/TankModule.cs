@@ -6,7 +6,8 @@ namespace SimulatorUI
 {
     public class TankModule : INotifyPropertyChanged
     {
-        //EDITED BY DSD under:
+        // DSD Joakim 
+        // Updated by Bendik with databinding used in rawdataview
         public event PropertyChangedEventHandler PropertyChanged;
         protected virtual void OnPropertyChanged(string propertyname)
         {
@@ -21,7 +22,7 @@ namespace SimulatorUI
             return true;
         }
         public string Name { get; }
-        private double inletflow; // created by Bendik
+        private double inletflow;
         public double InletFlow
         {
             get {

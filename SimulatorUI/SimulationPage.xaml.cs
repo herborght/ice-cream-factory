@@ -36,6 +36,7 @@ namespace SimulatorUI
 
         }
 
+        // DSD Joakim - Create all the tanks
         private void createTanks()
         {
             int height = 200; //General height of the tank elements
@@ -60,7 +61,8 @@ namespace SimulatorUI
                     rows++;
                 }
 
-                Rectangle rectangle = new Rectangle(); //The rectangle for visualizing the tank level
+                // The rectangle for visualizing the tank level
+                Rectangle rectangle = new Rectangle(); 
                 rectangle.Width = 75;
                 rectangle.Height = height;
                 SolidColorBrush blueBrush = new SolidColorBrush();
@@ -71,7 +73,8 @@ namespace SimulatorUI
                 rectangle.StrokeThickness = 2;
                 rectangle.Stroke = Brushes.Black;
 
-                Expander detailsExpander = new Expander(); // DSD Emil - Expander used for details dropdown
+                // DSD Emil - Expander used for details dropdown
+                Expander detailsExpander = new Expander(); 
                 detailsExpander.Uid = tank.Name;
                 TextBlock headerText = new TextBlock();
                 headerText.Text = "Name: " + tank.Name;
@@ -85,7 +88,8 @@ namespace SimulatorUI
                 Canvas.SetTop(detailsExpander, fromTop-1); // yeah its stupid, but the expander box was visually a tiny bit under the top of the tank
                 detailsExpanders.Add(detailsExpander);
 
-                Rectangle other = new Rectangle(); //The rectangle showing how empty the tank is 
+                // The rectangle showing how empty the tank is 
+                Rectangle other = new Rectangle(); 
                 other.Uid = tank.Name;
                 other.Width = 75;
                 other.Height = 200;
@@ -98,13 +102,15 @@ namespace SimulatorUI
                 other.Stroke = Brushes.Black;
                 barList.Add(other);
 
-                Point point = new Point();//The point at which the tank will have its connections
+                // The point at which the tank will have its connections
+                Point point = new Point();
                 point.X = time * distance + 37.5;
                 point.Y = fromTop + height;
                 KeyValuePair<string, KeyValuePair<int, Point>> keyValuePair = new KeyValuePair<string, KeyValuePair<int, Point>>(tank.Name, new KeyValuePair<int, Point>(rows, point)); //Added in this way to get which row they are on
                 pointList.Add(keyValuePair);
 
-                Ellipse dumpValve = new Ellipse(); //Dump valves will probably have to improve the visuals of these, or change their position not really intuitive 
+                //Dump valves will probably have to improve the visuals of these, or change their position not really intuitive 
+                Ellipse dumpValve = new Ellipse(); 
                 dumpValve.Width = 10;
                 dumpValve.Height = 10;
                 dumpValve.Fill = Brushes.Black;
@@ -115,7 +121,8 @@ namespace SimulatorUI
                 Canvas.SetTop(dumpValve, fromTop + height / 2);
                 dumpValves.Add(dumpValve);
 
-                canvas.Children.Add(rectangle); //Draw the elements
+                // All elements to be drawn are added to the canvas
+                canvas.Children.Add(rectangle); 
                 canvas.Children.Add(other);
                 canvas.Children.Add(dumpValve);
                 canvas.Children.Add(detailsExpander);
@@ -140,7 +147,8 @@ namespace SimulatorUI
             int[] times = new int[rows + 1]; //Used to increment the length of which the lines are apart from eachother
             foreach(TankModule tank in tankList)
             {
-                foreach(TankModule connected in tank.InFlowTanks) //This is a bit backward initial is the destination of the connection while target is the source
+                // This is a bit backward initial is the destination of the connection while target is the source
+                foreach (TankModule connected in tank.InFlowTanks) 
                 {
                     KeyValuePair<int, Point> initialPair = pointList.Find(x => x.Key == tank.Name).Value; //The pairs are used to access the rows and points for the lines
                     KeyValuePair<int, Point> targetPair = pointList.Find(x => x.Key == connected.Name).Value;
@@ -218,10 +226,12 @@ namespace SimulatorUI
             }
         }
 
-        internal async Task UpdateVisuals()//Loops through the different elements and updates them
+        // DSD Joakim - Loops through the different elements and updates them
+        internal async Task UpdateVisuals()
         {
             for (; ; )
             {
+                // Update rectangles visualizing the tank level
                 foreach (Rectangle r in barList)
                 {
                     r.Dispatcher.Invoke(() =>
@@ -231,9 +241,10 @@ namespace SimulatorUI
                         r.Height = 200 - 200 * current.LevelPercentage / 100;
                     });
                 }
-                foreach (Ellipse v in connectedValves) //White means open, black closed
-                {
 
+                // Update the valves, White means open, black closed
+                foreach (Ellipse v in connectedValves) 
+                {
                     v.Dispatcher.Invoke(() =>
                     {
                         string name = v.Uid;
@@ -252,9 +263,10 @@ namespace SimulatorUI
                         }
                     });
                 }
+
+                // Update dumpvalves, currently only black dots on the side of the tanks
                 foreach (Ellipse v in dumpValves)
                 {
-
                     v.Dispatcher.Invoke(() =>
                     {
                         string name = v.Uid;
@@ -269,6 +281,8 @@ namespace SimulatorUI
                         }
                     });
                 }
+
+                // DSD Emil - Update expandable/collapsable container for displaying tank info
                 foreach (Expander expander in detailsExpanders)
                 {
                     expander.Dispatcher.Invoke(()=> {
@@ -279,6 +293,8 @@ namespace SimulatorUI
                         expander.Content = content;
                     });
                 }
+
+                // Update special symbols
                 foreach (TextBlock textBlock in symbols)
                 {
                     textBlock.Dispatcher.Invoke(() => {
@@ -305,6 +321,8 @@ namespace SimulatorUI
                         }
                     });
                 }
+
+                // Update labels for tank connections
                 foreach (TextBlock label in labels)
                 {
                     label.Dispatcher.Invoke(() => {
@@ -313,40 +331,19 @@ namespace SimulatorUI
                         {
                             TankModule connected = tank.InFlowTanks.Find(x => x.Name == label.Name.Split('_')[1]);
                             string msg = connected.Name + "->" + tank.Name + "\n";
-                            msg += "InFlow: " + Math.Round(tank.InletFlow, 3) + "m3/s\n"; //Could also add the temperatures, will probably have to divide what each shows in other functions, as we should be able to select the details
+                            msg += "InFlow: " + Math.Round(tank.InletFlow, 3) + "m3/s\n";
                             label.Text = msg;
                         }
                     });
                 }
+
                 await Task.Delay(1000);
             }
         }
+
+        // DSD - Get the info from the tank to be displayed
         private string getTankInfo(string name)
         {
-            //string msg = ""; //Old with all of the info
-            //TankModule tank = tankList.Find(x => x.Name == name);
-            //msg += "Name: " + tank.Name + "\n";
-            //msg += "Level: " + Math.Round(tank.Level, 3) + " m \n";
-            //msg += "Percent: " + Math.Round(tank.LevelPercentage, 3) + "%" + "\n";
-            //msg += "Temp: " + Math.Round(tank.Temperature, 3) + "\n";
-            //if(tank.InFlowTanks.Count > 0)
-            //{
-            //    msg += "InFlow from: ";
-            //    foreach(var t in tank.InFlowTanks)
-            //    {
-            //        msg += t.Name + " ";
-            //    }
-            //    msg += "\n";
-            //}
-            //msg += "InFlow: " + Math.Round(tank.InletFlow, 3) + "m3/s\n"; 
-            //msg += "InFow Temp: " + Math.Round(tank.InFlowTemp, 3) + "K\n";
-            //msg += "OutFlow: " + Math.Round(tank.OutLetFlow, 3) + "K\n";
-            //msg += "OutFlow Temp: " + Math.Round(tank.OutFlowTemp, 3) + "K\n";
-            //msg += tank.Name + " Dmp. Valve: " + tank.DumpValveOpen + "\n";
-            //msg += tank.Name + " Out Valve: " + tank.OutValveOpen + "\n";
-            //msg += "\n";
-            //return msg;
-
             string msg = "";
             TankModule tank = tankList.Find(x => x.Name == name);
             msg += "Level: " + Math.Round(tank.Level, 3) + "m\n";
@@ -368,6 +365,4 @@ namespace SimulatorUI
             return msg;
         }
     }
-
-    
 }
