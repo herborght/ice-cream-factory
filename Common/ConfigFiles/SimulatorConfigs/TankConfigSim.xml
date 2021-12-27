@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <config>
 	<modules>
+    <module name="SimEnv" baseArea="0.0" outletArea="0.0" height="0" type="SimEnv" >
+      <AnalogOutputParameter>AmbientTemp</AnalogOutputParameter>
+    </module>
 		<module name="T1" baseArea="0.5" outletArea="0.004" height="2" type="TankModule" >
 			<DigitalInputParameter>OpenDumpValve</DigitalInputParameter>
 			<AnalogOutputParameter>Level</AnalogOutputParameter>
@@ -12,18 +15,21 @@
 			<DigitalInputParameter>OpenOutlet</DigitalInputParameter>
 			<AnalogOutputParameter>OutFlow</AnalogOutputParameter>
 		</module>
-		<module name="T2" baseArea="0.5" outletArea="0.004" height="2" type="TankModule" >
-			<DigitalInputParameter>OpenDumpValve</DigitalInputParameter>
-			<AnalogOutputParameter>Level</AnalogOutputParameter>
-			<AnalogOutputParameter>LevelPercent</AnalogOutputParameter>
-			<InOutChaining from="T1/OutFlow">InFlow</InOutChaining>
-			<DigitalInputParameter>OpenOutlet</DigitalInputParameter>
-			<AnalogOutputParameter>OutFlow</AnalogOutputParameter>
-			<InOutChaining from= "T1/OutFlowTemp">InFlowTemp</InOutChaining >
-			<AnalogOutputParameter>Temperature</AnalogOutputParameter>
-			<AnalogOutputParameter>OutFlowTemp</AnalogOutputParameter>
-
-		</module>
+    <module name="T2" baseArea="0.5" outletArea="0.004" height="2" heaterTemp="373.15" coolerTemp="273.15" thickness="0.05" HTC="80" CTC="80" type="PasteurizationModule" >
+      <AnalogOutputParameter>Level</AnalogOutputParameter>
+      <AnalogOutputParameter>LevelPercent</AnalogOutputParameter>
+      <AnalogInputParameter>InFlow</AnalogInputParameter>
+      <DigitalInputParameter>OpenOutlet</DigitalInputParameter>
+      <AnalogOutputParameter>OutFlow</AnalogOutputParameter>
+      <DigitalInputParameter>HeaterOn</DigitalInputParameter>
+      <AnalogOutputParameter>Temperature</AnalogOutputParameter>
+      <DigitalInputParameter>CoolerOn</DigitalInputParameter>
+      <DigitalInputParameter>OpenDumpValve</DigitalInputParameter>
+      <AnalogInputParameter>InFlowTemp</AnalogInputParameter>
+      <AnalogOutputParameter>OutFlowTemp</AnalogOutputParameter>
+      <InOutChaining from="T1/OutFlow">InFlow</InOutChaining>
+      <InOutChaining from= "T1/OutFlowTemp">InFlowTemp</InOutChaining >
+    </module>
 		<module name="T3" baseArea="0.5" outletArea="0.004" height="2" type="TankModule" >
 			<DigitalInputParameter>OpenDumpValve</DigitalInputParameter>
 			<AnalogOutputParameter>Level</AnalogOutputParameter>
