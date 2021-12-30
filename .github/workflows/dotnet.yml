@@ -25,4 +25,4 @@ jobs:
       run: echo ${env:PATH}
       shell: powershell
     - name: Test
-      run: dotnet test --no-build --verbosity normal --collect "Code Coverage" --logger "trx;logfilename=mytests.trx"
+      run: dotnet test --no-build --verbosity normal --collect "Code Coverage" --logger "trx;logfilename=mytests.trx" D:\a\ice-cream-factory\ice-cream-factory\SimulationTests\SimulationTests.csproj
