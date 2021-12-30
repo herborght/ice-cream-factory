@@ -22,4 +22,4 @@ jobs:
     - name: Build
       run: dotnet build --no-restore
     - name: Test
-      run: dotnet test --no-build --verbosity normal --collect "Code Coverage" --logger "trx;logfilename=mytests.trx" *\SimulationTests\SimulationTests.csproj
+      run: dotnet test --no-build --verbosity normal --collect "Code Coverage" --logger "trx;logfilename=mytests.trx" ~\ice-cream-factory\SimulationTests\SimulationTests.csproj
