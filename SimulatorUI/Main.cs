@@ -228,7 +228,7 @@ namespace SimulatorUI
                 }
             }
         }
-        //DSD Joakim Update the dynamic values of the pasteurization tank
+        //DSD Joakim Update the dynamic values of the other tanks (covers the ones bellow)
         private void updatePasteurizationTank(string parameterKey, PasteurizationModule current)
         {
             var parameter = m_parameters.GetParameter(parameterKey);
