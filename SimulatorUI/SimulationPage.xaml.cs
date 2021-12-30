@@ -51,7 +51,7 @@ namespace SimulatorUI
             symbols = new List<TextBlock>();
             detailsExpanders = new List<Expander>();
 
-            foreach (TankModule tank in tankList)
+            foreach (TankModule tank in tankList) //Setup the shapes and connection points
             {
                 if (time == 3)
                 {
@@ -120,10 +120,10 @@ namespace SimulatorUI
                 canvas.Children.Add(dumpValve);
                 canvas.Children.Add(detailsExpander);
 
-                if (tank is PasteurizationModule)
+                if (tank is PasteurizationModule || tank is HomogenizationModule || tank is FreezingModule || tank is FlavoringHardeningPackingModule)
                 {
                     TextBlock symbol = new TextBlock();
-                    symbol.Text = "+/-";
+                    symbol.Text = "";
                     symbol.Width = 40;
                     symbol.Height = 100;
                     symbol.Name = "symbols_" + tank.Name;
@@ -138,7 +138,7 @@ namespace SimulatorUI
                 time++;
             }
             int[] times = new int[rows + 1]; //Used to increment the length of which the lines are apart from eachother
-            foreach(TankModule tank in tankList)
+            foreach(TankModule tank in tankList) //Create the connections
             {
                 foreach(TankModule connected in tank.InFlowTanks) //This is a bit backward initial is the destination of the connection while target is the source
                 {
@@ -279,32 +279,6 @@ namespace SimulatorUI
                         expander.Content = content;
                     });
                 }
-                foreach (TextBlock textBlock in symbols)
-                {
-                    textBlock.Dispatcher.Invoke(() => {
-                        TankModule tank = tankList.Find(x => x.Name == textBlock.Name.Split('_')[1]);
-                        if(tank is PasteurizationModule)
-                        {
-                            PasteurizationModule temp = (PasteurizationModule)tank;
-                            if(temp.HeaterOn)
-                            {
-                                textBlock.Text = "+";
-                                if(temp.CoolerOn)
-                                {
-                                    textBlock.Text += "/-"; //Not really sure if this should be possible, as the result is NaN
-                                }
-                            }
-                            else if(temp.CoolerOn)
-                            {
-                                textBlock.Text = "-";
-                            }
-                            else
-                            {
-                                textBlock.Text = "";
-                            }
-                        }
-                    });
-                }
                 foreach (TextBlock label in labels)
                 {
                     label.Dispatcher.Invoke(() => {
@@ -318,9 +292,113 @@ namespace SimulatorUI
                         }
                     });
                 }
+                SymbolUpdate(); //Could divide the rest into functions, would probably be easier to modify later on
                 await Task.Delay(1000);
             }
         }
+
+        private void SymbolUpdate()
+        {
+            foreach (TextBlock textBlock in symbols)
+            {
+                textBlock.Dispatcher.Invoke(() => {
+                    TankModule tank = tankList.Find(x => x.Name == textBlock.Name.Split('_')[1]);
+                    switch(tank)
+                    {
+                        case PasteurizationModule p:
+                            textBlock.Text = updatePasteurization(p);
+                            break;
+                        case HomogenizationModule h:
+                            textBlock.Text = updateHomogenization(h);
+                            break;
+                        case FlavoringHardeningPackingModule fhp:
+                            textBlock.Text = updateFlavoringHardeningPacking(fhp);
+                            break;
+                        case FreezingModule f:
+                            textBlock.Text = updateFreezing(f);
+                            break;
+                        
+                    }                  
+                });
+            }
+        }
+
+        private string updatePasteurization(PasteurizationModule temp)
+        {
+            string ret = "";
+            if (temp.HeaterOn)
+            {
+                ret = "+";
+                if (temp.CoolerOn)
+                {
+                    ret += "/-"; //Not really sure if this should be possible, as the result is NaN
+                }
+            }
+            else if (temp.CoolerOn)
+            {
+                ret = "-";
+            }
+            else
+            {
+                ret = "";
+            }
+            return ret;
+        }
+        
+        private string updateHomogenization(HomogenizationModule temp) //Present cooler and pressure in raw data instead
+        {
+            string ret = "";
+            if(temp.HomogenizationOn)
+            {
+                ret = "H ";
+            }
+            if(temp.AgeingCoolingOn)
+            {
+                ret += "A-";
+            }
+            return ret;
+        }
+
+        private string updateFlavoringHardeningPacking(FlavoringHardeningPackingModule temp) //Represent Mix temp, cooler temp, package form (or with an image) in raw data
+        {
+            string ret = "";
+            if (temp.StartFlavoring)
+            {
+                ret = "F ";
+            }
+            if (temp.StartHardening)
+            {
+                ret += "H ";
+            }
+            if (temp.StartPackaging)
+            {
+                ret += "P ";
+            }
+            if(temp.FinishBatch)
+            {
+                ret = "Fin";
+            }
+            return ret;
+        }
+
+        private string updateFreezing(FreezingModule temp) //Represent sending test values? Represent others via raw data
+        {
+            string ret = "";
+            if (temp.FreezingOn)
+            {
+                ret = "-";
+            }
+            if (temp.DasherOn)
+            {
+                ret += "D";
+            }
+            if (temp.StartLiquidFlavoring) //Maybe do visually
+            {
+                ret += "LF";
+            }
+            return ret;
+        }
+
         private string getTankInfo(string name)
         {
             //string msg = ""; //Old with all of the info
@@ -364,7 +442,31 @@ namespace SimulatorUI
             {
                 msg += "Dump Valve: Closed\n";
             }
-            
+            switch (tank)
+            {
+                case PasteurizationModule p: //Can add Thickness and conductivities if necessary
+                    msg += "Heater temp: " + p.HeaterTemp + "K\n";
+                    msg += "Cooler temp: " + p.CoolerTemp + "K\n";
+                    break;
+                case HomogenizationModule h:
+                    msg += "Mix temp: " + h.MixTemperature + "K\n";
+                    msg += "Particle size: " + h.ParticleSize + "K\n";
+                    msg += "Stage 1 pressure: " + h.Stage1Pressure + " Pa\n"; //Don't know the unit, quessing pascal
+                    msg += "Stage 2 pressure: " + h.Stage2Pressure + " Pa\n";
+                    break;
+                case FlavoringHardeningPackingModule fhp:
+                    msg += "Mix temp: " + fhp.MixTemperature + "K\n";
+                    msg += "Package type: " + fhp.PackageType + "\n";
+                    msg += "Cooler temp: " + fhp.CoolerTemperature + "K\n";
+                    break;
+                case FreezingModule f:
+                    msg += "Mix temp: " + f.MixTemperature + "K\n";
+                    msg += "Freezer temp: " + f.FreezerTemp + "K\n";
+                    msg += "Volume increase: " + f.Overrun + "%\n"; //Precentage of increase in volume after mix and freeze
+                    msg += "Barrel rot. speed: " + f.BarrelRotationSpeed + " rad/s\n"; //Don't know which SI unit, quessing rad/s
+                    msg += "Units: " + f.PasteurizationUnits + "\n"; //Should probably be visualized, probably ask customer
+                    break;
+            }
             return msg;
         }
     }
