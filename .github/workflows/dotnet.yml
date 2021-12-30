@@ -2,9 +2,9 @@ name: .NET
 
 on:
   push:
-    branches: [ CITesting ]
   pull_request:
-    branches: [ CITesting ]
+    branches: 
+     - *
 
 jobs:
   build:

@@ -11,7 +11,7 @@ using System.Threading;
 
 namespace SimulationTests
 {
-    public class STATestMethodAttribute : TestMethodAttribute
+    public class STATestMethodAttribute : TestMethodAttribute // Customized test for running STA thread, from https://github.com/microsoft/XamlBehaviorsWpf/blob/master/Test/UnitTests/STATestMethodAttribute.cs
     {
         public override TestResult[] Execute(ITestMethod testMethod)
         {
