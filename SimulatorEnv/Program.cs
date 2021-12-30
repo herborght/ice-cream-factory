@@ -132,6 +132,7 @@ namespace ABB.InSecTT.SimulatorEnv
         }
 
         // DSD Emil - Hardcoded to mimic some controller behaviour for TankConfig
+        //DSD Joakim - Edited to fit various tanks
         private static void MimicControllerBehaviour(IParameterDataBase parameters)
         {
             // "open" t1 inflow by changes its inflow value
