@@ -4,7 +4,7 @@ using System.Text;
 
 namespace SimulatorUI
 {
-    class FlavoringHardeningPackingModule : TankModule
+    public class FlavoringHardeningPackingModule : TankModule
     {
         public double MixTemperature { get; set; }
         public string PackageType { get; }
