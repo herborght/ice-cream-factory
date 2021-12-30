@@ -7,16 +7,35 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Windows;
 using NUnit.Framework;
 using ABB.InSecTT.Common.Configuration;
+using System.Threading;
 
 namespace SimulationTests
 {
+    public class STATestMethodAttribute : TestMethodAttribute // Customized test for running STA thread, from https://github.com/microsoft/XamlBehaviorsWpf/blob/master/Test/UnitTests/STATestMethodAttribute.cs
+    {
+        public override TestResult[] Execute(ITestMethod testMethod)
+        {
+            if (Thread.CurrentThread.GetApartmentState() == ApartmentState.STA)
+                return Invoke(testMethod);
+
+            TestResult[] result = null;
+            var thread = new Thread(() => result = Invoke(testMethod));
+            thread.SetApartmentState(ApartmentState.STA);
+            thread.Start();
+            thread.Join();
+            return result;
+        }
+
+        private TestResult[] Invoke(ITestMethod testMethod)
+        {
+            return new[] { testMethod.Invoke(null) };
+        }
+    }
+
     [TestClass, RequiresSTA]
     public class MainWindowTests
     {
         //initalizing main
-        IParameterDataBase parameters;
-        IEnumerable<IModule> modules; 
-        string configFilePath;
         //Main main = new Main(parameters, modules, configFilePath);
 
         //variables for SwitchViewTest
@@ -32,7 +51,7 @@ namespace SimulationTests
 
 
 
-        [TestMethod]
+        [STATestMethod]
         public void SwitchViewTest()
         {
             /*This test is currently just checking if the currentPage i different 
@@ -42,6 +61,9 @@ namespace SimulationTests
             T2 = new TankModule("T2");
             tankList.Add(T1); //need to run initialize tanks to create tankList with the config path 
             tankList.Add(T2);
+
+            if (System.Windows.Application.Current == null)
+            { new System.Windows.Application { ShutdownMode = ShutdownMode.OnExplicitShutdown }; }
 
             Application.Current.Dispatcher.Invoke(delegate
             {
@@ -60,15 +82,14 @@ namespace SimulationTests
             });
         }
 
-       /* [TestMethod]
-        public void GetTnkInfoTest()
-        {
-            T1 = new TankModule("T1");
-            T2 = new TankModule("T2");
-            
-            tankList.Add(T1);
-            tankList.Add(T2);
+        /* [TestMethod]
+         public void GetTnkInfoTest()
+         {
+             T1 = new TankModule("T1");
+             T2 = new TankModule("T2");
 
-        }*/
+             tankList.Add(T1);
+             tankList.Add(T2);
+         }*/
     }
 }
