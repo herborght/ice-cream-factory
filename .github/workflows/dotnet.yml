@@ -21,5 +21,8 @@ jobs:
       run: dotnet restore
     - name: Build
       run: dotnet build --no-restore
+    - name: Display the path
+      run: echo ${env:PATH}
+      shell: powershell
     - name: Test
-      run: dotnet test --no-build --verbosity normal --collect "Code Coverage" --logger "trx;logfilename=mytests.trx" ~\ice-cream-factory\SimulationTests\SimulationTests.csproj
+      run: dotnet test --no-build --verbosity normal --collect "Code Coverage" --logger "trx;logfilename=mytests.trx" \ice-cream-factory\SimulationTests\SimulationTests.csproj
