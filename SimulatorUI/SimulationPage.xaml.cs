@@ -20,7 +20,7 @@ namespace SimulatorUI
     public partial class SimulationPage : Page
     {
         List<TankModule> tankList;
-        List<Rectangle> barList; // List of the rectangles visualizing the tank level
+        List<Rectangle> tankLevelList; // List of the rectangles visualizing the tank level
         List<KeyValuePair<string, KeyValuePair<int, Point>>> pointList; // The points of connectections for the tanks
         List<Ellipse> connectedValves; // The visualization of the valves
         List<Ellipse> dumpValves;
@@ -44,7 +44,7 @@ namespace SimulatorUI
             int fromTop = 0; // The height of the row
             int rows = 0; // Shows which row is the current
             int distance = 230; // Distance between each tank
-            barList = new List<Rectangle>();
+            tankLevelList = new List<Rectangle>();
             pointList = new List<KeyValuePair<string, KeyValuePair<int, Point>>>();
             connectedValves = new List<Ellipse>();
             dumpValves = new List<Ellipse>();
@@ -62,7 +62,7 @@ namespace SimulatorUI
                 }
 
                 // The rectangle for visualizing the tank level
-                Rectangle rectangle = new Rectangle
+                Rectangle tankRectangle = new Rectangle
                 {
                     Width = 75,
                     Height = height,
@@ -70,8 +70,22 @@ namespace SimulatorUI
                     StrokeThickness = 2,
                     Stroke = Brushes.Black
                 };
-                Canvas.SetLeft(rectangle, time * distance);
-                Canvas.SetTop(rectangle, fromTop);
+                Canvas.SetLeft(tankRectangle, time * distance);
+                Canvas.SetTop(tankRectangle, fromTop);
+
+                // The rectangle showing how empty the tank is 
+                Rectangle tankLevelRectangle = new Rectangle
+                {
+                    Uid = tank.Name,
+                    Width = 75,
+                    Height = 200,
+                    Fill = Brushes.White,
+                    StrokeThickness = 2,
+                    Stroke = Brushes.Black
+                };
+                Canvas.SetLeft(tankLevelRectangle, time * distance);
+                Canvas.SetTop(tankLevelRectangle, fromTop);
+                tankLevelList.Add(tankLevelRectangle);
 
                 // DSD Emil - Expander used for details dropdown
                 TextBlock headerText = new TextBlock
@@ -91,20 +105,6 @@ namespace SimulatorUI
                 Canvas.SetLeft(detailsExpander, time * distance + 80);
                 Canvas.SetTop(detailsExpander, fromTop - 1); // yeah its stupid, but the expander box was visually a tiny bit under the top of the tank
                 detailsExpanders.Add(detailsExpander);
-
-                // The rectangle showing how empty the tank is 
-                Rectangle other = new Rectangle
-                {
-                    Uid = tank.Name,
-                    Width = 75,
-                    Height = 200,
-                    Fill = Brushes.White,
-                    StrokeThickness = 2,
-                    Stroke = Brushes.Black
-                };
-                Canvas.SetLeft(other, time * distance);
-                Canvas.SetTop(other, fromTop);
-                barList.Add(other);
 
                 // The point at which the tank will have its connections
                 Point point = new Point
@@ -130,8 +130,8 @@ namespace SimulatorUI
                 dumpValves.Add(dumpValve);
 
                 // All elements to be drawn are added to the canvas
-                canvas.Children.Add(rectangle);
-                canvas.Children.Add(other);
+                canvas.Children.Add(tankRectangle);
+                canvas.Children.Add(tankLevelRectangle);
                 canvas.Children.Add(dumpValve);
                 canvas.Children.Add(detailsExpander);
 
@@ -270,7 +270,7 @@ namespace SimulatorUI
             for (; ; )
             {
                 // Update rectangles visualizing the tank level
-                foreach (Rectangle rectangle in barList)
+                foreach (Rectangle rectangle in tankLevelList)
                 {
                     rectangle.Dispatcher.Invoke(() =>
                     {

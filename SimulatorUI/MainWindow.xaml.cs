@@ -62,12 +62,12 @@ namespace SimulatorUI
             if (firstDate.HasValue && lastDate.HasValue)
             {
                 // Initalizes a temporary subdirectory
-                DirectoryInfo di = new DirectoryInfo(startPath);
-                DirectoryInfo sdi = di.CreateSubdirectory("subdir");
+                DirectoryInfo dir = new DirectoryInfo(startPath);
+                DirectoryInfo subdir = dir.CreateSubdirectory("subdir");
                 string targetPath = @"..\..\..\..\LogData\EventLogData\subdir";
 
                 // Iterate over the files in startpath
-                foreach (FileInfo file in di.EnumerateFiles())
+                foreach (FileInfo file in dir.EnumerateFiles())
                 {
                     // Filter the relevant files
                     if (file.CreationTime.Date >= firstDate && file.CreationTime.Date <= lastDate)
@@ -78,14 +78,14 @@ namespace SimulatorUI
                 }
                 // Creates the zipfile and deletes the subdir
                 ZipFile.CreateFromDirectory(targetPath, zipPath);
-                sdi.Delete(true);
+                subdir.Delete(true);
             }
             else if (firstDate.HasValue)
             {
-                DirectoryInfo di = new DirectoryInfo(startPath);
-                DirectoryInfo sdi = di.CreateSubdirectory("subdir");
+                DirectoryInfo dir = new DirectoryInfo(startPath);
+                DirectoryInfo subdir = dir.CreateSubdirectory("subdir");
                 string targetPath = @"..\..\..\..\LogData\EventLogData\subdir";
-                foreach (FileInfo file in di.EnumerateFiles())
+                foreach (FileInfo file in dir.EnumerateFiles())
                 {
                     if (file.CreationTime.Date >= firstDate)
                     {
@@ -93,15 +93,14 @@ namespace SimulatorUI
                     }
                 }
                 ZipFile.CreateFromDirectory(targetPath, zipPath);
-                sdi.Delete(true);
-
+                subdir.Delete(true);
             }
             else if (lastDate.HasValue)
             {
-                DirectoryInfo di = new DirectoryInfo(startPath);
-                DirectoryInfo sdi = di.CreateSubdirectory("subdir");
+                DirectoryInfo dir = new DirectoryInfo(startPath);
+                DirectoryInfo subdir = dir.CreateSubdirectory("subdir");
                 string targetPath = @"..\..\..\..\LogData\EventLogData\subdir";
-                foreach (FileInfo file in di.EnumerateFiles())
+                foreach (FileInfo file in dir.EnumerateFiles())
                 {
                     if (file.CreationTime.Date >= firstDate && file.CreationTime.Date <= lastDate)
                     {
@@ -109,12 +108,11 @@ namespace SimulatorUI
                     }
                 }
                 ZipFile.CreateFromDirectory(targetPath, zipPath);
-                sdi.Delete(true);
+                subdir.Delete(true);
             }
             else
             {
                 ZipFile.CreateFromDirectory(startPath, zipPath);
-
             }
         }
     }
