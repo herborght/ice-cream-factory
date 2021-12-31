@@ -17,7 +17,7 @@ namespace SimulatorUI
         public Main(IParameterDataBase parameters, string configFilePath)
         {
             m_parameters = parameters;
-            initializeTanks(configFilePath);
+            InitializeTanks(configFilePath);
         }
 
         public void Run()
@@ -32,26 +32,26 @@ namespace SimulatorUI
         {
             for (; ; )
             {
-                updateTanks();
+                UpdateTanks();
                 await Task.Delay(1000);
             }
         }
 
         // DSD Joakim - Initializing the tanks
-        private void initializeTanks(string configFilePath)
+        private void InitializeTanks(string configFilePath)
         {
-            tankList = readConfig(configFilePath);
+            tankList = ReadConfig(configFilePath);
 
-            updateTanks();
+            UpdateTanks();
         }
 
         // DSD Emil - Reads all modules from config and adds them to list
-        private List<TankModule> readConfig(string configFilePath)
+        private List<TankModule> ReadConfig(string configFilePath)
         {
             XmlDocument xDoc = new XmlDocument();
             xDoc.Load(configFilePath);
             XmlNode config = xDoc.LastChild.ChildNodes[0];
-            var tankList = new List<TankModule>();
+            List<TankModule> tankList = new List<TankModule>();
 
             foreach (XmlNode mod in config)
             {
@@ -144,7 +144,7 @@ namespace SimulatorUI
 
         // DSD Joakim - Main update function, goes thorugh different functions depending on the type,
         // as all tanks are tank modules all will go through updateBase
-        private void updateTanks()
+        private void UpdateTanks()
         {
             foreach (var parameterKey in m_parameters.ParameterKeys)
             {
@@ -153,22 +153,22 @@ namespace SimulatorUI
                     //add code for updating displayed ambient temp here, currently empty since amb temp is not visualized yet
                     continue;
                 }
-                var current = tankList.Find(tank => tank.Name == parameterKey.Split('/')[0]);
-                updateBase(parameterKey, current);
+                TankModule current = tankList.Find(tank => tank.Name == parameterKey.Split('/')[0]);
+                UpdateBase(parameterKey, current);
 
                 switch (current)
                 {
                     case PasteurizationModule p:
-                        updatePasteurizationTank(parameterKey, p);
+                        UpdatePasteurizationTank(parameterKey, p);
                         break;
                     case HomogenizationModule h:
-                        updateHomogenizationTank(parameterKey, h);
+                        UpdateHomogenizationTank(parameterKey, h);
                         break;
                     case FreezingModule f:
-                        updateFreezingModule(parameterKey, f);
+                        UpdateFreezingModule(parameterKey, f);
                         break;
                     case FlavoringHardeningPackingModule fhp:
-                        updateFlavoringPackagingModule(parameterKey, fhp);
+                        UpdateFlavoringPackagingModule(parameterKey, fhp);
                         break;
                     default:
                         break;
@@ -177,9 +177,9 @@ namespace SimulatorUI
         }
 
         // DSD Joakim - Update the basic values each tank has
-        private void updateBase(string parameterKey, TankModule current)
+        private void UpdateBase(string parameterKey, TankModule current)
         {
-            var parameter = m_parameters.GetParameter(parameterKey);
+            IParameter parameter = m_parameters.GetParameter(parameterKey);
             if (parameter.ValueType == ParameterType.Analog)
             {
                 switch (parameterKey.Split('/')[1])
@@ -205,6 +205,8 @@ namespace SimulatorUI
                     case "OutFlow":
                         current.OutLetFlow = parameter.AnalogValue;
                         break;
+                    default:
+                        break;
                 }
             }
             else
@@ -217,14 +219,16 @@ namespace SimulatorUI
                     case "OpenOutlet":
                         current.OutValveOpen = parameter.DigitalValue;
                         break;
+                    default:
+                        break;
                 }
             }
         }
 
         // DSD Joakim - Update the dynamic values of the pasteurization tank
-        private void updatePasteurizationTank(string parameterKey, PasteurizationModule current)
+        private void UpdatePasteurizationTank(string parameterKey, PasteurizationModule current)
         {
-            var parameter = m_parameters.GetParameter(parameterKey);
+            IParameter parameter = m_parameters.GetParameter(parameterKey);
             if (parameter.ValueType == ParameterType.Digital)
             {
                 switch (parameterKey.Split('/')[1])
@@ -235,14 +239,16 @@ namespace SimulatorUI
                     case "CoolerOn":
                         current.CoolerOn = parameter.DigitalValue;
                         break;
+                    default:
+                        break;
                 }
             }
         }
 
         // DSD Joakim - Update the dynamic values of the homogenization tank
-        private void updateHomogenizationTank(string parameterKey, HomogenizationModule current)
+        private void UpdateHomogenizationTank(string parameterKey, HomogenizationModule current)
         {
-            var parameter = m_parameters.GetParameter(parameterKey);
+            IParameter parameter = m_parameters.GetParameter(parameterKey);
             if (parameter.ValueType == ParameterType.Digital)
             {
                 switch (parameterKey.Split('/')[1])
@@ -252,6 +258,8 @@ namespace SimulatorUI
                         break;
                     case "AgeingCoolingOn":
                         current.AgeingCoolingOn = parameter.DigitalValue;
+                        break;
+                    default:
                         break;
                 }
             }
@@ -265,14 +273,16 @@ namespace SimulatorUI
                     case "MixTemperature":
                         current.MixTemperature = parameter.AnalogValue;
                         break;
+                    default:
+                        break;
                 }
             }
         }
 
         // DSD Joakim - Update the dynamic values of the freezing module
-        private void updateFreezingModule(string parameterKey, FreezingModule current)
+        private void UpdateFreezingModule(string parameterKey, FreezingModule current)
         {
-            var parameter = m_parameters.GetParameter(parameterKey);
+            IParameter parameter = m_parameters.GetParameter(parameterKey);
             if (parameter.ValueType == ParameterType.Analog)
             {
                 switch (parameterKey.Split('/')[1])
@@ -288,6 +298,8 @@ namespace SimulatorUI
                         break;
                     case "PasteurizationUnits":
                         current.PasteurizationUnits = parameter.AnalogValue;
+                        break;
+                    default:
                         break;
                 }
             }
@@ -307,21 +319,24 @@ namespace SimulatorUI
                     case "SendTestValues":
                         current.SendTestValues = parameter.DigitalValue;
                         break;
-
+                    default:
+                        break;
                 }
             }
         }
 
         // DSD Joakim - Update the dynamic values of the flavoringhardeningpackaging module
-        private void updateFlavoringPackagingModule(string parameterKey, FlavoringHardeningPackingModule current)
+        private void UpdateFlavoringPackagingModule(string parameterKey, FlavoringHardeningPackingModule current)
         {
-            var parameter = m_parameters.GetParameter(parameterKey);
+            IParameter parameter = m_parameters.GetParameter(parameterKey);
             if (parameter.ValueType == ParameterType.Analog)
             {
                 switch (parameterKey.Split('/')[1])
                 {
                     case "MixTemperature":
                         current.MixTemperature = parameter.AnalogValue;
+                        break;
+                    default:
                         break;
                 }
             }
@@ -341,7 +356,8 @@ namespace SimulatorUI
                     case "FinishBatch":
                         current.FinishBatch = parameter.DigitalValue;
                         break;
-
+                    default:
+                        break;
                 }
             }
         }

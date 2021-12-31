@@ -25,7 +25,7 @@ namespace SimulatorUI
             // Binding this instance as the datacontext for the view
             DataContext = this;
             InitializeComponent();
-            Task.Run(() => updateLoop());
+            Task.Run(() => UpdateLoop());
         }
 
         // DSD Bendik - Raw data displayed in a grid with databinding
@@ -37,7 +37,7 @@ namespace SimulatorUI
                 ((TextBlock)cell.Content).Text = "Lol";
             }
         }
-        internal async Task updateLoop()
+        internal async Task UpdateLoop()
         {
             for (; ; )
             {

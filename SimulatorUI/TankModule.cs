@@ -11,8 +11,7 @@ namespace SimulatorUI
         public event PropertyChangedEventHandler PropertyChanged;
         protected virtual void OnPropertyChanged(string propertyname)
         {
-            PropertyChangedEventHandler handler = PropertyChanged;
-            if (handler != null) handler(this, new PropertyChangedEventArgs(propertyname));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyname));
         }
         protected bool SetField<T>(ref T field, T value, string propertyname)
         {

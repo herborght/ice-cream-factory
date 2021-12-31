@@ -20,27 +20,27 @@ namespace TestRandomValues
             app2.Run();
         }
 
-        static internal async Task ExecuteSimulation(IParameterDataBase parameters)
+        internal static async Task ExecuteSimulation(IParameterDataBase parameters)
         {
             for (; ; )
             {
-                updateParameters(parameters);
+                UpdateParameters(parameters);
                 await Task.Delay(10000);
             }
         }
 
-        static private void updateParameters(IParameterDataBase parameters)
+        private static void UpdateParameters(IParameterDataBase parameters)
         {
-            int rand = 0;
-            Random random = new Random();
-            int moduleNr = 0;
+            int rand, moduleNr, val;
+            Random random = new Random();           
             string name;
+
             for (int i = 0; i < 5; i++)
             {
                 rand = random.Next(1, 6);
                 moduleNr = random.Next(1, 6);
                 name = "T" + moduleNr.ToString();
-                int val = random.Next(1);
+                val = random.Next(1);
                 switch (rand)
                 {
                     case 1:
