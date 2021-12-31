@@ -57,8 +57,8 @@ namespace SimulatorUI
             {
                 // Module properties
                 string m_name = mod.Attributes["name"].Value;
-                string m_type = mod.Attributes["type"].Value;             
-            
+                string m_type = mod.Attributes["type"].Value;
+
                 // Parse and convert values to use comma separator instead of decimal point separator
                 double.TryParse(mod.Attributes["baseArea"].Value, NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture, out double m_baseArea);
                 double.TryParse(mod.Attributes["outletArea"].Value, NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture, out double m_outletArea);
@@ -68,7 +68,7 @@ namespace SimulatorUI
                 if (m_type == "SimEnv")
                 {
                     continue;
-                }                
+                }
 
                 TankModule tank;
 
@@ -88,7 +88,7 @@ namespace SimulatorUI
                     case "HomogenizationModule":
                         double.TryParse(mod.Attributes["stage1Pressure"].Value, NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture, out double m_S1Pressure);
                         double.TryParse(mod.Attributes["stage2Pressure"].Value, NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture, out double m_S2Pressure);
-                        tank = new HomogenizationModule(m_name, m_S1Pressure, m_S2Pressure);                    
+                        tank = new HomogenizationModule(m_name, m_S1Pressure, m_S2Pressure);
                         break;
                     case "FreezingModule":
                         double.TryParse(mod.Attributes["freezerTemp"].Value, NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture, out double m_FreezerTemp);
@@ -98,7 +98,7 @@ namespace SimulatorUI
                     case "FlavoringPackagingModule":
                         string m_PType = mod.Attributes["packagingType"].Value;
                         double.TryParse(mod.Attributes["coolerTemperature"].Value, NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture, out double m_CoolerTemp2);
-                        tank= new FlavoringHardeningPackingModule(m_name, m_PType, m_CoolerTemp2);
+                        tank = new FlavoringHardeningPackingModule(m_name, m_PType, m_CoolerTemp2);
                         break;
                     default:
                         throw new NotImplementedException();
@@ -106,14 +106,14 @@ namespace SimulatorUI
 
                 tank.BaseArea = m_baseArea;
                 tank.OutletArea = m_outletArea;
-                tank.Height = m_height;             
+                tank.Height = m_height;
 
                 foreach (XmlNode param in mod.ChildNodes)
                 {
                     string p_name = param.InnerText;
                     string p_type = param.LocalName;
                     // Used as InOutChaining source
-                    string from; 
+                    string from;
 
                     switch (p_type)
                     {
@@ -128,10 +128,10 @@ namespace SimulatorUI
                             TankModule inFlowSourceTank = tankList.Find(t => t.Name.Equals(from.Split('/')[0]));
 
                             // First check if the inflowsource already exists in the list, to avoid duplicates
-                            if(!tank.InFlowTanks.Exists(t => t.Name.Equals(inFlowSourceTank.Name)))
+                            if (!tank.InFlowTanks.Exists(t => t.Name.Equals(inFlowSourceTank.Name)))
                             {
                                 tank.InFlowTanks.Add(inFlowSourceTank);
-                            }                         
+                            }
                             break;
                         default:
                             throw new NotImplementedException();
@@ -151,7 +151,7 @@ namespace SimulatorUI
                 if (parameterKey.Split('/')[0] == "SimEnv") // DSD Emil - SimEnv is not a tank, it only exists in the DB for visualization purposes.
                 {
                     //add code for updating displayed ambient temp here, currently empty since amb temp is not visualized yet
-                    continue; 
+                    continue;
                 }
                 var current = tankList.Find(tank => tank.Name == parameterKey.Split('/')[0]);
                 updateBase(parameterKey, current);

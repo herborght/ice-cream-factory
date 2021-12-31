@@ -25,28 +25,32 @@ namespace SimulatorUI
         private double inletflow;
         public double InletFlow
         {
-            get {
+            get
+            {
                 if (inletflow < 0.001 && inletflow > 0)
                 {
                     return 0.001;
                 }
-                return Math.Round(inletflow, 3); }
-            set { if (Math.Round(value, 3).Equals(0.000))
-                    {
-                        SetField(ref inletflow, value, "InLetFlow");
-                    }
-                else
-                    {
-                        SetField(ref inletflow, Math.Round(value, 3), "InLetFlow");
-                    }
-
+                return Math.Round(inletflow, 3);
+            }
+            set
+            {
+                if (Math.Round(value, 3).Equals(0.000))
+                {
+                    SetField(ref inletflow, value, "InLetFlow");
                 }
+                else
+                {
+                    SetField(ref inletflow, Math.Round(value, 3), "InLetFlow");
+                }
+
+            }
         }
         private bool outvalveopen;
-        public bool OutValveOpen 
+        public bool OutValveOpen
         {
             get { return outvalveopen; }
-            set { SetField(ref outvalveopen, value, "OutValveOpen"); } 
+            set { SetField(ref outvalveopen, value, "OutValveOpen"); }
         }
         private bool dumpvalveopen;
         public bool DumpValveOpen
@@ -69,22 +73,25 @@ namespace SimulatorUI
         private double outletflow;
         public double OutLetFlow
         {
-            get 
+            get
             {
                 if (outletflow < 0.001 && outletflow > 0)
                 {
                     return 0.001;
                 }
-                return Math.Round(outletflow, 3); 
+                return Math.Round(outletflow, 3);
             }
-            set { if (Math.Round(value, 3).Equals(0.000))
-                {
-                    SetField(ref outletflow, Math.Round(value, 3), "OutLetFlow");
-                } else
+            set
+            {
+                if (Math.Round(value, 3).Equals(0.000))
                 {
                     SetField(ref outletflow, Math.Round(value, 3), "OutLetFlow");
                 }
+                else
+                {
+                    SetField(ref outletflow, Math.Round(value, 3), "OutLetFlow");
                 }
+            }
         }
         private double levelpercentage;
         public double LevelPercentage
@@ -93,7 +100,7 @@ namespace SimulatorUI
             set { SetField(ref levelpercentage, value, "LevelPercentage"); }
         }
         public double temperature;
-        public double Temperature 
+        public double Temperature
         {
             get { return Math.Round(temperature, 2); }
             set { SetField(ref temperature, value, "Temperature"); }

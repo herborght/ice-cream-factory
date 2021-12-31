@@ -23,9 +23,9 @@ namespace SimulatorUI
         {
             TankList = new ObservableCollection<TankModule>(list);
             // Binding this instance as the datacontext for the view
-            DataContext = this; 
+            DataContext = this;
             InitializeComponent();
-            Task.Run(() => updateLoop());   
+            Task.Run(() => updateLoop());
         }
 
         // DSD Bendik - Raw data displayed in a grid with databinding

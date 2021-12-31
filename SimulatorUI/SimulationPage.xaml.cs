@@ -62,7 +62,7 @@ namespace SimulatorUI
                 }
 
                 // The rectangle for visualizing the tank level
-                Rectangle rectangle = new Rectangle(); 
+                Rectangle rectangle = new Rectangle();
                 rectangle.Width = 75;
                 rectangle.Height = height;
                 SolidColorBrush blueBrush = new SolidColorBrush();
@@ -74,7 +74,7 @@ namespace SimulatorUI
                 rectangle.Stroke = Brushes.Black;
 
                 // DSD Emil - Expander used for details dropdown
-                Expander detailsExpander = new Expander(); 
+                Expander detailsExpander = new Expander();
                 detailsExpander.Uid = tank.Name;
                 TextBlock headerText = new TextBlock();
                 headerText.Text = "Name: " + tank.Name;
@@ -84,12 +84,12 @@ namespace SimulatorUI
                 detailsExpander.BorderBrush = Brushes.Black;
                 detailsExpander.BorderThickness = new Thickness(2);
                 Canvas.SetZIndex(detailsExpander, 10); // Set z-index to draw ontop ofother elements (such as tank connections)
-                Canvas.SetLeft(detailsExpander, time * distance+80);
-                Canvas.SetTop(detailsExpander, fromTop-1); // yeah its stupid, but the expander box was visually a tiny bit under the top of the tank
+                Canvas.SetLeft(detailsExpander, time * distance + 80);
+                Canvas.SetTop(detailsExpander, fromTop - 1); // yeah its stupid, but the expander box was visually a tiny bit under the top of the tank
                 detailsExpanders.Add(detailsExpander);
 
                 // The rectangle showing how empty the tank is 
-                Rectangle other = new Rectangle(); 
+                Rectangle other = new Rectangle();
                 other.Uid = tank.Name;
                 other.Width = 75;
                 other.Height = 200;
@@ -110,19 +110,19 @@ namespace SimulatorUI
                 pointList.Add(keyValuePair);
 
                 //Dump valves will probably have to improve the visuals of these, or change their position not really intuitive 
-                Ellipse dumpValve = new Ellipse(); 
+                Ellipse dumpValve = new Ellipse();
                 dumpValve.Width = 10;
                 dumpValve.Height = 10;
                 dumpValve.Fill = Brushes.Black;
                 dumpValve.StrokeThickness = 2;
                 dumpValve.Stroke = Brushes.Black;
-                dumpValve.Uid = "d_"+tank.Name;
+                dumpValve.Uid = "d_" + tank.Name;
                 Canvas.SetLeft(dumpValve, time * distance - 10);
                 Canvas.SetTop(dumpValve, fromTop + height / 2);
                 dumpValves.Add(dumpValve);
 
                 // All elements to be drawn are added to the canvas
-                canvas.Children.Add(rectangle); 
+                canvas.Children.Add(rectangle);
                 canvas.Children.Add(other);
                 canvas.Children.Add(dumpValve);
                 canvas.Children.Add(detailsExpander);
@@ -145,17 +145,17 @@ namespace SimulatorUI
                 time++;
             }
             int[] times = new int[rows + 1]; //Used to increment the length of which the lines are apart from eachother
-            foreach(TankModule tank in tankList)
+            foreach (TankModule tank in tankList)
             {
                 // This is a bit backward initial is the destination of the connection while target is the source
-                foreach (TankModule connected in tank.InFlowTanks) 
+                foreach (TankModule connected in tank.InFlowTanks)
                 {
                     KeyValuePair<int, Point> initialPair = pointList.Find(x => x.Key == tank.Name).Value; //The pairs are used to access the rows and points for the lines
                     KeyValuePair<int, Point> targetPair = pointList.Find(x => x.Key == connected.Name).Value;
                     int initialRow = initialPair.Key;
                     times[initialRow]++;
                     int targetRow = targetPair.Key;
-                    if(initialRow != targetRow)
+                    if (initialRow != targetRow)
                     {
                         times[targetRow]++;
                     }
@@ -175,7 +175,7 @@ namespace SimulatorUI
                     connectedValves.Add(ellipse);
                     TextBlock label = new TextBlock(); //Label for which valve it is
                     label.Text = connected.Name + "->" + tank.Name + "\n";
-                    label.Name = tank.Name + "_"  + connected.Name;
+                    label.Name = tank.Name + "_" + connected.Name;
                     labels.Add(label);
 
                     if (initialRow == targetRow)
@@ -243,7 +243,7 @@ namespace SimulatorUI
                 }
 
                 // Update the valves, White means open, black closed
-                foreach (Ellipse v in connectedValves) 
+                foreach (Ellipse v in connectedValves)
                 {
                     v.Dispatcher.Invoke(() =>
                     {
@@ -254,7 +254,7 @@ namespace SimulatorUI
                         {
                             if (source.OutValveOpen)
                             {
-                                v.Fill = Brushes.White; 
+                                v.Fill = Brushes.White;
                             }
                             else
                             {
@@ -285,7 +285,8 @@ namespace SimulatorUI
                 // DSD Emil - Update expandable/collapsable container for displaying tank info
                 foreach (Expander expander in detailsExpanders)
                 {
-                    expander.Dispatcher.Invoke(()=> {
+                    expander.Dispatcher.Invoke(() =>
+                    {
                         string name = expander.Uid;
                         TextBlock content = new TextBlock();
                         content.Text = getTankInfo(name);
@@ -297,20 +298,21 @@ namespace SimulatorUI
                 // Update special symbols
                 foreach (TextBlock textBlock in symbols)
                 {
-                    textBlock.Dispatcher.Invoke(() => {
+                    textBlock.Dispatcher.Invoke(() =>
+                    {
                         TankModule tank = tankList.Find(x => x.Name == textBlock.Name.Split('_')[1]);
-                        if(tank is PasteurizationModule)
+                        if (tank is PasteurizationModule)
                         {
                             PasteurizationModule temp = (PasteurizationModule)tank;
-                            if(temp.HeaterOn)
+                            if (temp.HeaterOn)
                             {
                                 textBlock.Text = "+";
-                                if(temp.CoolerOn)
+                                if (temp.CoolerOn)
                                 {
                                     textBlock.Text += "/-"; //Not really sure if this should be possible, as the result is NaN
                                 }
                             }
-                            else if(temp.CoolerOn)
+                            else if (temp.CoolerOn)
                             {
                                 textBlock.Text = "-";
                             }
@@ -325,9 +327,10 @@ namespace SimulatorUI
                 // Update labels for tank connections
                 foreach (TextBlock label in labels)
                 {
-                    label.Dispatcher.Invoke(() => {
+                    label.Dispatcher.Invoke(() =>
+                    {
                         TankModule tank = tankList.Find(x => x.Name == label.Name.Split('_')[0]);
-                        if(tank != null)
+                        if (tank != null)
                         {
                             TankModule connected = tank.InFlowTanks.Find(x => x.Name == label.Name.Split('_')[1]);
                             string msg = connected.Name + "->" + tank.Name + "\n";
@@ -361,7 +364,7 @@ namespace SimulatorUI
             {
                 msg += "Dump Valve: Closed\n";
             }
-            
+
             return msg;
         }
     }

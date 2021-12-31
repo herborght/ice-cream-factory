@@ -15,7 +15,7 @@ namespace SimulationTests
     {
         // DSD Vår - Unit tests for main window
         IParameterDataBase parameters;
-        IEnumerable<IModule> modules; 
+        IEnumerable<IModule> modules;
         string configFilePath;
         //Main main = new Main(parameters, modules, configFilePath);
 

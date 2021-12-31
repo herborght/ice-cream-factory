@@ -7,7 +7,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace SimulationTests
 {
     [TestClass]
-    public  class TankModuleTests
+    public class TankModuleTests
     {
 
         [TestMethod]
@@ -64,7 +64,7 @@ namespace SimulationTests
             Tank3.InFlowTanks.Add(Tank2);
 
             Tank2.OutLetFlow = 0.01;
-            Tank1.InletFlow = Tank1.InFlowTanks.Find(x=>x.Name == Tank2.Name).OutLetFlow;
+            Tank1.InletFlow = Tank1.InFlowTanks.Find(x => x.Name == Tank2.Name).OutLetFlow;
 
             Assert.AreEqual(2, Tank1.InFlowTanks.Count);
             Assert.IsTrue(Tank1.InFlowTanks.Exists(x => x.Name == Tank2.Name));

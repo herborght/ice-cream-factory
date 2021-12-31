@@ -15,7 +15,7 @@ namespace SimulatorUI
     public partial class MainWindow : Window
     {
         List<TankModule> tankList;
-        public Page currentPage; 
+        public Page currentPage;
 
         public MainWindow(List<TankModule> list)
         {
@@ -52,7 +52,7 @@ namespace SimulatorUI
             // Extracting the data from here
             string startPath = @"..\..\..\..\LogData\EventLogData";
             // Where the zipped file is sent
-            string zipPath = @"..\..\..\..\ZippedLog\download" +timeStamp + ".zip";
+            string zipPath = @"..\..\..\..\ZippedLog\download" + timeStamp + ".zip";
 
             // Getting the selected dates
             DateTime? firstDate = fromDate.SelectedDate;
@@ -79,7 +79,9 @@ namespace SimulatorUI
                 // Creates the zipfile and deletes the subdir
                 ZipFile.CreateFromDirectory(targetPath, zipPath);
                 sdi.Delete(true);
-            } else if (firstDate.HasValue) {
+            }
+            else if (firstDate.HasValue)
+            {
                 DirectoryInfo di = new DirectoryInfo(startPath);
                 DirectoryInfo sdi = di.CreateSubdirectory("subdir");
                 string targetPath = @"..\..\..\..\LogData\EventLogData\subdir";
@@ -94,7 +96,8 @@ namespace SimulatorUI
                 sdi.Delete(true);
 
             }
-            else if (lastDate.HasValue) {
+            else if (lastDate.HasValue)
+            {
                 DirectoryInfo di = new DirectoryInfo(startPath);
                 DirectoryInfo sdi = di.CreateSubdirectory("subdir");
                 string targetPath = @"..\..\..\..\LogData\EventLogData\subdir";

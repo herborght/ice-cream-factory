@@ -11,7 +11,7 @@ namespace SimulationTests
     public class PasteurizationModuleTests
     {
         // DSD Vår - Unit tests for pasteurization module
-        PasteurizationModule pModule; 
+        PasteurizationModule pModule;
 
         [TestMethod]
         public void ConstructorTest()
