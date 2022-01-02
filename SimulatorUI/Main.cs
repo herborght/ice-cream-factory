@@ -13,10 +13,13 @@ namespace SimulatorUI
     {
         private IParameterDataBase m_parameters;
         private List<TankModule> tankList;
+        private string configName;
 
         public Main(IParameterDataBase parameters, string configFilePath)
         {
             m_parameters = parameters;
+            string[] temp = configFilePath.Split('/');
+            configName = temp[^1];
             InitializeTanks(configFilePath);
         }
 
@@ -24,7 +27,7 @@ namespace SimulatorUI
         {
             var application = new System.Windows.Application();
             Task.Run(() => ExecuteSimulation());
-            application.Run(new MainWindow(tankList));
+            application.Run(new MainWindow(tankList, configName));
         }
 
         // DSD Joakim - Update loop for values

@@ -17,12 +17,13 @@ namespace SimulatorUI
         List<TankModule> tankList;
         public Page currentPage;
 
-        public MainWindow(List<TankModule> list)
+        public MainWindow(List<TankModule> list, string configName)
         {
             tankList = list;
             InitializeComponent();
             currentPage = new SimulationPage(tankList);
             _mainFrame.Content = currentPage;
+            WindowTitle.Text = "Current Simulation: " + configName;
         }
 
         // DSD Yrjar - Switch the view displayed in the mainframe

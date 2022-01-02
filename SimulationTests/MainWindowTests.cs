@@ -44,7 +44,7 @@ namespace SimulationTests
 
             Application.Current.Dispatcher.Invoke(delegate
             {
-                MainWindow mainWindow = new MainWindow(tankList)
+                MainWindow mainWindow = new MainWindow(tankList, "test")
                 {
                     currentPage = new SimulationPage(tankList)
                 };
