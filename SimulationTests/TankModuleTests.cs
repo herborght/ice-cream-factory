@@ -7,13 +7,13 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace SimulationTests
 {
     [TestClass]
-    public  class TankModuleTests
+    public class TankModuleTests
     {
 
         [TestMethod]
         public void ConstructorTest()
         {
-            /*Checkig if the constructor actually sets the name and if inflow tanks are 0*/
+            // DSD Bendik - Checking if the constructor actually sets the name and if inflow tanks are 0
             string name = "T1";
             TankModule T1 = new TankModule("T1");
             Assert.AreEqual(name, T1.Name);
@@ -24,7 +24,7 @@ namespace SimulationTests
         [TestMethod]
         public void SettersTest()
         {
-            /* Testing if the setters actuallt sets the values it is supposed to */
+            // DSD Bendik - Testing if the setters actually sets the values it is supposed to 
             T1.Height = 2;
             Assert.AreEqual(2, T1.Height, "Height setter does not work properly");
             T1.DumpValveOpen = false;
@@ -50,23 +50,21 @@ namespace SimulationTests
         [TestMethod]
         public void ConnectionTest()
         {
-            //Adds tanks and assigns them as the inflow for others, test if they exist.
-            //Cannot test if value for inflow and outflow is the same as this is not handled by TankModule
-            //As it the simulator itself assigns this.
+            // DSD Vår - Adds tanks and assigns them as the inflow for others, test if they exist.
+            // Cannot test if value for inflow and outflow is the same as this is not handled by TankModule
+            // As the simulator itself assigns this.
             TankModule Tank1 = new TankModule("Tank1");
             TankModule Tank2 = new TankModule("Tank2");
             TankModule Tank3 = new TankModule("Tank3");
 
             Assert.AreEqual(0, Tank1.InFlowTanks.Count);
 
-
             Tank1.InFlowTanks.Add(Tank2);
             Tank1.InFlowTanks.Add(Tank3);
             Tank3.InFlowTanks.Add(Tank2);
 
             Tank2.OutLetFlow = 0.01;
-
-            Tank1.InletFlow = Tank1.InFlowTanks.Find(x=>x.Name == Tank2.Name).OutLetFlow;
+            Tank1.InletFlow = Tank1.InFlowTanks.Find(x => x.Name == Tank2.Name).OutLetFlow;
 
             Assert.AreEqual(2, Tank1.InFlowTanks.Count);
             Assert.IsTrue(Tank1.InFlowTanks.Exists(x => x.Name == Tank2.Name));
@@ -76,6 +74,4 @@ namespace SimulationTests
             Assert.AreEqual(Tank1.InletFlow, Tank2.OutLetFlow);
         }
     }
-
-
 }
