@@ -27,7 +27,7 @@ namespace SimulatorUI
         List<TextBlock> labels;
         List<Expander> detailsExpanders;
         List<TextBlock> symbols; //Could be replaced with images, for example pasteurization could use a snowflake and a flame
-        Boolean valvef; 
+        Boolean valvef;
         public SimulationPage(List<TankModule> list)
         {
             tankList = list;
@@ -280,13 +280,15 @@ namespace SimulatorUI
                 }
                 foreach (Expander expander in detailsExpanders)
                 {
+                    
                     expander.Dispatcher.Invoke(()=> {
                         string name = expander.Uid;
                         TextBlock content = new TextBlock();
                         content.Text = getTankInfo(name);
                         content.Padding = new Thickness(5, 0, 5, 0);
                         expander.Content = content;
-                    });
+                        
+                    });                    
                 }
                 foreach (TextBlock textBlock in symbols)
                 {
@@ -322,6 +324,7 @@ namespace SimulatorUI
                         {
                             TankModule connected = tank.InFlowTanks.Find(x => x.Name == label.Name.Split('_')[1]);
                             string msg = connected.Name + "->" + tank.Name + "\n";
+                            //Checks if valve flowrate is selected, and displays the flowrate if it is 
                             valvef = (this.Tag as MainWindow).getValvef();
                             if (valvef)
                             {
@@ -334,6 +337,7 @@ namespace SimulatorUI
                 await Task.Delay(1000);
             }
         }
+
         public string getTankInfo(string name)
         {
             //string msg = ""; //Old with all of the info
@@ -379,6 +383,20 @@ namespace SimulatorUI
             }
             
             return msg;
+        }
+        public void setOpen()
+        {
+            foreach(Expander exp in detailsExpanders)
+            {
+                exp.IsExpanded = true;
+            }
+        }
+        public void setClosed()
+        {
+            foreach (Expander exp in detailsExpanders)
+            {
+                exp.IsExpanded = false;
+            }
         }
     }
 

@@ -41,9 +41,8 @@
                 TextAlignment="Center" FontWeight="Bold" FontSize="14"/>
             <StackPanel Margin="0 0">
                 <TextBlock Text="Simulation properties" Margin="5 5"/>
-                <RadioButton Margin="5 5">Show more</RadioButton>
-                <RadioButton IsChecked="True" Margin="5 5">Show important</RadioButton>
-                <RadioButton Margin="5 5">Show all</RadioButton>
+                <RadioButton IsChecked="True" Margin="5 5" x:Name="showimportant" Checked="showImportat">Show important</RadioButton>
+                <RadioButton Margin="5 5" x:Name="showall" Checked="showAll">Show all</RadioButton>
             </StackPanel>
             <TextBlock 
                 Grid.Row="1" 
