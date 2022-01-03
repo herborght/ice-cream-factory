@@ -15,8 +15,7 @@ namespace SimulatorUI
     public partial class MainWindow : Window
     {
         List<TankModule> tankList;
-        public Page currentPage; 
-        private static int counter;
+        public Page currentPage;
 
         public MainWindow(List<TankModule> list)
         {
@@ -26,11 +25,11 @@ namespace SimulatorUI
             _mainFrame.Content = currentPage;
         }
 
+        // DSD Yrjar - Switch the view displayed in the mainframe
         public void SwitchView(object sender, RoutedEventArgs e)
         {
             if (currentPage is SimulationPage)
             {
-
                 Page newPage = new RawDataPage(tankList);
                 currentPage = newPage;
                 Filter.Visibility = Visibility.Visible;
@@ -43,17 +42,17 @@ namespace SimulatorUI
                 Filter.Visibility = Visibility.Collapsed;
                 _mainFrame.Content = newPage;
             }
-
         }
+
+        // DSD Yrjar - Create a zipfile with all simulation data between the two chosen dates
         private void Download(object sender, RoutedEventArgs e)
         {
             var timeStamp = new DateTimeOffset(DateTime.UtcNow).ToUnixTimeSeconds();
 
-
             // Extracting the data from here
             string startPath = @"..\..\..\..\LogData\EventLogData";
             // Where the zipped file is sent
-            string zipPath = @"..\..\..\..\ZippedLog\download" +timeStamp + ".zip";
+            string zipPath = @"..\..\..\..\ZippedLog\download" + timeStamp + ".zip";
 
             // Getting the selected dates
             DateTime? firstDate = fromDate.SelectedDate;
@@ -63,12 +62,12 @@ namespace SimulatorUI
             if (firstDate.HasValue && lastDate.HasValue)
             {
                 // Initalizes a temporary subdirectory
-                DirectoryInfo di = new DirectoryInfo(startPath);
-                DirectoryInfo sdi = di.CreateSubdirectory("subdir");
+                DirectoryInfo dir = new DirectoryInfo(startPath);
+                DirectoryInfo subdir = dir.CreateSubdirectory("subdir");
                 string targetPath = @"..\..\..\..\LogData\EventLogData\subdir";
 
                 // Iterate over the files in startpath
-                foreach (FileInfo file in di.EnumerateFiles())
+                foreach (FileInfo file in dir.EnumerateFiles())
                 {
                     // Filter the relevant files
                     if (file.CreationTime.Date >= firstDate && file.CreationTime.Date <= lastDate)
@@ -79,12 +78,14 @@ namespace SimulatorUI
                 }
                 // Creates the zipfile and deletes the subdir
                 ZipFile.CreateFromDirectory(targetPath, zipPath);
-                sdi.Delete(true);
-            } else if (firstDate.HasValue) {
-                DirectoryInfo di = new DirectoryInfo(startPath);
-                DirectoryInfo sdi = di.CreateSubdirectory("subdir");
+                subdir.Delete(true);
+            }
+            else if (firstDate.HasValue)
+            {
+                DirectoryInfo dir = new DirectoryInfo(startPath);
+                DirectoryInfo subdir = dir.CreateSubdirectory("subdir");
                 string targetPath = @"..\..\..\..\LogData\EventLogData\subdir";
-                foreach (FileInfo file in di.EnumerateFiles())
+                foreach (FileInfo file in dir.EnumerateFiles())
                 {
                     if (file.CreationTime.Date >= firstDate)
                     {
@@ -92,14 +93,14 @@ namespace SimulatorUI
                     }
                 }
                 ZipFile.CreateFromDirectory(targetPath, zipPath);
-                sdi.Delete(true);
-
+                subdir.Delete(true);
             }
-            else if (lastDate.HasValue) {
-                DirectoryInfo di = new DirectoryInfo(startPath);
-                DirectoryInfo sdi = di.CreateSubdirectory("subdir");
+            else if (lastDate.HasValue)
+            {
+                DirectoryInfo dir = new DirectoryInfo(startPath);
+                DirectoryInfo subdir = dir.CreateSubdirectory("subdir");
                 string targetPath = @"..\..\..\..\LogData\EventLogData\subdir";
-                foreach (FileInfo file in di.EnumerateFiles())
+                foreach (FileInfo file in dir.EnumerateFiles())
                 {
                     if (file.CreationTime.Date >= firstDate && file.CreationTime.Date <= lastDate)
                     {
@@ -107,14 +108,12 @@ namespace SimulatorUI
                     }
                 }
                 ZipFile.CreateFromDirectory(targetPath, zipPath);
-                sdi.Delete(true);
+                subdir.Delete(true);
             }
             else
             {
                 ZipFile.CreateFromDirectory(startPath, zipPath);
-
             }
-
         }
     }
 }

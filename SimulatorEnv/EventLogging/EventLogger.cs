@@ -37,7 +37,6 @@ namespace ABB.InSecTT.SimulatorEnv
                 try
                 {
                     File.AppendAllText(fileName, sb.ToString());
-
                     return;
                 }
                 catch (IOException e)
