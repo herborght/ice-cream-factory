@@ -31,14 +31,16 @@ namespace SimulatorUI
         List<Line> arrowheads;
         List<TextBlock> levelTextBlocks;
         List<TextBlock> tempTextBlocks;
+        private double ambientTemp;
+        TextBlock ambTempBlock;
 
-        public SimulationPage(List<TankModule> list)
+        public SimulationPage(List<TankModule> list, double ambTemp)
         {
             tankList = list;
+            ambientTemp = ambTemp;
             InitializeComponent();
             CreateTanks();
             Task.Run(() => UpdateVisuals());
-
         }
 
         // DSD Joakim - Create all the tanks
@@ -201,12 +203,19 @@ namespace SimulatorUI
                     Uid = tank.Name,
                     TextAlignment = TextAlignment.Right,
                     Padding = new Thickness(0, 0, 5, 0),
-                    //Background = Brushes.Red
                 };
                 Canvas.SetLeft(tempText, time * distance + 2);
                 Canvas.SetTop(tempText, fromTop + 2);
                 Canvas.SetZIndex(tempText, 12);
                 tempTextBlocks.Add(tempText);
+
+                // DSD Emil - Textblock displaying simulatiom ambient temperature
+                ambTempBlock = new TextBlock
+                {
+                    TextAlignment = TextAlignment.Right,
+                    Padding = new Thickness(0, 0, 5, 0),
+                };
+                Canvas.SetRight(ambTempBlock, canvas.ActualWidth);
 
                 // All elements to be drawn are added to the canvas
                 canvas.Children.Add(tankRectangle);
@@ -218,6 +227,7 @@ namespace SimulatorUI
                 canvas.Children.Add(arrowhead2);
                 canvas.Children.Add(levelText);
                 canvas.Children.Add(tempText);
+                canvas.Children.Add(ambTempBlock);
 
                 if (tank is PasteurizationModule || tank is HomogenizationModule || tank is FreezingModule || tank is FlavoringHardeningPackingModule)
                 {
@@ -481,6 +491,12 @@ namespace SimulatorUI
                         temp.Text = tank.Temperature + "K";
                     });
                 }
+
+                ambTempBlock.Dispatcher.Invoke(() =>
+                {
+                    ambTempBlock.Text = "Ambient temp: " + ambientTemp.ToString() + "K";
+
+                });
 
                 SymbolUpdate();
                 await Task.Delay(1000);

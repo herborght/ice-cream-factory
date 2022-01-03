@@ -14,6 +14,7 @@ namespace SimulatorUI
         private IParameterDataBase m_parameters;
         private List<TankModule> tankList;
         private string configName;
+        private double ambTemp;
 
         public Main(IParameterDataBase parameters, string configFilePath)
         {
@@ -27,7 +28,7 @@ namespace SimulatorUI
         {
             var application = new System.Windows.Application();
             Task.Run(() => ExecuteSimulation());
-            application.Run(new MainWindow(tankList, configName));
+            application.Run(new MainWindow(tankList, configName, ambTemp));
         }
 
         // DSD Joakim - Update loop for values
@@ -70,6 +71,7 @@ namespace SimulatorUI
                 // To avoid adding simulator environment as a tank, skip the current iteration of the loop
                 if (m_type == "SimEnv")
                 {
+                    ambTemp = 0.0;
                     continue;
                 }
 
@@ -151,9 +153,12 @@ namespace SimulatorUI
         {
             foreach (var parameterKey in m_parameters.ParameterKeys)
             {
-                if (parameterKey.Split('/')[0] == "SimEnv") // DSD Emil - SimEnv is not a tank, it only exists in the DB for visualization purposes.
+                // DSD Emil - SimEnv is not a tank, it only exists in the DB for visualization purposes.
+                if (parameterKey.Split('/')[0] == "SimEnv") 
                 {
-                    //add code for updating displayed ambient temp here, currently empty since amb temp is not visualized yet
+                    IParameter parameter = m_parameters.GetParameter(parameterKey);
+                    ambTemp = parameter.AnalogValue;
+
                     continue;
                 }
                 TankModule current = tankList.Find(tank => tank.Name == parameterKey.Split('/')[0]);
