@@ -10,8 +10,8 @@ namespace SimulationTests
     [TestClass]
     public class PasteurizationModuleTests
     {
-
-        PasteurizationModule pModule; 
+        // DSD Vår - Unit tests for pasteurization module
+        PasteurizationModule pModule;
 
         [TestMethod]
         public void ConstructorTest()
@@ -35,23 +35,21 @@ namespace SimulationTests
         public void SettersAndGettersTest()
         {
 
-            //expected results
-            Boolean expectedHeaterOn = true;
-            Boolean expectedCoolerOn = false;
+            // Expected results
+            bool expectedHeaterOn = true;
+            bool expectedCoolerOn = false;
             double expectedHeaterTemp = 40;
             double expectedCoolerTemp = 0;
             double expectedThickness = 2;
             double expectedHeaterConductivity = 3;
             double expectedCoolerConductivity = 0;
-
             pModule = new PasteurizationModule("T1", expectedHeaterTemp, expectedCoolerTemp, expectedThickness, expectedHeaterConductivity, expectedCoolerConductivity);
 
-            //set values 
             pModule.HeaterOn = expectedHeaterOn;
             pModule.CoolerOn = expectedCoolerOn;
 
 
-            //assert values 
+            // Assert values 
             Assert.AreEqual(expectedHeaterOn, pModule.HeaterOn);
             Assert.AreEqual(expectedCoolerOn, pModule.CoolerOn);
             Assert.AreEqual(expectedHeaterTemp, pModule.HeaterTemp);
@@ -60,6 +58,5 @@ namespace SimulationTests
             Assert.AreEqual(expectedHeaterConductivity, pModule.HeaterConductivity);
             Assert.AreEqual(expectedCoolerConductivity, pModule.CoolerConductivity);
         }
-
     }
 }

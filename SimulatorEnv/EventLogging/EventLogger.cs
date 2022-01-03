@@ -30,7 +30,14 @@ namespace ABB.InSecTT.SimulatorEnv
                 sb.Append(eventArgs.Message);
             }
             sb.AppendLine();
-            File.AppendAllText(fileName, sb.ToString());
+            try
+            {
+                File.AppendAllText(fileName, sb.ToString());
+            }
+            catch(IOException e)
+            {
+                Console.WriteLine(e); //Just writes out that it failed to access the file, could do a loop to try again
+            }
         }
     }
 

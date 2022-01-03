@@ -10,42 +10,43 @@ namespace TestRandomValues
 {
     class Program
     {
+        // DSD Joakim - Separate program.cs used for testing UI in isolation from simulation, with random values
         [STAThread]
         static void Main(string[] args)
         {
             IParameterDataBase parameters = ParameterDataBase.FromConfiguration("ConfigFiles/SimulatorConfigs/TankConfigSim.xml");
-            Task.Run(() => ExecuteSimulation(parameters)); 
+            Task.Run(() => ExecuteSimulation(parameters));
             var app2 = new Main(parameters, "ConfigFiles/SimulatorConfigs/TankConfigSim.xml");
             app2.Run();
         }
 
-        static internal async Task ExecuteSimulation(IParameterDataBase parameters)
+        internal static async Task ExecuteSimulation(IParameterDataBase parameters)
         {
             for (; ; )
             {
-                updateParameters(parameters);
+                UpdateParameters(parameters);
                 await Task.Delay(10000);
             }
         }
 
-        static private void updateParameters(IParameterDataBase parameters)
+        private static void UpdateParameters(IParameterDataBase parameters)
         {
-            int rand = 0;
-            Random random = new Random();
-            int moduleNr = 0;
+            int rand, moduleNr, val;
+            Random random = new Random();           
             string name;
+
             for (int i = 0; i < 5; i++)
             {
                 rand = random.Next(1, 6);
                 moduleNr = random.Next(1, 6);
                 name = "T" + moduleNr.ToString();
-                int val = random.Next(1);
+                val = random.Next(1);
                 switch (rand)
                 {
                     case 1:
                         double value = random.NextDouble();
                         ChangeParameter(name + "/Level:" + value, parameters);
-                        ChangeParameter(name + "/LevelPercent:" + value/2 * 100, parameters);
+                        ChangeParameter(name + "/LevelPercent:" + value / 2 * 100, parameters);
                         break;
                     case 2:
                         ChangeParameter(name + "/InFlow:" + random.NextDouble().ToString(), parameters);
@@ -99,8 +100,6 @@ namespace TestRandomValues
                     Console.WriteLine($"Parameter not changed {key}:{unparsedValue}");
                 }
             }
-
         }
     }
-
 }
