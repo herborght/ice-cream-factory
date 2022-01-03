@@ -30,10 +30,7 @@
                 <TextBlock 
                 Grid.Row="1" 
                 Text="Properties" Margin="5 5" />
-                <CheckBox IsChecked="True" Margin="5 5">Tank temperature</CheckBox>
-                <CheckBox IsChecked="True" Margin="5 5 ">Tank capacity</CheckBox>
                 <CheckBox IsChecked="True" Margin="5 5" Checked="CheckBoxChanged" Unchecked="CheckBoxChanged" x:Name="valveflowrate">Valve flowrate</CheckBox>
-                <CheckBox Margin="5 5">Ambinent temperature</CheckBox>
             </StackPanel>
             <TextBlock 
                 Grid.Row="1" 
