@@ -69,9 +69,9 @@ namespace SimulationTests
 
             Application.Current.Dispatcher.Invoke(delegate
             {
-                MainWindow mainWindow = new MainWindow(tankList)
+                MainWindow mainWindow = new MainWindow(tankList, "test", 277)
                 {
-                    currentPage = new SimulationPage(tankList)
+                    currentPage = new SimulationPage(tankList, 277)
                 };
                 // Assuming tanklist cant be empty, but it is set in Main and it feels
                 // wrong to use Main in this testclass as well.

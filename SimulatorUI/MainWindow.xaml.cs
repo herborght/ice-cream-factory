@@ -16,13 +16,16 @@ namespace SimulatorUI
     {
         List<TankModule> tankList;
         public Page currentPage;
+        private double ambientTemp;
 
-        public MainWindow(List<TankModule> list)
+        public MainWindow(List<TankModule> list, string configName, double ambTemp)
         {
             tankList = list;
+            ambientTemp = ambTemp;
             InitializeComponent();
-            currentPage = new SimulationPage(tankList);
+            currentPage = new SimulationPage(tankList, ambientTemp);
             _mainFrame.Content = currentPage;
+            WindowTitle.Text = "Current Simulation: " + configName;
         }
 
         // DSD Yrjar - Switch the view displayed in the mainframe
@@ -37,7 +40,7 @@ namespace SimulatorUI
             }
             else
             {
-                Page newPage = new SimulationPage(tankList);
+                Page newPage = new SimulationPage(tankList, ambientTemp);
                 currentPage = newPage;
                 Filter.Visibility = Visibility.Collapsed;
                 _mainFrame.Content = newPage;

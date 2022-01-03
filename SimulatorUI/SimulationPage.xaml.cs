@@ -26,14 +26,21 @@ namespace SimulatorUI
         List<Ellipse> dumpValves;
         List<TextBlock> labels;
         List<Expander> detailsExpanders;
-        List<TextBlock> symbols; // Could be replaced with images, for example pasteurization could use a snowflake and a flame
-        public SimulationPage(List<TankModule> list)
+        List<TextBlock> symbols; //Could be replaced with images, for example pasteurization could use a snowflake and a flame
+        List<Line> arrowshafts;
+        List<Line> arrowheads;
+        List<TextBlock> levelTextBlocks;
+        List<TextBlock> tempTextBlocks;
+        private double ambientTemp;
+        TextBlock ambTempBlock;
+
+        public SimulationPage(List<TankModule> list, double ambTemp)
         {
             tankList = list;
+            ambientTemp = ambTemp;
             InitializeComponent();
             CreateTanks();
             Task.Run(() => UpdateVisuals());
-
         }
 
         // DSD Joakim - Create all the tanks
@@ -51,6 +58,10 @@ namespace SimulatorUI
             labels = new List<TextBlock>();
             symbols = new List<TextBlock>();
             detailsExpanders = new List<Expander>();
+            arrowshafts = new List<Line>();
+            arrowheads = new List<Line>();
+            levelTextBlocks = new List<TextBlock>();
+            tempTextBlocks = new List<TextBlock>();
 
             foreach (TankModule tank in tankList) //Setup the shapes and connection points
             {
@@ -129,11 +140,94 @@ namespace SimulatorUI
                 Canvas.SetTop(dumpValve, fromTop + height / 2);
                 dumpValves.Add(dumpValve);
 
+                // DSD Emil - Lines used for creating arrows
+                Line arrowshaft = new Line
+                {
+                    X1 = time * distance + 20,
+                    Y1 = fromTop + 1,
+                    X2 = time * distance + 20,
+                    Y2 = fromTop + height,
+                    StrokeThickness = 2,
+                    Stroke = Brushes.Black,
+                    Uid = "as_" + tank.Name
+                };
+                Canvas.SetZIndex(arrowshaft,10);
+                arrowshafts.Add(arrowshaft);
+
+                Line arrowhead = new Line
+                {
+                    X1 = time * distance + 20,
+                    Y1 = fromTop + 7,
+                    X2 = time * distance + 20,
+                    Y2 = fromTop + 8,
+                    StrokeThickness = 13,
+                    Stroke = Brushes.Black,
+                    StrokeStartLineCap = PenLineCap.Triangle,
+                    Uid = "ah1_" + tank.Name
+                };
+                Canvas.SetZIndex(arrowhead, 11);
+                arrowheads.Add(arrowhead);
+
+                Line arrowhead2 = new Line
+                {
+                    X1 = time * distance + 20,
+                    Y1 = fromTop + height - 8,
+                    X2 = time * distance + 20,
+                    Y2 = fromTop + height - 9,
+                    StrokeThickness = 13,
+                    Stroke = Brushes.Black,
+                    StrokeStartLineCap = PenLineCap.Triangle,
+                    Uid = "ah2_" + tank.Name
+                };
+                Canvas.SetZIndex(arrowhead2, 11);
+                arrowheads.Add(arrowhead2);
+
+                // DSD Emil - Text displaying the current level, beside the arrows
+                TextBlock levelText = new TextBlock
+                {
+                    Text = "0%",
+                    Width = 40,
+                    Height = 20,
+                    Uid = tank.Name
+                };
+                Canvas.SetLeft(levelText, time * distance + 30);
+                Canvas.SetTop(levelText, fromTop + 100);
+                levelTextBlocks.Add(levelText);
+
+                // DSD Emil - Text displaying the current temp, at the top of the tank
+                TextBlock tempText = new TextBlock
+                {
+                    Text = "0K",
+                    Width = 71,
+                    Height = 20,
+                    Uid = tank.Name,
+                    TextAlignment = TextAlignment.Right,
+                    Padding = new Thickness(0, 0, 5, 0),
+                };
+                Canvas.SetLeft(tempText, time * distance + 2);
+                Canvas.SetTop(tempText, fromTop + 2);
+                Canvas.SetZIndex(tempText, 12);
+                tempTextBlocks.Add(tempText);
+
+                // DSD Emil - Textblock displaying simulatiom ambient temperature
+                ambTempBlock = new TextBlock
+                {
+                    TextAlignment = TextAlignment.Right,
+                    Padding = new Thickness(0, 0, 5, 0),
+                };
+                Canvas.SetRight(ambTempBlock, canvas.ActualWidth);
+
                 // All elements to be drawn are added to the canvas
                 canvas.Children.Add(tankRectangle);
                 canvas.Children.Add(tankLevelRectangle);
                 canvas.Children.Add(dumpValve);
                 canvas.Children.Add(detailsExpander);
+                canvas.Children.Add(arrowshaft);
+                canvas.Children.Add(arrowhead);
+                canvas.Children.Add(arrowhead2);
+                canvas.Children.Add(levelText);
+                canvas.Children.Add(tempText);
+                canvas.Children.Add(ambTempBlock);
 
                 if (tank is PasteurizationModule || tank is HomogenizationModule || tank is FreezingModule || tank is FlavoringHardeningPackingModule)
                 {
@@ -148,7 +242,7 @@ namespace SimulatorUI
                     };
 
                     Canvas.SetLeft(symbol, time * distance + 35);
-                    Canvas.SetTop(symbol, fromTop);
+                    Canvas.SetTop(symbol, fromTop + 10);
                     symbols.Add(symbol);
                     canvas.Children.Add(symbol);
                 }
@@ -156,7 +250,7 @@ namespace SimulatorUI
                 time++;
             }
             int[] times = new int[rows + 1]; // Used to increment the length of which the lines are apart from eachother
-            foreach (TankModule tank in tankList) //Create the connections
+            foreach (TankModule tank in tankList) // Create the connections
             {
                 // This is a bit backward initial is the destination of the connection while target is the source
                 foreach (TankModule connected in tank.InFlowTanks)
@@ -278,6 +372,43 @@ namespace SimulatorUI
                         string name = rectangle.Uid;
                         TankModule current = tankList.Find(x => x.Name == name);
                         rectangle.Height = 200 - 200 * current.LevelPercentage / 100;
+
+                        // DSD Emil - Update the level indicator arrows here since their level is dependant on the current tank level
+                        Line arrow = arrowshafts.Find(x => x.Uid.Split('_')[1] == name);
+                        arrow.Y1 = arrow.Y2 - 200 + rectangle.Height;
+
+                        List<Line> arrowheadlist = arrowheads.FindAll(x => x.Uid.Split('_')[1] == name);
+
+                        Line arrowhead1 = arrowheadlist.Find(x => x.Uid.Split('_')[0] == "ah1");
+                        Line arrowhead2 = arrowheadlist.Find(x => x.Uid.Split('_')[0] == "ah2");
+
+                        TextBlock leveltext = levelTextBlocks.Find(x => x.Uid == name);
+                        leveltext.Text = Math.Round(current.LevelPercentage, 3) + "%";
+                        
+                        if (rectangle.Height < 187)
+                        {
+                            arrowhead1.Visibility = Visibility.Visible;
+                            arrowhead2.Visibility = Visibility.Visible;
+
+                            arrowhead1.Y1 = arrow.Y1 + 6;
+                            arrowhead1.Y2 = arrow.Y1 + 7;
+
+                            if (rectangle.Height < 200 - leveltext.Height)
+                            {
+                                Canvas.SetTop(leveltext, (arrow.Y1 + arrow.Y2 - leveltext.Height) / 2);                             
+                            }
+                            else
+                            {
+                                Canvas.SetTop(leveltext, arrow.Y1 - leveltext.Height);
+                            }                            
+                        }
+                        else
+                        {
+                            arrowhead1.Visibility = Visibility.Hidden;
+                            arrowhead2.Visibility = Visibility.Hidden;
+
+                            Canvas.SetTop(leveltext, arrow.Y1 - leveltext.Height);
+                        }
                     });
                 }
 
@@ -350,6 +481,22 @@ namespace SimulatorUI
                         }
                     });
                 }
+
+                // DSD Emil - Update tank temperature text
+                foreach (TextBlock temp in tempTextBlocks)
+                {
+                    temp.Dispatcher.Invoke(() =>
+                    {
+                        TankModule tank = tankList.Find(x => x.Name == temp.Uid);
+                        temp.Text = tank.Temperature + "K";
+                    });
+                }
+
+                ambTempBlock.Dispatcher.Invoke(() =>
+                {
+                    ambTempBlock.Text = "Ambient temp: " + ambientTemp.ToString() + "K";
+
+                });
 
                 SymbolUpdate();
                 await Task.Delay(1000);
