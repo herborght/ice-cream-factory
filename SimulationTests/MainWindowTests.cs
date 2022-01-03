@@ -13,19 +13,19 @@ namespace SimulationTests
     [TestClass, RequiresSTA]
     public class MainWindowTests
     {
-        //initalizing main
+        // DSD Vår - Unit tests for main window
         IParameterDataBase parameters;
-        IEnumerable<IModule> modules; 
+        IEnumerable<IModule> modules;
         string configFilePath;
         //Main main = new Main(parameters, modules, configFilePath);
 
-        //variables for SwitchViewTest
+        // Variables for SwitchViewTest
         Page expectedCurr;
         Page result;
         object sender;
         RoutedEventArgs e;
 
-        //variables for MainWIndow (but think i can just use main.)
+        // Variables for MainWIndow (but think i can just use main.)
         TankModule T1;
         TankModule T2;
         List<TankModule> tankList = new List<TankModule>();
@@ -35,8 +35,7 @@ namespace SimulationTests
         [TestMethod]
         public void SwitchViewTest()
         {
-            /*This test is currently just checking if the currentPage i different 
-            before and after running switchView. */
+            // DSD Vår - This test is currently just checking if the currentPage is different before and after running switchView. 
 
             T1 = new TankModule("T1");
             T2 = new TankModule("T2");
@@ -49,7 +48,7 @@ namespace SimulationTests
                 {
                     currentPage = new SimulationPage(tankList)
                 };
-                //assuming tanklist cant be empty, but it is set in Main and it feels
+                // Assuming tanklist cant be empty, but it is set in Main and it feels
                 // wrong to use Main in this testclass as well.
 
                 expectedCurr = mainWindow.currentPage;
@@ -59,16 +58,5 @@ namespace SimulationTests
                 Microsoft.VisualStudio.TestTools.UnitTesting.Assert.AreNotEqual(expectedCurr, result);
             });
         }
-
-       /* [TestMethod]
-        public void GetTnkInfoTest()
-        {
-            T1 = new TankModule("T1");
-            T2 = new TankModule("T2");
-            
-            tankList.Add(T1);
-            tankList.Add(T2);
-
-        }*/
     }
 }
