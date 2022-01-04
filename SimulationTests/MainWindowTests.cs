@@ -7,9 +7,31 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Windows;
 using NUnit.Framework;
 using ABB.InSecTT.Common.Configuration;
+using System.Threading;
 
 namespace SimulationTests
 {
+    public class STATestMethodAttribute : TestMethodAttribute // Customized test for running STA thread, from https://github.com/microsoft/XamlBehaviorsWpf/blob/master/Test/UnitTests/STATestMethodAttribute.cs
+    {
+        public override TestResult[] Execute(ITestMethod testMethod)
+        {
+            if (Thread.CurrentThread.GetApartmentState() == ApartmentState.STA)
+                return Invoke(testMethod);
+
+            TestResult[] result = null;
+            var thread = new Thread(() => result = Invoke(testMethod));
+            thread.SetApartmentState(ApartmentState.STA);
+            thread.Start();
+            thread.Join();
+            return result;
+        }
+
+        private TestResult[] Invoke(ITestMethod testMethod)
+        {
+            return new[] { testMethod.Invoke(null) };
+        }
+    }
+
     [TestClass, RequiresSTA]
     public class MainWindowTests
     {
@@ -32,7 +54,7 @@ namespace SimulationTests
 
 
 
-        [TestMethod]
+        [STATestMethod]
         public void SwitchViewTest()
         {
             // DSD Vår - This test is currently just checking if the currentPage is different before and after running switchView. 
@@ -42,11 +64,14 @@ namespace SimulationTests
             tankList.Add(T1); //need to run initialize tanks to create tankList with the config path 
             tankList.Add(T2);
 
+            if (System.Windows.Application.Current == null)
+            { new System.Windows.Application { ShutdownMode = ShutdownMode.OnExplicitShutdown }; }
+
             Application.Current.Dispatcher.Invoke(delegate
             {
-                MainWindow mainWindow = new MainWindow(tankList)
+                MainWindow mainWindow = new MainWindow(tankList, "test", 277)
                 {
-                    currentPage = new SimulationPage(tankList)
+                    currentPage = new SimulationPage(tankList, 277)
                 };
                 // Assuming tanklist cant be empty, but it is set in Main and it feels
                 // wrong to use Main in this testclass as well.

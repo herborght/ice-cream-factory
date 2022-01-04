@@ -18,13 +18,20 @@ namespace SimulatorUI
         public CheckBox valveCheckBox;
         public bool important; //used to close all expanders in simulationPage
 
-        public MainWindow(List<TankModule> list)
+        public Page currentPage;
+        private double ambientTemp;
+
+
+        public MainWindow(List<TankModule> list, string configName, double ambTemp)
         {
             tankList = list;
+            ambientTemp = ambTemp;
             InitializeComponent();
+
             TextBlock test = new TextBlock();
-            currentPage = new SimulationPage(tankList);
+            currentPage = new SimulationPage(tankList, ambientTemp);
             _mainFrame.Content = currentPage;
+            WindowTitle.Text = "Current Simulation: " + configName;
         }
         public void CheckBoxChanged(object sender, RoutedEventArgs e)
         {
@@ -74,7 +81,7 @@ namespace SimulatorUI
             }
             else
             {
-                Page newPage = new SimulationPage(tankList);
+                Page newPage = new SimulationPage(tankList, ambientTemp);
                 currentPage = newPage;
                 Filter.Visibility = Visibility.Collapsed;
                 _mainFrame.Content = newPage;
