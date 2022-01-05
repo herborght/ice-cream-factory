@@ -6,7 +6,6 @@ namespace SimulatorUI
 {
     public class TankModule : INotifyPropertyChanged
     {
-
         // DSD Joakim 
         // Updated by Bendik with databinding used in rawdataview
         public event PropertyChangedEventHandler PropertyChanged;

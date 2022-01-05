@@ -18,7 +18,6 @@ namespace SimulatorUI
         public Page currentPage; 
         private static int counter;
         public CheckBox valveCheckBox;
-        public TextBlock test;
         public bool important; //used to close all expanders in simulationPage
         private double ambientTemp;
 
@@ -27,6 +26,7 @@ namespace SimulatorUI
             tankList = list;
             ambientTemp = ambTemp;
             InitializeComponent();
+
             TextBlock test = new TextBlock();
             currentPage = new SimulationPage(tankList, ambientTemp);
             _mainFrame.Content = currentPage;
@@ -47,21 +47,21 @@ namespace SimulatorUI
                 (e.Content as RawDataPage).Tag = this;
             }
         }
-        public void showImportat(object sender, RoutedEventArgs e)
+        public void ShowImportat(object sender, RoutedEventArgs e)
         {
             if (showimportant.IsChecked == true && currentPage is SimulationPage)
             {
-                (currentPage as SimulationPage).setClosed();
+                (currentPage as SimulationPage).SetClosed();
             }
         }
-        public void showAll(object sender, RoutedEventArgs e)
+        public void ShowAll(object sender, RoutedEventArgs e)
         {
             if (showall.IsChecked == true && currentPage is SimulationPage)
             {
-                (currentPage as SimulationPage).setOpen();
+                (currentPage as SimulationPage).SetOpen();
             }
         }
-        public bool getValvef()
+        public bool GetValvef()
         {   
             //returns the value for valve flowrate
             return valveflowrate.IsChecked ?? false;
