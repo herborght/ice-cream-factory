@@ -489,12 +489,15 @@ namespace SimulatorUI
                             string msg = connected.Name + "->" + tank.Name + "\n";
 
                             //Checks if valve flowrate is selected, and displays the flowrate if it is 
-                            valvef = (this.Tag as MainWindow).GetValvef();
-                            if (valvef)
+                            if(Tag != null)
                             {
-                                msg += "InFlow: " + Math.Round(tank.InletFlow, 3) + "m3/s\n"; //Could also add the temperatures, will probably have to divide what each shows in other functions, as we should be able to select the 
-                            } 
-                            label.Text = msg;
+                                valvef = (this.Tag as MainWindow).GetValvef();
+                                if (valvef)
+                                {
+                                    msg += "InFlow: " + Math.Round(tank.InletFlow, 3) + "m3/s\n"; //Could also add the temperatures, will probably have to divide what each shows in other functions, as we should be able to select the 
+                                }
+                                label.Text = msg;
+                            }
                         }
                     });
                 }
