@@ -15,7 +15,10 @@ namespace SimulatorUI
     public partial class MainWindow : Window
     {
         List<TankModule> tankList;
-        public Page currentPage;
+        public Page currentPage; 
+        private static int counter;
+        public CheckBox valveCheckBox;
+        public bool important; //used to close all expanders in simulationPage
         private double ambientTemp;
 
         public MainWindow(List<TankModule> list, string configName, double ambTemp)
@@ -23,10 +26,47 @@ namespace SimulatorUI
             tankList = list;
             ambientTemp = ambTemp;
             InitializeComponent();
+
+            TextBlock test = new TextBlock();
             currentPage = new SimulationPage(tankList, ambientTemp);
             _mainFrame.Content = currentPage;
             WindowTitle.Text = "Current Simulation: " + configName;
         }
+        public void CheckBoxChanged(object sender, RoutedEventArgs e)
+        {
+            
+        }
+        private void Frame_LoadCompleted(object sender, System.Windows.Navigation.NavigationEventArgs e)
+        {
+            if (currentPage is SimulationPage)
+            {
+                (e.Content as SimulationPage).Tag = this;
+            }
+            else
+            {
+                (e.Content as RawDataPage).Tag = this;
+            }
+        }
+        public void ShowImportat(object sender, RoutedEventArgs e)
+        {
+            if (showimportant.IsChecked == true && currentPage is SimulationPage)
+            {
+                (currentPage as SimulationPage).SetClosed();
+            }
+        }
+        public void ShowAll(object sender, RoutedEventArgs e)
+        {
+            if (showall.IsChecked == true && currentPage is SimulationPage)
+            {
+                (currentPage as SimulationPage).SetOpen();
+            }
+        }
+        public bool GetValvef()
+        {   
+            //returns the value for valve flowrate
+            return valveflowrate.IsChecked ?? false;
+        }
+
 
         // DSD Yrjar - Switch the view displayed in the mainframe
         public void SwitchView(object sender, RoutedEventArgs e)
@@ -36,13 +76,28 @@ namespace SimulatorUI
                 Page newPage = new RawDataPage(tankList);
                 currentPage = newPage;
                 Filter.Visibility = Visibility.Visible;
+                barone.Visibility = Visibility.Collapsed;
+                bartwo.Visibility = Visibility.Collapsed;
+                showoptions.Visibility = Visibility.Collapsed;
+                checkboxes.Visibility = Visibility.Collapsed;
                 _mainFrame.Content = newPage;
             }
             else
             {
                 Page newPage = new SimulationPage(tankList, ambientTemp);
                 currentPage = newPage;
+                if (showall.IsChecked ?? false)
+                {
+                    foreach (Expander ex in (currentPage as SimulationPage).GetExpanders())
+                    {
+                        ex.IsExpanded = true;
+                    }
+                }
                 Filter.Visibility = Visibility.Collapsed;
+                barone.Visibility = Visibility.Visible;
+                bartwo.Visibility = Visibility.Visible;
+                showoptions.Visibility = Visibility.Visible;
+                checkboxes.Visibility = Visibility.Visible;
                 _mainFrame.Content = newPage;
             }
         }
