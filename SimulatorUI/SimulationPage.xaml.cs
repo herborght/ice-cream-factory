@@ -118,13 +118,20 @@ namespace SimulatorUI
                 detailsExpanders.Add(detailsExpander);
 
                 // The point at which the tank will have its connections
-                Point point = new Point
+                Point exit = new Point
                 {
                     X = time * distance + 37.5,
                     Y = fromTop + height
                 };
-                KeyValuePair<string, KeyValuePair<int, Point>> keyValuePair = new KeyValuePair<string, KeyValuePair<int, Point>>(tank.Name, new KeyValuePair<int, Point>(rows, point)); //Added in this way to get which row they are on
-                pointList.Add(keyValuePair);
+                Point entry = new Point
+                {
+                    X = time * distance,
+                    Y = fromTop + height / 2
+                };
+                KeyValuePair<string, KeyValuePair<int, Point>> exitPoint = new KeyValuePair<string, KeyValuePair<int, Point>>(tank.Name + "_exit", new KeyValuePair<int, Point>(rows, exit)); //Added in this way to get which row they are on
+                KeyValuePair<string, KeyValuePair<int, Point>> entryPoint = new KeyValuePair<string, KeyValuePair<int, Point>>(tank.Name + "_entry", new KeyValuePair<int, Point>(rows, entry));
+                pointList.Add(exitPoint);
+                pointList.Add(entryPoint);
 
                 // Dump valves will probably have to improve the visuals of these, or change their position not really intuitive 
                 Ellipse dumpValve = new Ellipse
@@ -136,7 +143,7 @@ namespace SimulatorUI
                     Stroke = Brushes.Black,
                     Uid = "d_" + tank.Name
                 };
-                Canvas.SetLeft(dumpValve, time * distance - 10);
+                Canvas.SetLeft(dumpValve, time * distance + 70);
                 Canvas.SetTop(dumpValve, fromTop + height / 2);
                 dumpValves.Add(dumpValve);
 
