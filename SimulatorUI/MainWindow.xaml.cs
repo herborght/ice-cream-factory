@@ -86,6 +86,13 @@ namespace SimulatorUI
             {
                 Page newPage = new SimulationPage(tankList, ambientTemp);
                 currentPage = newPage;
+                if (showall.IsChecked ?? false)
+                {
+                    foreach (Expander ex in (currentPage as SimulationPage).GetExpanders())
+                    {
+                        ex.IsExpanded = true;
+                    }
+                }
                 Filter.Visibility = Visibility.Collapsed;
                 barone.Visibility = Visibility.Visible;
                 bartwo.Visibility = Visibility.Visible;

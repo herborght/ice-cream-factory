@@ -43,6 +43,10 @@ namespace SimulatorUI
             CreateTanks();
             Task.Run(() => UpdateVisuals());
         }
+        public List<Expander> GetExpanders()
+        {
+            return this.detailsExpanders;
+        }
 
         public void SetValve(bool check)
         {
