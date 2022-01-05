@@ -15,12 +15,11 @@ namespace SimulatorUI
     public partial class MainWindow : Window
     {
         List<TankModule> tankList;
+        public Page currentPage; 
+        private static int counter;
         public CheckBox valveCheckBox;
         public bool important; //used to close all expanders in simulationPage
-
-        public Page currentPage;
         private double ambientTemp;
-
 
         public MainWindow(List<TankModule> list, string configName, double ambTemp)
         {

@@ -476,7 +476,6 @@ namespace SimulatorUI
                         expander.Content = content;
                     });
                 }
-
                 // Update labels for tank connections
                 foreach (TextBlock label in labels)
                 {
@@ -487,7 +486,6 @@ namespace SimulatorUI
                         {
                             TankModule connected = tank.InFlowTanks.Find(x => x.Name == label.Name.Split('_')[1]);
                             string msg = connected.Name + "->" + tank.Name + "\n";
-
                             //Checks if valve flowrate is selected, and displays the flowrate if it is 
                             if(Tag != null)
                             {
@@ -522,7 +520,6 @@ namespace SimulatorUI
                 await Task.Delay(1000);
             }
         }
-
 
         // Update special symbols
         private void SymbolUpdate()
@@ -573,6 +570,7 @@ namespace SimulatorUI
             return ret;
         }
         
+
         private string UpdateHomogenization(HomogenizationModule temp) //Present cooler and pressure in raw data instead
         {
             string ret = "";
