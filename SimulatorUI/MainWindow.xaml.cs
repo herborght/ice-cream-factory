@@ -76,6 +76,10 @@ namespace SimulatorUI
                 Page newPage = new RawDataPage(tankList);
                 currentPage = newPage;
                 Filter.Visibility = Visibility.Visible;
+                barone.Visibility = Visibility.Collapsed;
+                bartwo.Visibility = Visibility.Collapsed;
+                showoptions.Visibility = Visibility.Collapsed;
+                checkboxes.Visibility = Visibility.Collapsed;
                 _mainFrame.Content = newPage;
             }
             else
@@ -83,6 +87,10 @@ namespace SimulatorUI
                 Page newPage = new SimulationPage(tankList, ambientTemp);
                 currentPage = newPage;
                 Filter.Visibility = Visibility.Collapsed;
+                barone.Visibility = Visibility.Visible;
+                bartwo.Visibility = Visibility.Visible;
+                showoptions.Visibility = Visibility.Visible;
+                checkboxes.Visibility = Visibility.Visible;
                 _mainFrame.Content = newPage;
             }
         }
