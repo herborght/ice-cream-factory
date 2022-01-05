@@ -5,6 +5,7 @@ using System.IO;
 using System.Configuration;
 using System.Diagnostics.Tracing;
 using System.Linq;
+using System.Threading;
 
 namespace ABB.InSecTT.SimulatorEnv
 {
@@ -30,7 +31,25 @@ namespace ABB.InSecTT.SimulatorEnv
                 sb.Append(eventArgs.Message);
             }
             sb.AppendLine();
-            File.AppendAllText(fileName, sb.ToString());
+            int time = 0;
+            while (true)
+            {
+                try
+                {
+                    File.AppendAllText(fileName, sb.ToString());
+                    return;
+                }
+                catch (IOException e)
+                {
+                    //Console.WriteLine("Attempt:" + time);
+                    time++;
+                    if (time > 10)
+                    {
+                        throw e;
+                    }
+                    Thread.Sleep(100);
+                }
+            }
         }
     }
 

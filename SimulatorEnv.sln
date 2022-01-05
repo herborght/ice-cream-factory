@@ -9,7 +9,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SimulationTests", "Simulati
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Common", "Common\Common.csproj", "{A8D42109-8B77-438A-85E4-7CD7FFD73578}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimulatorUI", "SimulatorUI\SimulatorUI.csproj", "{30374ECB-5743-4C98-BCE7-17A78CD481A3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SimulatorUI", "SimulatorUI\SimulatorUI.csproj", "{30374ECB-5743-4C98-BCE7-17A78CD481A3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestRandomValues", "TestRandomValues\TestRandomValues.csproj", "{70334B80-0249-46B1-BA67-130A7AE06D03}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{30374ECB-5743-4C98-BCE7-17A78CD481A3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{30374ECB-5743-4C98-BCE7-17A78CD481A3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{30374ECB-5743-4C98-BCE7-17A78CD481A3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{70334B80-0249-46B1-BA67-130A7AE06D03}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{70334B80-0249-46B1-BA67-130A7AE06D03}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{70334B80-0249-46B1-BA67-130A7AE06D03}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{70334B80-0249-46B1-BA67-130A7AE06D03}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

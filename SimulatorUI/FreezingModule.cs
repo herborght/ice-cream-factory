@@ -4,7 +4,7 @@ using System.Text;
 
 namespace SimulatorUI
 {
-    class FreezingModule : TankModule
+    public class FreezingModule : TankModule
     {
         public bool FreezingOn { get; set; }
         public bool DasherOn { get; set; }

@@ -89,7 +89,7 @@
 
         
         <StackPanel Grid.Column="1" Grid.Row="0" Background="#FFCBCBCB">
-            <TextBlock Text="Current Simulation: TankConfigSim" FontSize="20" FontWeight="Normal" Margin="8,0,0,0"/>
+            <TextBlock x:Name="WindowTitle"  Text="Current Simulation: " FontSize="20" FontWeight="Normal" Margin="8,0,0,0"/>
             
         </StackPanel>
         
