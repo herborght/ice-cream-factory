@@ -48,21 +48,21 @@ namespace SimulatorUI
                 (e.Content as RawDataPage).Tag = this;
             }
         }
-        public void showImportat(object sender, RoutedEventArgs e)
+        public void ShowImportat(object sender, RoutedEventArgs e)
         {
             if (showimportant.IsChecked == true && currentPage is SimulationPage)
             {
-                (currentPage as SimulationPage).setClosed();
+                (currentPage as SimulationPage).SetClosed();
             }
         }
-        public void showAll(object sender, RoutedEventArgs e)
+        public void ShowAll(object sender, RoutedEventArgs e)
         {
             if (showall.IsChecked == true && currentPage is SimulationPage)
             {
-                (currentPage as SimulationPage).setOpen();
+                (currentPage as SimulationPage).SetOpen();
             }
         }
-        public bool getValvef()
+        public bool GetValvef()
         {   
             //returns the value for valve flowrate
             return valveflowrate.IsChecked ?? false;

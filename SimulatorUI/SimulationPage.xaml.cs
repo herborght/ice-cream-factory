@@ -28,7 +28,6 @@ namespace SimulatorUI
         List<Expander> detailsExpanders;
         List<TextBlock> symbols; //Could be replaced with images, for example pasteurization could use a snowflake and a flame
         Boolean valvef;
-        public SimulationPage(List<TankModule> list)
         List<Line> arrowshafts;
         List<Line> arrowheads;
         List<TextBlock> levelTextBlocks;
@@ -45,7 +44,7 @@ namespace SimulatorUI
             Task.Run(() => UpdateVisuals());
         }
 
-        public void setValve(Boolean check)
+        public void SetValve(bool check)
         {
             this.valvef = check;
         }
@@ -53,7 +52,6 @@ namespace SimulatorUI
         {
             this.valvef = data;
         }
-        private void createTanks()
 
         // DSD Joakim - Create all the tanks
         private void CreateTanks()
@@ -491,7 +489,7 @@ namespace SimulatorUI
                             string msg = connected.Name + "->" + tank.Name + "\n";
 
                             //Checks if valve flowrate is selected, and displays the flowrate if it is 
-                            valvef = (this.Tag as MainWindow).getValvef();
+                            valvef = (this.Tag as MainWindow).GetValvef();
                             if (valvef)
                             {
                                 msg += "InFlow: " + Math.Round(tank.InletFlow, 3) + "m3/s\n"; //Could also add the temperatures, will probably have to divide what each shows in other functions, as we should be able to select the 
@@ -533,16 +531,16 @@ namespace SimulatorUI
                     switch(tank)
                     {
                         case PasteurizationModule p:
-                            textBlock.Text = updatePasteurization(p);
+                            textBlock.Text = UpdatePasteurization(p);
                             break;
                         case HomogenizationModule h:
-                            textBlock.Text = updateHomogenization(h);
+                            textBlock.Text = UpdateHomogenization(h);
                             break;
                         case FlavoringHardeningPackingModule fhp:
-                            textBlock.Text = updateFlavoringHardeningPacking(fhp);
+                            textBlock.Text = UpdateFlavoringHardeningPacking(fhp);
                             break;
                         case FreezingModule f:
-                            textBlock.Text = updateFreezing(f);
+                            textBlock.Text = UpdateFreezing(f);
                             break;
                         
                     }                  
@@ -550,7 +548,7 @@ namespace SimulatorUI
             }
         }
 
-        private string updatePasteurization(PasteurizationModule temp)
+        private string UpdatePasteurization(PasteurizationModule temp)
         {
             string ret = "";
             if (temp.HeaterOn)
@@ -572,7 +570,7 @@ namespace SimulatorUI
             return ret;
         }
         
-        private string updateHomogenization(HomogenizationModule temp) //Present cooler and pressure in raw data instead
+        private string UpdateHomogenization(HomogenizationModule temp) //Present cooler and pressure in raw data instead
         {
             string ret = "";
             if(temp.HomogenizationOn)
@@ -586,7 +584,7 @@ namespace SimulatorUI
             return ret;
         }
 
-        private string updateFlavoringHardeningPacking(FlavoringHardeningPackingModule temp) //Represent Mix temp, cooler temp, package form (or with an image) in raw data
+        private string UpdateFlavoringHardeningPacking(FlavoringHardeningPackingModule temp) //Represent Mix temp, cooler temp, package form (or with an image) in raw data
         {
             string ret = "";
             if (temp.StartFlavoring)
@@ -608,7 +606,7 @@ namespace SimulatorUI
             return ret;
         }
 
-        private string updateFreezing(FreezingModule temp) //Represent sending test values? Represent others via raw data
+        private string UpdateFreezing(FreezingModule temp) //Represent sending test values? Represent others via raw data
         {
             string ret = "";
             if (temp.FreezingOn)
@@ -675,14 +673,14 @@ namespace SimulatorUI
 
             return msg;
         }
-        public void setOpen()
+        public void SetOpen()
         {
             foreach(Expander exp in detailsExpanders)
             {
                 exp.IsExpanded = true;
             }
         }
-        public void setClosed()
+        public void SetClosed()
         {
             foreach (Expander exp in detailsExpanders)
             {
