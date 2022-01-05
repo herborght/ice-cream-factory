@@ -22,10 +22,13 @@ namespace SimulatorUI
         public RawDataPage(List<TankModule> list)
         {
             TankList = new ObservableCollection<TankModule>(list);
-            DataContext = this; //Binding this instance as the datacontext for the view
+            // Binding this instance as the datacontext for the view
+            DataContext = this;
             InitializeComponent();
-            Task.Run(() => updateLoop());   
+            Task.Run(() => UpdateLoop());
         }
+
+        // DSD Bendik - Raw data displayed in a grid with databinding
         public void DataGridCell_load(object sender, RoutedEventArgs e)
         {
             DataGridCell cell = sender as DataGridCell;
@@ -34,7 +37,7 @@ namespace SimulatorUI
                 ((TextBlock)cell.Content).Text = "Lol";
             }
         }
-        internal async Task updateLoop()
+        internal async Task UpdateLoop()
         {
             for (; ; )
             {
