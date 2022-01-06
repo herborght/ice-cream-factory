@@ -5,14 +5,53 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:SimulatorUI"
       mc:Ignorable="d" 
-      d:DesignHeight="950" d:DesignWidth="750"
+      d:DesignHeight="1500" d:DesignWidth="1500"
       Title="RawDataPage">
-
-    <DataGrid Name="dataTable" ItemsSource="{Binding TankList}" 
+    <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+        <Grid Height="Auto" Width="Auto" HorizontalAlignment="Left" VerticalAlignment="Top">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <DataGrid Name="dataTable" ItemsSource="{Binding TankList}" 
+              MinWidth="500" 
+              Margin="10 10 10 10" 
+              HorizontalContentAlignment="Left" 
+              HorizontalAlignment="Left"
+              Grid.Row="0">
+        </DataGrid>
+        <DataGrid Name="dataTable2" ItemsSource="{Binding FreezingList}" 
               MinWidth="500" 
               Margin="10 10 10 10" 
               HorizontalContentAlignment="Center" 
-              HorizontalAlignment="Center">
+              HorizontalAlignment="Left"
+              Grid.Row="1">
+        </DataGrid>
+        <DataGrid Name="dataTable3" ItemsSource="{Binding FHPMList}" 
+              MinWidth="500" 
+              Margin="10 10 10 10" 
+              HorizontalContentAlignment="Center" 
+              HorizontalAlignment="Left"
+              Grid.Row="2">
     </DataGrid>
+    <DataGrid Name="dataTable4" ItemsSource="{Binding HomoList}" 
+              MinWidth="500" 
+              Margin="10 10 10 10" 
+              HorizontalContentAlignment="Center" 
+              HorizontalAlignment="Left"
+              Grid.Row="3">
+    </DataGrid>
+    <DataGrid Name="dataTable5" ItemsSource="{Binding PastList}" 
+              MinWidth="500" 
+              Margin="10 10 10 10" 
+              HorizontalContentAlignment="Center" 
+              HorizontalAlignment="Left"
+              Grid.Row="4">
+    </DataGrid>
+    </Grid>
+    </ScrollViewer>
 
 </Page>

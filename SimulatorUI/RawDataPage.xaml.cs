@@ -19,9 +19,36 @@ namespace SimulatorUI
     public partial class RawDataPage : Page
     {
         public ObservableCollection<TankModule> TankList { get; set; }
+        public ObservableCollection<FreezingModule> FreezingList { get; set; }
+        public ObservableCollection<FlavoringHardeningPackingModule> FHPMList { get; set; }
+        public ObservableCollection<HomogenizationModule> HomoList { get; set; }
+        public ObservableCollection<PasteurizationModule> PastList { get; set; }
+
         public RawDataPage(List<TankModule> list)
         {
             TankList = new ObservableCollection<TankModule>(list);
+            FreezingList = new ObservableCollection<FreezingModule>();
+            FHPMList = new ObservableCollection<FlavoringHardeningPackingModule>();
+            HomoList = new ObservableCollection<HomogenizationModule>();
+            PastList = new ObservableCollection<PasteurizationModule>();
+            foreach (TankModule module in list)
+            {   
+                if(Object.ReferenceEquals(module.GetType(), typeof(FreezingModule)))
+                {
+                    FreezingList.Add(module as FreezingModule);
+                } else if (Object.ReferenceEquals(module.GetType(), typeof(FlavoringHardeningPackingModule)))
+                {
+                    FHPMList.Add(module as FlavoringHardeningPackingModule);
+                } else if (Object.ReferenceEquals(module.GetType(), typeof(HomogenizationModule)))
+                {
+                    HomoList.Add(module as HomogenizationModule);
+                }
+                else if (Object.ReferenceEquals(module.GetType(), typeof(HomogenizationModule)))
+                {
+                    PastList.Add(module as PasteurizationModule);
+                }
+
+            }
             // Binding this instance as the datacontext for the view
             DataContext = this;
             InitializeComponent();
