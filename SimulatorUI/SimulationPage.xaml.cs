@@ -27,13 +27,14 @@ namespace SimulatorUI
         List<TextBlock> labels;
         List<Expander> detailsExpanders;
         List<TextBlock> symbols; //Could be replaced with images, for example pasteurization could use a snowflake and a flame
+        Boolean valvef;
         List<Line> arrowshafts;
         List<Line> arrowheads;
         List<TextBlock> levelTextBlocks;
         List<TextBlock> tempTextBlocks;
         private double ambientTemp;
         TextBlock ambTempBlock;
-
+        
         public SimulationPage(List<TankModule> list, double ambTemp)
         {
             tankList = list;
@@ -41,6 +42,19 @@ namespace SimulatorUI
             InitializeComponent();
             CreateTanks();
             Task.Run(() => UpdateVisuals());
+        }
+        public List<Expander> GetExpanders()
+        {
+            return this.detailsExpanders;
+        }
+
+        public void SetValve(bool check)
+        {
+            this.valvef = check;
+        }
+        public void PassData(bool data)
+        {
+            this.valvef = data;
         }
 
         // DSD Joakim - Create all the tanks
@@ -379,6 +393,7 @@ namespace SimulatorUI
                     }; 
                     connectedValves.Add(ellipse);
 
+
                     // Label for which valve it is
                     TextBlock label = new TextBlock
                     {
@@ -585,7 +600,6 @@ namespace SimulatorUI
                         expander.Content = content;
                     });
                 }
-
                 // Update labels for tank connections
                 foreach (TextBlock label in labels)
                 {
@@ -604,13 +618,17 @@ namespace SimulatorUI
                         }
                         else
                         {
-                            TankModule tank = tankList.Find(x => x.Name == label.Name.Split('_')[0]);
-                            if (tank != null)
+                            TankModule connected = tank.InFlowTanks.Find(x => x.Name == label.Name.Split('_')[1]);
+                            msg = connected.Name + "->" + tank.Name + "\n";
+                            //Checks if valve flowrate is selected, and displays the flowrate if it is 
+                            if(Tag != null)
                             {
-                                TankModule connected = tank.InFlowTanks.Find(x => x.Name == label.Name.Split('_')[1]);
-                                msg = connected.Name + "->" + tank.Name + "\n";
-                                msg += "InFlow: \n" + Math.Round(tank.InletFlow, 3) + "m3/s\n";
-
+                                valvef = (this.Tag as MainWindow).GetValvef();
+                                if (valvef)
+                                {
+                                    msg += "InFlow: " + Math.Round(tank.InletFlow, 3) + "m3/s\n"; //Could also add the temperatures, will probably have to divide what each shows in other functions, as we should be able to select the 
+                                }
+                                label.Text = msg;
                             }
                         }
                         label.Text = msg;
@@ -648,16 +666,16 @@ namespace SimulatorUI
                     switch(tank)
                     {
                         case PasteurizationModule p:
-                            textBlock.Text = updatePasteurization(p);
+                            textBlock.Text = UpdatePasteurization(p);
                             break;
                         case HomogenizationModule h:
-                            textBlock.Text = updateHomogenization(h);
+                            textBlock.Text = UpdateHomogenization(h);
                             break;
                         case FlavoringHardeningPackingModule fhp:
-                            textBlock.Text = updateFlavoringHardeningPacking(fhp);
+                            textBlock.Text = UpdateFlavoringHardeningPacking(fhp);
                             break;
                         case FreezingModule f:
-                            textBlock.Text = updateFreezing(f);
+                            textBlock.Text = UpdateFreezing(f);
                             break;
                         
                     }                  
@@ -665,7 +683,7 @@ namespace SimulatorUI
             }
         }
 
-        private string updatePasteurization(PasteurizationModule temp)
+        private string UpdatePasteurization(PasteurizationModule temp)
         {
             string ret = "";
             if (temp.HeaterOn)
@@ -687,7 +705,8 @@ namespace SimulatorUI
             return ret;
         }
         
-        private string updateHomogenization(HomogenizationModule temp) //Present cooler and pressure in raw data instead
+
+        private string UpdateHomogenization(HomogenizationModule temp) //Present cooler and pressure in raw data instead
         {
             string ret = "";
             if(temp.HomogenizationOn)
@@ -701,7 +720,7 @@ namespace SimulatorUI
             return ret;
         }
 
-        private string updateFlavoringHardeningPacking(FlavoringHardeningPackingModule temp) //Represent Mix temp, cooler temp, package form (or with an image) in raw data
+        private string UpdateFlavoringHardeningPacking(FlavoringHardeningPackingModule temp) //Represent Mix temp, cooler temp, package form (or with an image) in raw data
         {
             string ret = "";
             if (temp.StartFlavoring)
@@ -723,7 +742,7 @@ namespace SimulatorUI
             return ret;
         }
 
-        private string updateFreezing(FreezingModule temp) //Represent sending test values? Represent others via raw data
+        private string UpdateFreezing(FreezingModule temp) //Represent sending test values? Represent others via raw data
         {
             string ret = "";
             if (temp.FreezingOn)
@@ -808,6 +827,20 @@ namespace SimulatorUI
             }
 
             return msg;
+        }
+        public void SetOpen()
+        {
+            foreach(Expander exp in detailsExpanders)
+            {
+                exp.IsExpanded = true;
+            }
+        }
+        public void SetClosed()
+        {
+            foreach (Expander exp in detailsExpanders)
+            {
+                exp.IsExpanded = false;
+            }
         }
     }
 }

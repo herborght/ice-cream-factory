@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SimulatorUI"
         mc:Ignorable="d"
+        x:Name="mainwindow"
         Title="Ice Cream Factory" Height="1000" Width="1000">
     <Grid Background="#FFE4E4E4">
         <Grid.ColumnDefinitions>
@@ -21,48 +22,31 @@
             <Image Width="25" Source="/SimulatorUI;component/assets/settings-17-512.png" Margin="5,0,5,0" />
             <TextBlock Text="Settings" FontSize="20" TextAlignment="Center"/>
         </StackPanel>
-        
-        
-        
+
+
+
         <StackPanel Grid.Column="0" Grid.Row="1" Background="#e2ece9" x:Name="SideBar">
-            <StackPanel Orientation="Horizontal" Margin="10">
-                <Image Source="https://pics.freeicons.io/uploads/icons/png/2725159511543238876-512.png" Width="16" Margin="0,0,5,0"/>
+            <StackPanel Margin="0 0" x:Name="checkboxes" Visibility="Visible">
                 <TextBlock 
-                Grid.Row="0" 
-                Text="Download simulation data" 
-                TextAlignment="Center"
-                />
+                Grid.Row="1" 
+                Text="Properties" Margin="5 5" />
+                <CheckBox IsChecked="True" Margin="5 5" Checked="CheckBoxChanged" Unchecked="CheckBoxChanged" x:Name="valveflowrate">Valve flowrate</CheckBox>
             </StackPanel>
             <TextBlock 
                 Grid.Row="1" 
                 Text="-----------------------------" 
-                TextAlignment="Center" FontSize="14" FontWeight="Bold"/>
-            <Border CornerRadius="10" BorderThickness="1.5" BorderBrush="Black" Grid.Row="2" Margin="5,5,5,5">
-                <StackPanel Orientation="Horizontal">
-                    <Image Width="15" Margin="5,0,0,0" Source="https://pics.freeicons.io/uploads/icons/png/13416400251535694869-512.png"/>
-                    <TextBox TextWrapping="Wrap" MaxWidth="120" Text="Search" BorderThickness="0" Opacity="0.5" Background="{x:Null}"/>
-                </StackPanel>
-            </Border>
-            <StackPanel Margin="0 10">
-                <CheckBox IsChecked="True" Margin="5 5">Tank temperature</CheckBox>
-                <CheckBox IsChecked="True" Margin="5 5 ">Tank capacity</CheckBox>
-                <CheckBox IsChecked="True" Margin="5 5">Valve flowrate</CheckBox>
-                <CheckBox Margin="5 5">Ambinent temperature</CheckBox>
-            </StackPanel>
-            <TextBlock 
-                Grid.Row="1" 
-                Text="-----------------------------" 
-                TextAlignment="Center" FontWeight="Bold" FontSize="14"/>
-            <StackPanel Margin="0 10">
+                TextAlignment="Center" FontWeight="Bold" FontSize="14"
+                Visibility="Visible"
+                x:Name="barone"/>
+            <StackPanel Margin="0 0" Visibility="Visible" x:Name="showoptions">
                 <TextBlock Text="Simulation properties" Margin="5 5"/>
-                <RadioButton Margin="5 5">Show more</RadioButton>
-                <RadioButton IsChecked="True" Margin="5 5">Show important</RadioButton>
-                <RadioButton Margin="5 5">Show all</RadioButton>
+                <RadioButton IsChecked="True" Margin="5 5" x:Name="showimportant" Checked="ShowImportat">Show important</RadioButton>
+                <RadioButton Margin="5 5" x:Name="showall" Checked="ShowAll">Show all</RadioButton>
             </StackPanel>
             <TextBlock 
                 Grid.Row="1" 
                 Text="-----------------------------" 
-                TextAlignment="Center" FontSize="14" FontWeight="Bold"/>
+                TextAlignment="Center" FontSize="14" FontWeight="Bold" Visibility="Visible" x:Name="bartwo"/>
             
             
             <StackPanel Visibility="Collapsed" x:Name="Filter">
@@ -93,29 +77,15 @@
                 </StackPanel>
                 <Button Content="Download" MinWidth="80" Click="Download" Margin="5 5"/>      
             </StackPanel>
-            <StackPanel Margin="0 10">
-                <TextBlock Text="Other options" Margin="5 5"/>
-                <StackPanel Orientation="Horizontal" Margin="5 5">
-                    <ComboBox Margin="0,0,20,0">
-                        <ComboBoxItem IsSelected="True">Style</ComboBoxItem>
-                    </ComboBox>
-                    <ComboBox>
-                        <ComboBoxItem IsSelected="True">12px</ComboBoxItem>
-                        <ComboBoxItem IsSelected="False">14px</ComboBoxItem>
-                        <ComboBoxItem IsSelected="False">16px</ComboBoxItem>
-                        <ComboBoxItem IsSelected="False">18px</ComboBoxItem>
-                        <ComboBoxItem IsSelected="False">20px</ComboBoxItem>
-                        <ComboBoxItem IsSelected="False">22px</ComboBoxItem>
-                    </ComboBox>
-                </StackPanel>
-            </StackPanel>
+            
+           
             <Button Content="Switch View" MinWidth="80" Click="SwitchView" Margin="5 5"/>
         </StackPanel>
         
         
         <StackPanel Grid.Column="1" Grid.Row="1">
             <DockPanel>
-                <Frame x:Name="_mainFrame" NavigationUIVisibility="Hidden"/>
+                <Frame x:Name="_mainFrame" NavigationUIVisibility="Hidden" LoadCompleted="Frame_LoadCompleted"/>
             </DockPanel>
         </StackPanel>
 
