@@ -305,7 +305,7 @@ namespace SimulatorUI
 
                     Canvas.SetLeft(ellipse, target.X - 5);
                     Canvas.SetTop(ellipse, target.Y - 5);
-                    Canvas.SetLeft(label, target.X - 20);
+                    Canvas.SetLeft(label, target.X - 25);
                     Canvas.SetTop(label, target.Y + 10);
                     Polyline line = new Polyline
                     {
@@ -618,17 +618,20 @@ namespace SimulatorUI
                         }
                         else
                         {
-                            TankModule connected = tank.InFlowTanks.Find(x => x.Name == label.Name.Split('_')[1]);
-                            msg = connected.Name + "->" + tank.Name + "\n";
-                            //Checks if valve flowrate is selected, and displays the flowrate if it is 
-                            if(Tag != null)
+                            TankModule tank = tankList.Find(x => x.Name == label.Name.Split('_')[0]);
+                            if(tank != null)
                             {
-                                valvef = (this.Tag as MainWindow).GetValvef();
-                                if (valvef)
+                                TankModule connected = tank.InFlowTanks.Find(x => x.Name == label.Name.Split('_')[1]);
+                                msg = connected.Name + "->" + tank.Name + "\n";
+                                //Checks if valve flowrate is selected, and displays the flowrate if it is 
+                                if (Tag != null)
                                 {
-                                    msg += "InFlow: " + Math.Round(tank.InletFlow, 3) + "m3/s\n"; //Could also add the temperatures, will probably have to divide what each shows in other functions, as we should be able to select the 
+                                    valvef = (this.Tag as MainWindow).GetValvef();
+                                    if (valvef)
+                                    {
+                                        msg += "InFlow: \n" + Math.Round(tank.InletFlow, 3) + "m3/s\n"; //Could also add the temperatures, will probably have to divide what each shows in other functions, as we should be able to select the 
+                                    }
                                 }
-                                label.Text = msg;
                             }
                         }
                         label.Text = msg;
