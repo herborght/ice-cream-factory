@@ -36,16 +36,20 @@ namespace SimulatorUI
                 if(Object.ReferenceEquals(module.GetType(), typeof(FreezingModule)))
                 {
                     FreezingList.Add(module as FreezingModule);
+                    TankList.Remove(module);
                 } else if (Object.ReferenceEquals(module.GetType(), typeof(FlavoringHardeningPackingModule)))
                 {
                     FHPMList.Add(module as FlavoringHardeningPackingModule);
+                    TankList.Remove(module);
                 } else if (Object.ReferenceEquals(module.GetType(), typeof(HomogenizationModule)))
                 {
                     HomoList.Add(module as HomogenizationModule);
+                    TankList.Remove(module);
                 }
                 else if (Object.ReferenceEquals(module.GetType(), typeof(HomogenizationModule)))
                 {
                     PastList.Add(module as PasteurizationModule);
+                    TankList.Remove(module);
                 }
 
             }

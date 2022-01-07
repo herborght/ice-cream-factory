@@ -6,13 +6,38 @@ namespace SimulatorUI
 {
     public class FlavoringHardeningPackingModule : TankModule
     {
-        public double MixTemperature { get; set; }
+        private double mixtemperature;
+        public double MixTemperature
+        {
+            get { return mixtemperature; }
+            set { SetField(ref mixtemperature, value, "MixTemperature"); }
+        }
         public string PackageType { get; }
         public double CoolerTemperature { get; }
-        public bool StartFlavoring { get; set; }
-        public bool StartHardening { get; set; }
-        public bool StartPackaging { get; set; }
-        public bool FinishBatch { get; set; }
+        private bool startflavoring;
+        public bool StartFlavoring
+        {
+            get { return startflavoring; }
+            set { SetField(ref startflavoring, value, "StartFlavoring"); }
+        }
+        private bool starthardening;
+        public bool StartHardening
+        {
+            get { return starthardening; }
+            set { SetField(ref starthardening, value, "StartHardening"); }
+        }
+        private bool startpackaging;
+        public bool StartPackaging
+        {
+            get { return startpackaging; }
+            set { SetField(ref startpackaging, value, "StartPackaging"); }
+        }
+        private bool finishbatch;
+        public bool FinishBatch
+        {
+            get { return finishbatch; }
+            set { SetField(ref finishbatch, value, "FinishBatch"); }
+        }
 
         public FlavoringHardeningPackingModule(string name, string packageType, double coolerTemp) : base(name)
         {
