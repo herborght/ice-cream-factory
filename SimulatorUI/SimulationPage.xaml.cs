@@ -609,12 +609,28 @@ namespace SimulatorUI
                         if (label.Name == "entry")
                         {
                             msg = "Entry\n";
-                            msg += "InFlow: \n" + Math.Round(tankList[0].InletFlow, 3) + "m3/s\n";
+                            if (Tag != null)
+                            {
+                                valvef = (this.Tag as MainWindow).GetValvef();
+                                if (valvef)
+                                {
+                                    msg += "InFlow: \n" + Math.Round(tankList[0].InletFlow, 3) + "m3/s\n"; 
+                                }
+                            }
+                            
                         }
                         else if(label.Name == "exit")
                         {
                             msg = "Exit\n";
-                            msg += "OutFlow: \n" + Math.Round(tankList[tankList.Count - 1].OutLetFlow, 3) + "m3/s\n";
+                            if (Tag != null)
+                            {
+                                valvef = (this.Tag as MainWindow).GetValvef();
+                                if (valvef)
+                                {
+                                    msg += "OutFlow: \n" + Math.Round(tankList[tankList.Count - 1].OutLetFlow, 3) + "m3/s\n";
+                                }
+                            }
+                            
                         }
                         else
                         {
