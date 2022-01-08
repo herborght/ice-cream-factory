@@ -58,14 +58,202 @@ namespace SimulatorUI
             InitializeComponent();
             Task.Run(() => UpdateLoop());
         }
-
-        // DSD Bendik - Raw data displayed in a grid with databinding
-        public void DataGridCell_load(object sender, RoutedEventArgs e)
+        //Function for setting the column order in the DataGrid, similar functions are created for all tables
+        private void DataGrid_FHPMordering(object sender, EventArgs e)
         {
-            DataGridCell cell = sender as DataGridCell;
-            if (cell.Column.Header.ToString() == "InLetFlow")
+            
+            var grid = (DataGrid)sender;
+            foreach (var item in grid.Columns)
             {
-                ((TextBlock)cell.Content).Text = "Lol";
+                string itemname = item.Header.ToString();
+                switch (itemname)
+                {
+                    case "Name":
+                        item.DisplayIndex = 0;
+                        break;
+                    case "InletFlow":
+                        item.DisplayIndex = 1;
+                        break;
+                    case "OutValveOpen":
+                        item.DisplayIndex = 2;
+                        break;
+                    case "InFlowTemp":
+                        item.DisplayIndex = 3;
+                        break;
+                    case "OutFlowTemp":
+                        item.DisplayIndex = 4;
+                        break;
+                    case "OutLetFlow":
+                        item.DisplayIndex = 5;
+                        break;
+                    case "LevelPercentage":
+                        item.DisplayIndex = 6;
+                        break;
+                    case "Temperature":
+                        item.DisplayIndex = 7;
+                        break;
+                    case "Level":
+                        item.DisplayIndex = 8;
+                        break;
+                    case "Height":
+                        item.DisplayIndex = 9;
+                        break;
+                    case "BaseArea":
+                        item.DisplayIndex = 10;
+                        break;
+                    case "OutletArea":
+                        item.DisplayIndex = 11;
+                        break;
+                }
+            }
+        }
+        //Function for setting the column order in the DataGrid, similar functions are created for all tables
+        private void DataGrid_Freeordering(object sender, EventArgs e)
+        {
+
+            var grid = (DataGrid)sender;
+            foreach (var item in grid.Columns)
+            {
+                string itemname = item.Header.ToString();
+                switch (itemname)
+                {
+                    case "Name":
+                        item.DisplayIndex = 0;
+                        break;
+                    case "InletFlow":
+                        item.DisplayIndex = 1;
+                        break;
+                    case "OutValveOpen":
+                        item.DisplayIndex = 2;
+                        break;
+                    case "InFlowTemp":
+                        item.DisplayIndex = 3;
+                        break;
+                    case "OutFlowTemp":
+                        item.DisplayIndex = 4;
+                        break;
+                    case "OutLetFlow":
+                        item.DisplayIndex = 5;
+                        break;
+                    case "LevelPercentage":
+                        item.DisplayIndex = 6;
+                        break;
+                    case "Temperature":
+                        item.DisplayIndex = 7;
+                        break;
+                    case "Level":
+                        item.DisplayIndex = 8;
+                        break;
+                    case "Height":
+                        item.DisplayIndex = 9;
+                        break;
+                    case "BaseArea":
+                        item.DisplayIndex = 10;
+                        break;
+                    case "OutletArea":
+                        item.DisplayIndex = 11;
+                        break;
+                }
+            }
+        }
+        //Function for setting the column order in the DataGrid, similar functions are created for all tables
+        private void DataGrid_FREEordering(object sender, EventArgs e)
+        {
+
+            var grid = (DataGrid)sender;
+            foreach (var item in grid.Columns)
+            {
+                string itemname = item.Header.ToString();
+                switch (itemname)
+                {
+                    case "Name":
+                        item.DisplayIndex = 0;
+                        break;
+                    case "InletFlow":
+                        item.DisplayIndex = 1;
+                        break;
+                    case "OutValveOpen":
+                        item.DisplayIndex = 2;
+                        break;
+                    case "InFlowTemp":
+                        item.DisplayIndex = 3;
+                        break;
+                    case "OutFlowTemp":
+                        item.DisplayIndex = 4;
+                        break;
+                    case "OutLetFlow":
+                        item.DisplayIndex = 5;
+                        break;
+                    case "LevelPercentage":
+                        item.DisplayIndex = 6;
+                        break;
+                    case "Temperature":
+                        item.DisplayIndex = 7;
+                        break;
+                    case "Level":
+                        item.DisplayIndex = 8;
+                        break;
+                    case "Height":
+                        item.DisplayIndex = 9;
+                        break;
+                    case "BaseArea":
+                        item.DisplayIndex = 10;
+                        break;
+                    case "OutletArea":
+                        item.DisplayIndex = 11;
+                        break;
+                }
+            }
+        }
+        private void DataGrid_HOMOordering(object sender, EventArgs e)
+        {
+
+            var grid = (DataGrid)sender;
+            foreach (var item in grid.Columns)
+            {
+                string itemname = item.Header.ToString();
+                switch (itemname)
+                {
+                    case "Name":
+                        item.DisplayIndex = 0;
+                        break;
+                    case "InletFlow":
+                        item.DisplayIndex = 1;
+                        break;
+                    case "OutValveOpen":
+                        item.DisplayIndex = 2;
+                        break;
+                    case "DumpValveOpen":
+                        item.DisplayIndex = 3;
+                        break;
+                    case "InFlowTemp":
+                        item.DisplayIndex = 4;
+                        break;
+                    case "OutFlowTemp":
+                        item.DisplayIndex = 5;
+                        break;
+                    case "OutLetFlow":
+                        item.DisplayIndex = 6;
+                        break;
+                    case "LevelPercentage":
+                        item.DisplayIndex = 7;
+                        break;
+                    case "Temperature":
+                        item.DisplayIndex = 8;
+                        break;
+                    case "Level":
+                        item.DisplayIndex = 9;
+                        break;
+                    case "Height":
+                        item.DisplayIndex = 10;
+                        break;
+                    case "BaseArea":
+                        item.DisplayIndex = 111;
+                        break;
+                    case "OutletArea":
+                        item.DisplayIndex = 11;
+                        break;
+                }
             }
         }
         internal async Task UpdateLoop()
