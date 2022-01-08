@@ -64,7 +64,8 @@ namespace SimulatorUI
             int time = 0; // How many tanks are in this row
             int fromTop = 0; // The height of the row
             int rows = 0; // Shows which row is the current
-            int distance = 230; // Distance between each tank
+            int distance = 230; // distance + offset  between each tank
+            int offset = 50; // To make room for lines etc
             tankLevelList = new List<Rectangle>();
             pointList = new List<KeyValuePair<string, KeyValuePair<int, Point>>>();
             connectedValves = new List<Ellipse>();
@@ -95,7 +96,7 @@ namespace SimulatorUI
                     StrokeThickness = 2,
                     Stroke = Brushes.Black
                 };
-                Canvas.SetLeft(tankRectangle, time * distance);
+                Canvas.SetLeft(tankRectangle, time * distance + offset );
                 Canvas.SetTop(tankRectangle, fromTop);
 
                 // The rectangle showing how empty the tank is 
@@ -108,7 +109,7 @@ namespace SimulatorUI
                     StrokeThickness = 2,
                     Stroke = Brushes.Black
                 };
-                Canvas.SetLeft(tankLevelRectangle, time * distance);
+                Canvas.SetLeft(tankLevelRectangle, time * distance + offset );
                 Canvas.SetTop(tankLevelRectangle, fromTop);
                 tankLevelList.Add(tankLevelRectangle);
 
@@ -127,18 +128,25 @@ namespace SimulatorUI
                     BorderThickness = new Thickness(2)
                 };
                 Canvas.SetZIndex(detailsExpander, 10); // Set z-index to draw ontop ofother elements (such as tank connections)
-                Canvas.SetLeft(detailsExpander, time * distance + 80);
+                Canvas.SetLeft(detailsExpander, time * distance + offset  + 80);
                 Canvas.SetTop(detailsExpander, fromTop - 1); // yeah its stupid, but the expander box was visually a tiny bit under the top of the tank
                 detailsExpanders.Add(detailsExpander);
 
                 // The point at which the tank will have its connections
-                Point point = new Point
+                Point exit = new Point
                 {
-                    X = time * distance + 37.5,
+                    X = time * distance + offset  + 37.5,
                     Y = fromTop + height
                 };
-                KeyValuePair<string, KeyValuePair<int, Point>> keyValuePair = new KeyValuePair<string, KeyValuePair<int, Point>>(tank.Name, new KeyValuePair<int, Point>(rows, point)); //Added in this way to get which row they are on
-                pointList.Add(keyValuePair);
+                Point entry = new Point
+                {
+                    X = time * distance + offset ,
+                    Y = fromTop + height / 2
+                };
+                KeyValuePair<string, KeyValuePair<int, Point>> exitPoint = new KeyValuePair<string, KeyValuePair<int, Point>>(tank.Name + "_exit", new KeyValuePair<int, Point>(rows, exit)); //Added in this way to get which row they are on
+                KeyValuePair<string, KeyValuePair<int, Point>> entryPoint = new KeyValuePair<string, KeyValuePair<int, Point>>(tank.Name + "_entry", new KeyValuePair<int, Point>(rows, entry));
+                pointList.Add(exitPoint);
+                pointList.Add(entryPoint);
 
                 // Dump valves will probably have to improve the visuals of these, or change their position not really intuitive 
                 Ellipse dumpValve = new Ellipse
@@ -150,16 +158,16 @@ namespace SimulatorUI
                     Stroke = Brushes.Black,
                     Uid = "d_" + tank.Name
                 };
-                Canvas.SetLeft(dumpValve, time * distance - 10);
+                Canvas.SetLeft(dumpValve, time * distance + offset  + 70); //just placed it on the other side
                 Canvas.SetTop(dumpValve, fromTop + height / 2);
                 dumpValves.Add(dumpValve);
 
                 // DSD Emil - Lines used for creating arrows
                 Line arrowshaft = new Line
                 {
-                    X1 = time * distance + 20,
+                    X1 = time * distance + offset  + 20,
                     Y1 = fromTop + 1,
-                    X2 = time * distance + 20,
+                    X2 = time * distance + offset  + 20,
                     Y2 = fromTop + height,
                     StrokeThickness = 2,
                     Stroke = Brushes.Black,
@@ -170,9 +178,9 @@ namespace SimulatorUI
 
                 Line arrowhead = new Line
                 {
-                    X1 = time * distance + 20,
+                    X1 = time * distance + offset  + 20,
                     Y1 = fromTop + 7,
-                    X2 = time * distance + 20,
+                    X2 = time * distance + offset  + 20,
                     Y2 = fromTop + 8,
                     StrokeThickness = 13,
                     Stroke = Brushes.Black,
@@ -184,9 +192,9 @@ namespace SimulatorUI
 
                 Line arrowhead2 = new Line
                 {
-                    X1 = time * distance + 20,
+                    X1 = time * distance + offset  + 20,
                     Y1 = fromTop + height - 8,
-                    X2 = time * distance + 20,
+                    X2 = time * distance + offset  + 20,
                     Y2 = fromTop + height - 9,
                     StrokeThickness = 13,
                     Stroke = Brushes.Black,
@@ -204,7 +212,7 @@ namespace SimulatorUI
                     Height = 20,
                     Uid = tank.Name
                 };
-                Canvas.SetLeft(levelText, time * distance + 30);
+                Canvas.SetLeft(levelText, time * distance + offset  + 30);
                 Canvas.SetTop(levelText, fromTop + 100);
                 levelTextBlocks.Add(levelText);
 
@@ -218,7 +226,7 @@ namespace SimulatorUI
                     TextAlignment = TextAlignment.Right,
                     Padding = new Thickness(0, 0, 5, 0),
                 };
-                Canvas.SetLeft(tempText, time * distance + 2);
+                Canvas.SetLeft(tempText, time * distance + offset  + 2);
                 Canvas.SetTop(tempText, fromTop + 2);
                 Canvas.SetZIndex(tempText, 12);
                 tempTextBlocks.Add(tempText);
@@ -251,11 +259,11 @@ namespace SimulatorUI
                         Width = 40,
                         Height = 100,
                         Name = "symbols_" + tank.Name,
-                        FontSize = 20,
+                        //FontSize = 20,
                         TextWrapping = TextWrapping.Wrap
                     };
 
-                    Canvas.SetLeft(symbol, time * distance + 35);
+                    Canvas.SetLeft(symbol, time * distance + offset  + 35);
                     Canvas.SetTop(symbol, fromTop + 10);
                     symbols.Add(symbol);
                     canvas.Children.Add(symbol);
@@ -266,19 +274,100 @@ namespace SimulatorUI
             int[] times = new int[rows + 1]; // Used to increment the length of which the lines are apart from eachother
             foreach (TankModule tank in tankList) // Create the connections
             {
-                // This is a bit backward initial is the destination of the connection while target is the source
+                if(tank == tankList[0])
+                {
+                    KeyValuePair<int, Point> initialPair = pointList.Find(x => x.Key == tank.Name + "_entry").Value;
+                    Point initial = initialPair.Value;
+                    Point target = new Point
+                    {
+                        Y = initial.Y,
+                        X = initial.X - 30
+                    };
+                    PointCollection points = new PointCollection();
+                    points.Add(initial);
+                    points.Add(target);
+                    Ellipse ellipse = new Ellipse
+                    {
+                        Width = 10,
+                        Height = 10,
+                        Fill = Brushes.Black,
+                        StrokeThickness = 2,
+                        Stroke = Brushes.Black,
+                        Uid = "entry" // ID for the valves
+                    };
+                    connectedValves.Add(ellipse);
+                    TextBlock label = new TextBlock
+                    {
+                        Text = "Entry" + "\n",
+                        Name = "entry"
+                    };
+                    labels.Add(label);
+
+                    Canvas.SetLeft(ellipse, target.X - 5);
+                    Canvas.SetTop(ellipse, target.Y - 5);
+                    Canvas.SetLeft(label, target.X - 25);
+                    Canvas.SetTop(label, target.Y + 10);
+                    Polyline line = new Polyline
+                    {
+                        Stroke = Brushes.Black
+                    };
+                    line.Points = points;
+                    canvas.Children.Add(line);
+                    canvas.Children.Add(ellipse);
+                    canvas.Children.Add(label);
+                }
+
+                else if (tank == tankList[tankList.Count - 1])
+                {
+                    KeyValuePair<int, Point> initialPair = pointList.Find(x => x.Key == tank.Name + "_exit").Value;
+                    Point initial = initialPair.Value;
+                    Point target = new Point
+                    {
+                        Y = initial.Y + 20,
+                        X = initial.X
+                    };
+                    PointCollection points = new PointCollection();
+                    points.Add(initial);
+                    points.Add(target);
+                    Ellipse ellipse = new Ellipse
+                    {
+                        Width = 10,
+                        Height = 10,
+                        Fill = Brushes.Black,
+                        StrokeThickness = 2,
+                        Stroke = Brushes.Black,
+                        Uid = "exit" // ID for the valves
+                    };
+                    connectedValves.Add(ellipse);
+                    TextBlock label = new TextBlock
+                    {
+                        Text = "Exit" + "\n",
+                        Name = "exit"
+                    };
+                    labels.Add(label);
+
+                    Canvas.SetLeft(ellipse, target.X - 5);
+                    Canvas.SetTop(ellipse, target.Y - 5);
+                    Canvas.SetLeft(label, target.X + 20);
+                    Canvas.SetTop(label, target.Y - 10);
+                    Polyline line = new Polyline
+                    {
+                        Stroke = Brushes.Black
+                    };
+                    line.Points = points;
+                    canvas.Children.Add(line);
+                    canvas.Children.Add(ellipse);
+                    canvas.Children.Add(label);
+                }
+
+                // This is a bit backward initial is the destination of the connection while target is the source, which means the lines have to be drawn backwards
                 foreach (TankModule connected in tank.InFlowTanks)
                 {
                     // The pairs are used to access the rows and points for the lines
-                    KeyValuePair<int, Point> initialPair = pointList.Find(x => x.Key == tank.Name).Value; 
-                    KeyValuePair<int, Point> targetPair = pointList.Find(x => x.Key == connected.Name).Value;
+                    KeyValuePair<int, Point> initialPair = pointList.Find(x => x.Key == tank.Name+ "_entry").Value; 
+                    KeyValuePair<int, Point> targetPair = pointList.Find(x => x.Key == connected.Name+"_exit").Value;
                     int initialRow = initialPair.Key;
-                    times[initialRow]++;
                     int targetRow = targetPair.Key;
-                    if (initialRow != targetRow)
-                    {
-                        times[targetRow]++;
-                    }
 
                     // Used to visualize the connections between each tank
                     Polyline line = new Polyline
@@ -315,55 +404,60 @@ namespace SimulatorUI
 
                     if (initialRow == targetRow)
                     {
+                        times[initialRow]++;
                         Point first = new Point
                         {
-                            Y = initial.Y + times[initialRow] * 10, // Make the lines look more seperate
-                            X = initial.X
+                            X = initial.X - 75,
+                            Y = initial.Y // Make the lines look more seperate
                         };
+
                         Point second = new Point
                         {
-                            Y = first.Y,
+                            Y = target.Y + 20 * times[targetRow],
+                            X = first.X
+                        };
+
+                        Point third = new Point
+                        {
+                            Y = second.Y,
                             X = target.X
                         };
+
                         points.Add(first);
                         points.Add(second);
+                        points.Add(third);
 
-                        Canvas.SetLeft(ellipse, first.X + (second.X - first.X) / 2);
-                        Canvas.SetTop(ellipse, first.Y - 5);
-                        Canvas.SetLeft(label, first.X + (second.X - first.X) / 2 - 30);
-                        Canvas.SetTop(label, first.Y - 40);
+                        Canvas.SetLeft(ellipse, second.X - 5);
+                        Canvas.SetTop(ellipse, second.Y - 5);
+                        Canvas.SetLeft(label, second.X - 60);
+                        Canvas.SetTop(label, second.Y - 50);
                     }
                     else // If the target is not in the same row it will use 4 points instead of 2
                     {
+                        times[targetRow]++;
                         Point first = new Point
                         {
-                            Y = initial.Y + times[initialRow] * 10,
-                            X = initial.X
+                            Y = initial.Y,
+                            X = initial.X - 60
                         };
                         Point second = new Point
                         {
-                            Y = first.Y,
-                            X = first.X + 75
+                            Y = target.Y + 20 * times[targetRow],
+                            X = first.X
                         };
                         Point third = new Point
                         {
-                            Y = target.Y + times[targetRow] * 10,
-                            X = second.X
-                        };
-                        Point fourth = new Point
-                        {
-                            Y = target.Y + times[targetRow] * 10,
+                            Y = second.Y,
                             X = target.X
                         };
                         points.Add(first);
                         points.Add(second);
                         points.Add(third);
-                        points.Add(fourth);
 
-                        Canvas.SetLeft(ellipse, third.X - 5);
-                        Canvas.SetTop(ellipse, second.Y + (third.Y - second.Y) / 2);
-                        Canvas.SetLeft(label, third.X + 10);
-                        Canvas.SetTop(label, second.Y + (third.Y - second.Y) / 2); ;
+                        Canvas.SetLeft(ellipse, second.X - 5);
+                        Canvas.SetTop(ellipse, second.Y - 5);
+                        Canvas.SetLeft(label, second.X + 5);
+                        Canvas.SetTop(label, second.Y + 5);
                     }
                     points.Add(target);
                     line.Points = points;
@@ -432,12 +526,9 @@ namespace SimulatorUI
                 {
                     valve.Dispatcher.Invoke(() =>
                     {
-                        string name = valve.Uid;
-                        TankModule target = tankList.Find(x => x.Name == name.Split('_')[0]);
-                        TankModule source = target.InFlowTanks.Find(x => x.Name == name.Split('_')[1]);
-                        if (source != null)
+                        if(valve.Uid == "entry")
                         {
-                            if (source.OutValveOpen)
+                            if(tankList[0].InletFlow > 0)
                             {
                                 valve.Fill = Brushes.White;
                             }
@@ -446,6 +537,35 @@ namespace SimulatorUI
                                 valve.Fill = Brushes.Black;
                             }
                         }
+                        else if (valve.Uid == "exit")
+                        {
+                            if (tankList[tankList.Count - 1].OutValveOpen)
+                            {
+                                valve.Fill = Brushes.White;
+                            }
+                            else
+                            {
+                                valve.Fill = Brushes.Black;
+                            }
+                        }
+                        else
+                        {
+                            string name = valve.Uid;
+                            TankModule target = tankList.Find(x => x.Name == name.Split('_')[0]);
+                            TankModule source = target.InFlowTanks.Find(x => x.Name == name.Split('_')[1]);
+                            if (source != null)
+                            {
+                                if (source.OutValveOpen)
+                                {
+                                    valve.Fill = Brushes.White;
+                                }
+                                else
+                                {
+                                    valve.Fill = Brushes.Black;
+                                }
+                            }
+                        }
+
                     });
                 }
 
@@ -485,22 +605,52 @@ namespace SimulatorUI
                 {
                     label.Dispatcher.Invoke(() =>
                     {
-                        TankModule tank = tankList.Find(x => x.Name == label.Name.Split('_')[0]);
-                        if (tank != null)
+                        string msg = "";
+                        if (label.Name == "entry")
                         {
-                            TankModule connected = tank.InFlowTanks.Find(x => x.Name == label.Name.Split('_')[1]);
-                            string msg = connected.Name + "->" + tank.Name + "\n";
-                            //Checks if valve flowrate is selected, and displays the flowrate if it is 
-                            if(Tag != null)
+                            msg = "Entry\n";
+                            if (Tag != null)
                             {
                                 valvef = (this.Tag as MainWindow).GetValvef();
                                 if (valvef)
                                 {
-                                    msg += "InFlow: " + Math.Round(tank.InletFlow, 3) + "m3/s\n"; //Could also add the temperatures, will probably have to divide what each shows in other functions, as we should be able to select the 
+                                    msg += "InFlow: \n" + Math.Round(tankList[0].InletFlow, 3) + "m3/s\n"; 
                                 }
-                                label.Text = msg;
+                            }
+                            
+                        }
+                        else if(label.Name == "exit")
+                        {
+                            msg = "Exit\n";
+                            if (Tag != null)
+                            {
+                                valvef = (this.Tag as MainWindow).GetValvef();
+                                if (valvef)
+                                {
+                                    msg += "OutFlow: \n" + Math.Round(tankList[tankList.Count - 1].OutLetFlow, 3) + "m3/s\n";
+                                }
+                            }
+                            
+                        }
+                        else
+                        {
+                            TankModule tank = tankList.Find(x => x.Name == label.Name.Split('_')[0]);
+                            if(tank != null)
+                            {
+                                TankModule connected = tank.InFlowTanks.Find(x => x.Name == label.Name.Split('_')[1]);
+                                msg = connected.Name + "->" + tank.Name + "\n";
+                                //Checks if valve flowrate is selected, and displays the flowrate if it is 
+                                if (Tag != null)
+                                {
+                                    valvef = (this.Tag as MainWindow).GetValvef();
+                                    if (valvef)
+                                    {
+                                        msg += "InFlow: \n" + Math.Round(tank.InletFlow, 3) + "m3/s\n"; //Could also add the temperatures, will probably have to divide what each shows in other functions, as we should be able to select the 
+                                    }
+                                }
                             }
                         }
+                        label.Text = msg;
                     });
                 }
 
@@ -580,11 +730,11 @@ namespace SimulatorUI
             string ret = "";
             if(temp.HomogenizationOn)
             {
-                ret = "H ";
+                ret = "Homogen ";
             }
             if(temp.AgeingCoolingOn)
             {
-                ret += "A-";
+                ret += "Aging, -";
             }
             return ret;
         }
@@ -594,15 +744,15 @@ namespace SimulatorUI
             string ret = "";
             if (temp.StartFlavoring)
             {
-                ret = "F ";
+                ret = "Flavor ";
             }
             if (temp.StartHardening)
             {
-                ret += "H ";
+                ret += "Hard ";
             }
             if (temp.StartPackaging)
             {
-                ret += "P ";
+                ret += "Pack ";
             }
             if(temp.FinishBatch)
             {
@@ -616,15 +766,15 @@ namespace SimulatorUI
             string ret = "";
             if (temp.FreezingOn)
             {
-                ret = "-";
+                ret = "Freeze";
             }
             if (temp.DasherOn)
             {
-                ret += "D";
+                ret += "Dash";
             }
             if (temp.StartLiquidFlavoring) //Maybe do visually
             {
-                ret += "LF";
+                ret += "L. Flavor";
             }
             return ret;
         }
@@ -634,6 +784,25 @@ namespace SimulatorUI
         {
             string msg = "";
             TankModule tank = tankList.Find(x => x.Name == name);
+            msg += "Type: ";
+            switch(tank)
+            {
+                case PasteurizationModule p:
+                    msg += " P. Module\n";
+                    break;
+                case HomogenizationModule h:
+                    msg += " H. Module\n";
+                    break;
+                case FlavoringHardeningPackingModule fhp:
+                    msg += " F.H.P Module\n";
+                    break;
+                case FreezingModule f:
+                    msg += " F. Module\n";
+                    break;
+                default:
+                    msg += " Tank Module\n";
+                    break;
+            }
             msg += "Level: " + Math.Round(tank.Level, 3) + "m\n";
             msg += "Percent: " + Math.Round(tank.LevelPercentage, 3) + "%" + "\n";
             msg += "Temp: " + Math.Round(tank.Temperature, 3) + "K\n";

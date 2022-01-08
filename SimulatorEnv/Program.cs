@@ -245,6 +245,7 @@ namespace ABB.InSecTT.SimulatorEnv
             }
             ChangeParameter("T5/StartFlavoring:False", parameters);
             wait = 10;
+            ChangeParameter("T5/OpenOutlet:True", parameters);
             ChangeParameter("T5/StartPackaging:True", parameters);
             wait = 20;
             for (int i = 0; i < wait; i++)
@@ -262,7 +263,6 @@ namespace ABB.InSecTT.SimulatorEnv
             }
             ChangeParameter("T5/StartHardening:False", parameters);
             ChangeParameter("T5/FinishedBatch:True", parameters);
-            ChangeParameter("T5/OpenOutlet:True", parameters); //Probably needs to add visuals to the last valve
             DisplayParameters(parameters);
         }
 

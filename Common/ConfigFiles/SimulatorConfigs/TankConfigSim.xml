@@ -45,7 +45,7 @@
       <AnalogOutputParameter>OutFlowTemp</AnalogOutputParameter>
 
     </module>
-    <module name="T4" type="FreezingModule" height="3" outletArea="0.005" baseArea="1" barrelRotationSpeed="200" freezerTemp="253">
+    <module name="T4" type="FreezingModule" height="3" outletArea="0.005" baseArea="1" barrelRotationSpeed="200" freezerTemp="200">
       <AnalogOutputParameter>Level</AnalogOutputParameter>
       <AnalogOutputParameter>LevelPercent</AnalogOutputParameter>
       <InOutChaining from="T3/OutFlow">InFlow</InOutChaining>
