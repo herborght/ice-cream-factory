@@ -248,10 +248,10 @@ namespace SimulatorUI
                         item.DisplayIndex = 10;
                         break;
                     case "BaseArea":
-                        item.DisplayIndex = 111;
+                        item.DisplayIndex = 11;
                         break;
                     case "OutletArea":
-                        item.DisplayIndex = 11;
+                        item.DisplayIndex = 12;
                         break;
                 }
             }
