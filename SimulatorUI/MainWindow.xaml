@@ -33,6 +33,7 @@
                 Grid.Row="1" 
                 Text="Properties" Margin="5 5" />
                 <CheckBox IsChecked="True" Margin="5 5" Checked="CheckBoxChanged" Unchecked="CheckBoxChanged" x:Name="valveflowrate">Valve flowrate</CheckBox>
+                <CheckBox IsChecked="True" Margin="5 5" Checked="AmbientTempCheckboxChanged" Unchecked="AmbientTempCheckboxChanged" x:Name="AmbientTemp">Ambient temp</CheckBox>
             </StackPanel>
             <TextBlock 
                 Grid.Row="1" 
@@ -41,7 +42,7 @@
                 Visibility="Visible"
                 x:Name="barone"/>
             <StackPanel Margin="0 0" Visibility="Visible" x:Name="showoptions">
-                <TextBlock Text="Simulation properties" Margin="5 5"/>
+                <TextBlock Text="Tank parameters" Margin="5 5"/>
                 <RadioButton IsChecked="True" Margin="5 5" x:Name="showimportant" Checked="ShowImportat">Show important</RadioButton>
                 <RadioButton Margin="5 5" x:Name="showall" Checked="ShowAll">Show all</RadioButton>
             </StackPanel>

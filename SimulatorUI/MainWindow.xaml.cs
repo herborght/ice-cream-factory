@@ -36,6 +36,20 @@ namespace SimulatorUI
         {
             
         }
+        public void AmbientTempCheckboxChanged(object sender, RoutedEventArgs e)
+        {
+            if(AmbientTemp != null && currentPage is SimulationPage)
+            {
+                if (AmbientTemp.IsChecked == true)
+                {
+                    (currentPage as SimulationPage).AmbientTempVisibility(true);
+                }
+                else
+                {
+                    (currentPage as SimulationPage).AmbientTempVisibility(false);
+                }
+            }
+        }
         private void Frame_LoadCompleted(object sender, System.Windows.Navigation.NavigationEventArgs e)
         {
             if (currentPage is SimulationPage)
@@ -65,6 +79,11 @@ namespace SimulatorUI
         {   
             //returns the value for valve flowrate
             return valveflowrate.IsChecked ?? false;
+        }
+
+        public bool GetAmbTemp()
+        {
+            return AmbientTemp.IsChecked ?? false;
         }
 
 

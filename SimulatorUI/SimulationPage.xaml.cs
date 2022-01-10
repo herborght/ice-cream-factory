@@ -861,5 +861,10 @@ namespace SimulatorUI
                 exp.IsExpanded = false;
             }
         }
+
+        public void AmbientTempVisibility(bool b)
+        {
+            ambTempBlock.Visibility = b ? Visibility.Visible : Visibility.Hidden;
+        }
     }
 }
