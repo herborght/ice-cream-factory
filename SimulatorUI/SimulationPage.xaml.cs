@@ -666,7 +666,19 @@ namespace SimulatorUI
 
                 ambTempBlock.Dispatcher.Invoke(() =>
                 {
-                    ambTempBlock.Text = "Ambient temp: " + ambientTemp.ToString() + "K";
+                    if(Tag != null)
+                    {
+                        if((Tag as MainWindow).GetAmbTemp())
+                        {
+                            ambTempBlock.Visibility = Visibility.Visible;
+                            ambTempBlock.Text = "Ambient temp: " + ambientTemp.ToString() + "K";
+                        }
+                        else
+                        {
+                            ambTempBlock.Visibility = Visibility.Hidden;
+                        }           
+                    }
+                    
 
                 });
 
