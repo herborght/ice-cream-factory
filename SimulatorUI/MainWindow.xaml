@@ -6,7 +6,8 @@
         xmlns:local="clr-namespace:SimulatorUI"
         mc:Ignorable="d"
         x:Name="mainwindow"
-        Title="Ice Cream Factory" Height="1000" Width="1000">
+        Title="Ice Cream Factory" Height="900" Width="1100"
+        WindowStartupLocation="CenterScreen">
     <Grid Background="#FFE4E4E4">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="auto"/>
