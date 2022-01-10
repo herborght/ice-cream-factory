@@ -6,8 +6,18 @@ namespace SimulatorUI
 {
     public class PasteurizationModule : TankModule
     {
-        public bool HeaterOn { get; set; }
-        public bool CoolerOn { get; set; }
+        private bool heateron;
+        public bool HeaterOn
+        {
+            get { return heateron; }
+            set { SetField(ref heateron, value, "HeaterOn"); }
+        }
+        private bool cooleron;
+        public bool CoolerOn
+        {
+            get { return cooleron; }
+            set { SetField(ref cooleron, value, "CoolerOn"); }
+        }
         public double HeaterTemp { get; }
         public double CoolerTemp { get; }
         public double Thickness { get; }
