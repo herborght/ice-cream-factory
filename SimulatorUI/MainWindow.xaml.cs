@@ -81,6 +81,7 @@ namespace SimulatorUI
                 showoptions.Visibility = Visibility.Collapsed;
                 checkboxes.Visibility = Visibility.Collapsed;
                 _mainFrame.Content = newPage;
+                SwitchViewButton.Content = "View simulation";
             }
             else
             {
@@ -99,6 +100,7 @@ namespace SimulatorUI
                 showoptions.Visibility = Visibility.Visible;
                 checkboxes.Visibility = Visibility.Visible;
                 _mainFrame.Content = newPage;
+                SwitchViewButton.Content = "View raw data";
             }
         }
 

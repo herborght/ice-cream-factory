@@ -27,6 +27,7 @@
 
 
         <StackPanel Grid.Column="0" Grid.Row="1" Background="#e2ece9" x:Name="SideBar">
+            <Button x:Name="SwitchViewButton" Content="View raw data" MinWidth="80" Click="SwitchView" Margin="5 5"/>
             <StackPanel Margin="0 0" x:Name="checkboxes" Visibility="Visible">
                 <TextBlock 
                 Grid.Row="1" 
@@ -78,9 +79,7 @@
                 </StackPanel>
                 <Button Content="Download" MinWidth="80" Click="Download" Margin="5 5"/>      
             </StackPanel>
-            
-           
-            <Button Content="Switch View" MinWidth="80" Click="SwitchView" Margin="5 5"/>
+
         </StackPanel>
         
         
