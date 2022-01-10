@@ -46,7 +46,7 @@ namespace SimulatorUI
                     HomoList.Add(module as HomogenizationModule);
                     TankList.Remove(module);
                 }
-                else if (Object.ReferenceEquals(module.GetType(), typeof(HomogenizationModule)))
+                else if (Object.ReferenceEquals(module.GetType(), typeof(PasteurizationModule)))
                 {
                     PastList.Add(module as PasteurizationModule);
                     TankList.Remove(module);
