@@ -256,15 +256,16 @@ namespace SimulatorUI
                     TextBlock symbol = new TextBlock
                     {
                         Text = "",
-                        Width = 40,
+                        Width = 75,
                         Height = 100,
                         Name = "symbols_" + tank.Name,
                         //FontSize = 20,
-                        TextWrapping = TextWrapping.Wrap
+                        TextWrapping = TextWrapping.Wrap,
+                        TextAlignment = TextAlignment.Center
                     };
 
-                    Canvas.SetLeft(symbol, time * distance + offset  + 35);
-                    Canvas.SetTop(symbol, fromTop + 10);
+                    Canvas.SetLeft(symbol, time * distance + offset);
+                    Canvas.SetTop(symbol, fromTop + 20);
                     symbols.Add(symbol);
                     canvas.Children.Add(symbol);
                 }
@@ -800,19 +801,19 @@ namespace SimulatorUI
             switch(tank)
             {
                 case PasteurizationModule p:
-                    msg += " P. Module\n";
+                    msg += " Pasteurization\n";
                     break;
                 case HomogenizationModule h:
-                    msg += " H. Module\n";
+                    msg += " Homogenization\n";
                     break;
                 case FlavoringHardeningPackingModule fhp:
-                    msg += " F.H.P Module\n";
+                    msg += " FlavoringHardeningPacking\n";
                     break;
                 case FreezingModule f:
-                    msg += " F. Module\n";
+                    msg += " Freezing\n";
                     break;
                 default:
-                    msg += " Tank Module\n";
+                    msg += " Tank\n";
                     break;
             }
             msg += "Level: " + Math.Round(tank.Level, 3) + "m\n";
