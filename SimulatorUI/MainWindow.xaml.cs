@@ -36,6 +36,20 @@ namespace SimulatorUI
         {
             
         }
+        public void AmbientTempCheckboxChanged(object sender, RoutedEventArgs e)
+        {
+            if(AmbientTemp != null && currentPage is SimulationPage)
+            {
+                if (AmbientTemp.IsChecked == true)
+                {
+                    (currentPage as SimulationPage).AmbientTempVisibility(true);
+                }
+                else
+                {
+                    (currentPage as SimulationPage).AmbientTempVisibility(false);
+                }
+            }
+        }
         private void Frame_LoadCompleted(object sender, System.Windows.Navigation.NavigationEventArgs e)
         {
             if (currentPage is SimulationPage)
@@ -67,6 +81,11 @@ namespace SimulatorUI
             return valveflowrate.IsChecked ?? false;
         }
 
+        public bool GetAmbTemp()
+        {
+            return AmbientTemp.IsChecked ?? false;
+        }
+
 
         // DSD Yrjar - Switch the view displayed in the mainframe
         public void SwitchView(object sender, RoutedEventArgs e)
@@ -81,6 +100,7 @@ namespace SimulatorUI
                 showoptions.Visibility = Visibility.Collapsed;
                 checkboxes.Visibility = Visibility.Collapsed;
                 _mainFrame.Content = newPage;
+                SwitchViewButton.Content = "View simulation";
             }
             else
             {
@@ -99,6 +119,7 @@ namespace SimulatorUI
                 showoptions.Visibility = Visibility.Visible;
                 checkboxes.Visibility = Visibility.Visible;
                 _mainFrame.Content = newPage;
+                SwitchViewButton.Content = "View raw data";
             }
         }
 

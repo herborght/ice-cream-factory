@@ -6,7 +6,8 @@
         xmlns:local="clr-namespace:SimulatorUI"
         mc:Ignorable="d"
         x:Name="mainwindow"
-        Title="Ice Cream Factory" Height="1000" Width="1000">
+        Title="Ice Cream Factory" Height="900" Width="1100"
+        WindowStartupLocation="CenterScreen">
     <Grid Background="#FFE4E4E4">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="auto"/>
@@ -26,11 +27,13 @@
 
 
         <StackPanel Grid.Column="0" Grid.Row="1" Background="#e2ece9" x:Name="SideBar">
+            <Button x:Name="SwitchViewButton" Content="View raw data" MinWidth="80" Click="SwitchView" Margin="5 5"/>
             <StackPanel Margin="0 0" x:Name="checkboxes" Visibility="Visible">
                 <TextBlock 
                 Grid.Row="1" 
                 Text="Properties" Margin="5 5" />
                 <CheckBox IsChecked="True" Margin="5 5" Checked="CheckBoxChanged" Unchecked="CheckBoxChanged" x:Name="valveflowrate">Valve flowrate</CheckBox>
+                <CheckBox IsChecked="True" Margin="5 5" Checked="AmbientTempCheckboxChanged" Unchecked="AmbientTempCheckboxChanged" x:Name="AmbientTemp">Ambient temp</CheckBox>
             </StackPanel>
             <TextBlock 
                 Grid.Row="1" 
@@ -39,7 +42,7 @@
                 Visibility="Visible"
                 x:Name="barone"/>
             <StackPanel Margin="0 0" Visibility="Visible" x:Name="showoptions">
-                <TextBlock Text="Simulation properties" Margin="5 5"/>
+                <TextBlock Text="Tank parameters" Margin="5 5"/>
                 <RadioButton IsChecked="True" Margin="5 5" x:Name="showimportant" Checked="ShowImportat">Show important</RadioButton>
                 <RadioButton Margin="5 5" x:Name="showall" Checked="ShowAll">Show all</RadioButton>
             </StackPanel>
@@ -77,9 +80,7 @@
                 </StackPanel>
                 <Button Content="Download" MinWidth="80" Click="Download" Margin="5 5"/>      
             </StackPanel>
-            
-           
-            <Button Content="Switch View" MinWidth="80" Click="SwitchView" Margin="5 5"/>
+
         </StackPanel>
         
         

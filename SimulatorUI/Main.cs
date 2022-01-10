@@ -91,8 +91,9 @@ namespace SimulatorUI
                         tank = new PasteurizationModule(m_name, m_HeaterTemp, m_CoolerTemp, m_Thickness, m_HTC, m_CTC);
                         break;
                     case "HomogenizationModule":
-                        double.TryParse(mod.Attributes["stage1Pressure"].Value, NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture, out double m_S1Pressure);
-                        double.TryParse(mod.Attributes["stage2Pressure"].Value, NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture, out double m_S2Pressure);
+                        double.TryParse(mod.Attributes["stage1Pressure"].Value, NumberStyles.Float, CultureInfo.InvariantCulture, out double m_S1Pressure);
+                        double.TryParse(mod.Attributes["stage2Pressure"].Value, NumberStyles.Float, CultureInfo.InvariantCulture, out double m_S2Pressure);
+                        
                         tank = new HomogenizationModule(m_name, m_S1Pressure, m_S2Pressure);
                         break;
                     case "FreezingModule":
