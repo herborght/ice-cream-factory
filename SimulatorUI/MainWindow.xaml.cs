@@ -6,6 +6,7 @@ using System.IO.Compression;
 using System.IO;
 using System.Linq;
 using System.Globalization;
+using Microsoft.Win32;
 
 namespace SimulatorUI
 {
@@ -105,72 +106,80 @@ namespace SimulatorUI
         // DSD Yrjar - Create a zipfile with all simulation data between the two chosen dates
         private void Download(object sender, RoutedEventArgs e)
         {
-            var timeStamp = new DateTimeOffset(DateTime.UtcNow).ToUnixTimeSeconds();
+            // DSD Emil - Create a dialog box for choosing download location and file name
+            SaveFileDialog dialog = new SaveFileDialog();
+            dialog.DefaultExt = ".zip";
+            dialog.Filter = "Zip file (*.zip)|*.zip";
 
-            // Extracting the data from here
-            string startPath = @"..\..\..\..\LogData\EventLogData";
-            // Where the zipped file is sent
-            string zipPath = @"..\..\..\..\ZippedLog\download" + timeStamp + ".zip";
-
-            // Getting the selected dates
-            DateTime? firstDate = fromDate.SelectedDate;
-            DateTime? lastDate = toDate.SelectedDate;
-
-            // Checking if the user has inputed values
-            if (firstDate.HasValue && lastDate.HasValue)
+            if (dialog.ShowDialog() == true)
             {
-                // Initalizes a temporary subdirectory
-                DirectoryInfo dir = new DirectoryInfo(startPath);
-                DirectoryInfo subdir = dir.CreateSubdirectory("subdir");
-                string targetPath = @"..\..\..\..\LogData\EventLogData\subdir";
+                var timeStamp = new DateTimeOffset(DateTime.UtcNow).ToUnixTimeSeconds();
 
-                // Iterate over the files in startpath
-                foreach (FileInfo file in dir.EnumerateFiles())
+                // Extracting the data from here
+                string startPath = @"..\..\..\..\LogData\EventLogData";
+                // Where the zipped file is sent
+                string zipPath = @"..\..\..\..\ZippedLog\download" + timeStamp + ".zip";
+
+                // Getting the selected dates
+                DateTime? firstDate = fromDate.SelectedDate;
+                DateTime? lastDate = toDate.SelectedDate;
+
+                // Checking if the user has inputed values
+                if (firstDate.HasValue && lastDate.HasValue)
                 {
-                    // Filter the relevant files
-                    if (file.CreationTime.Date >= firstDate && file.CreationTime.Date <= lastDate)
+                    // Initalizes a temporary subdirectory
+                    DirectoryInfo dir = new DirectoryInfo(startPath);
+                    DirectoryInfo subdir = dir.CreateSubdirectory("subdir");
+                    string targetPath = @"..\..\..\..\LogData\EventLogData\subdir";
+
+                    // Iterate over the files in startpath
+                    foreach (FileInfo file in dir.EnumerateFiles())
                     {
-                        // Copy the file into the subdir
-                        File.Copy(Path.Combine(startPath, file.Name), Path.Combine(targetPath, file.Name), true);
+                        // Filter the relevant files
+                        if (file.CreationTime.Date >= firstDate && file.CreationTime.Date <= lastDate)
+                        {
+                            // Copy the file into the subdir
+                            File.Copy(Path.Combine(startPath, file.Name), Path.Combine(targetPath, file.Name), true);
+                        }
                     }
+                    // Creates the zipfile and deletes the subdir
+                    ZipFile.CreateFromDirectory(targetPath, dialog.FileName);
+                    subdir.Delete(true);
                 }
-                // Creates the zipfile and deletes the subdir
-                ZipFile.CreateFromDirectory(targetPath, zipPath);
-                subdir.Delete(true);
-            }
-            else if (firstDate.HasValue)
-            {
-                DirectoryInfo dir = new DirectoryInfo(startPath);
-                DirectoryInfo subdir = dir.CreateSubdirectory("subdir");
-                string targetPath = @"..\..\..\..\LogData\EventLogData\subdir";
-                foreach (FileInfo file in dir.EnumerateFiles())
+                else if (firstDate.HasValue)
                 {
-                    if (file.CreationTime.Date >= firstDate)
+                    DirectoryInfo dir = new DirectoryInfo(startPath);
+                    DirectoryInfo subdir = dir.CreateSubdirectory("subdir");
+                    string targetPath = @"..\..\..\..\LogData\EventLogData\subdir";
+                    foreach (FileInfo file in dir.EnumerateFiles())
                     {
-                        File.Copy(Path.Combine(startPath, file.Name), Path.Combine(targetPath, file.Name), true);
+                        if (file.CreationTime.Date >= firstDate)
+                        {
+                            File.Copy(Path.Combine(startPath, file.Name), Path.Combine(targetPath, file.Name), true);
+                        }
                     }
+                    ZipFile.CreateFromDirectory(targetPath, dialog.FileName);
+                    subdir.Delete(true);
                 }
-                ZipFile.CreateFromDirectory(targetPath, zipPath);
-                subdir.Delete(true);
-            }
-            else if (lastDate.HasValue)
-            {
-                DirectoryInfo dir = new DirectoryInfo(startPath);
-                DirectoryInfo subdir = dir.CreateSubdirectory("subdir");
-                string targetPath = @"..\..\..\..\LogData\EventLogData\subdir";
-                foreach (FileInfo file in dir.EnumerateFiles())
+                else if (lastDate.HasValue)
                 {
-                    if (file.CreationTime.Date >= firstDate && file.CreationTime.Date <= lastDate)
+                    DirectoryInfo dir = new DirectoryInfo(startPath);
+                    DirectoryInfo subdir = dir.CreateSubdirectory("subdir");
+                    string targetPath = @"..\..\..\..\LogData\EventLogData\subdir";
+                    foreach (FileInfo file in dir.EnumerateFiles())
                     {
-                        File.Copy(Path.Combine(startPath, file.Name), Path.Combine(targetPath, file.Name), true);
+                        if (file.CreationTime.Date >= firstDate && file.CreationTime.Date <= lastDate)
+                        {
+                            File.Copy(Path.Combine(startPath, file.Name), Path.Combine(targetPath, file.Name), true);
+                        }
                     }
+                    ZipFile.CreateFromDirectory(targetPath, dialog.FileName);
+                    subdir.Delete(true);
                 }
-                ZipFile.CreateFromDirectory(targetPath, zipPath);
-                subdir.Delete(true);
-            }
-            else
-            {
-                ZipFile.CreateFromDirectory(startPath, zipPath);
+                else
+                {
+                    ZipFile.CreateFromDirectory(startPath, dialog.FileName);
+                }
             }
         }
     }
