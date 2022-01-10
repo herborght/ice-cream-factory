@@ -62,7 +62,7 @@ namespace SimulatorUI
         {
             int height = 200; // General height of the tank elements
             int time = 0; // How many tanks are in this row
-            int fromTop = 0; // The height of the row
+            int fromTop = 20; // The height of the row
             int rows = 0; // Shows which row is the current
             int distance = 230; // distance + offset  between each tank
             int offset = 50; // To make room for lines etc
@@ -413,7 +413,7 @@ namespace SimulatorUI
 
                         Point second = new Point
                         {
-                            Y = target.Y + 20 * times[targetRow],
+                            Y = target.Y + 15 * times[targetRow],
                             X = first.X
                         };
 
@@ -442,7 +442,7 @@ namespace SimulatorUI
                         };
                         Point second = new Point
                         {
-                            Y = target.Y + 20 * times[targetRow],
+                            Y = target.Y + 15 * times[targetRow],
                             X = first.X
                         };
                         Point third = new Point
