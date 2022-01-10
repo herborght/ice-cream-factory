@@ -77,32 +77,35 @@ namespace SimulatorUI
                     case "OutValveOpen":
                         item.DisplayIndex = 2;
                         break;
-                    case "InFlowTemp":
+                    case "DumpValveOpen":
                         item.DisplayIndex = 3;
                         break;
-                    case "OutFlowTemp":
+                    case "InFlowTemp":
                         item.DisplayIndex = 4;
                         break;
-                    case "OutLetFlow":
+                    case "OutFlowTemp":
                         item.DisplayIndex = 5;
                         break;
-                    case "LevelPercentage":
+                    case "OutLetFlow":
                         item.DisplayIndex = 6;
                         break;
-                    case "Temperature":
+                    case "LevelPercentage":
                         item.DisplayIndex = 7;
                         break;
-                    case "Level":
+                    case "Temperature":
                         item.DisplayIndex = 8;
                         break;
-                    case "Height":
+                    case "Level":
                         item.DisplayIndex = 9;
                         break;
-                    case "BaseArea":
+                    case "Height":
                         item.DisplayIndex = 10;
                         break;
-                    case "OutletArea":
+                    case "BaseArea":
                         item.DisplayIndex = 11;
+                        break;
+                    case "OutletArea":
+                        item.DisplayIndex = 12;
                         break;
                 }
             }
@@ -126,32 +129,35 @@ namespace SimulatorUI
                     case "OutValveOpen":
                         item.DisplayIndex = 2;
                         break;
-                    case "InFlowTemp":
+                    case "DumpValveOpen":
                         item.DisplayIndex = 3;
                         break;
-                    case "OutFlowTemp":
+                    case "InFlowTemp":
                         item.DisplayIndex = 4;
                         break;
-                    case "OutLetFlow":
+                    case "OutFlowTemp":
                         item.DisplayIndex = 5;
                         break;
-                    case "LevelPercentage":
+                    case "OutLetFlow":
                         item.DisplayIndex = 6;
                         break;
-                    case "Temperature":
+                    case "LevelPercentage":
                         item.DisplayIndex = 7;
                         break;
-                    case "Level":
+                    case "Temperature":
                         item.DisplayIndex = 8;
                         break;
-                    case "Height":
+                    case "Level":
                         item.DisplayIndex = 9;
                         break;
-                    case "BaseArea":
+                    case "Height":
                         item.DisplayIndex = 10;
                         break;
-                    case "OutletArea":
+                    case "BaseArea":
                         item.DisplayIndex = 11;
+                        break;
+                    case "OutletArea":
+                        item.DisplayIndex = 12;
                         break;
                 }
             }
@@ -175,32 +181,35 @@ namespace SimulatorUI
                     case "OutValveOpen":
                         item.DisplayIndex = 2;
                         break;
-                    case "InFlowTemp":
+                    case "DumpValveOpen":
                         item.DisplayIndex = 3;
                         break;
-                    case "OutFlowTemp":
+                    case "InFlowTemp":
                         item.DisplayIndex = 4;
                         break;
-                    case "OutLetFlow":
+                    case "OutFlowTemp":
                         item.DisplayIndex = 5;
                         break;
-                    case "LevelPercentage":
+                    case "OutLetFlow":
                         item.DisplayIndex = 6;
                         break;
-                    case "Temperature":
+                    case "LevelPercentage":
                         item.DisplayIndex = 7;
                         break;
-                    case "Level":
+                    case "Temperature":
                         item.DisplayIndex = 8;
                         break;
-                    case "Height":
+                    case "Level":
                         item.DisplayIndex = 9;
                         break;
-                    case "BaseArea":
+                    case "Height":
                         item.DisplayIndex = 10;
                         break;
-                    case "OutletArea":
+                    case "BaseArea":
                         item.DisplayIndex = 11;
+                        break;
+                    case "OutletArea":
+                        item.DisplayIndex = 12;
                         break;
                 }
             }
