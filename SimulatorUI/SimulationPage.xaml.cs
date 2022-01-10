@@ -801,19 +801,19 @@ namespace SimulatorUI
             switch(tank)
             {
                 case PasteurizationModule p:
-                    msg += " P. Module\n";
+                    msg += " Pasteurization\n";
                     break;
                 case HomogenizationModule h:
-                    msg += " H. Module\n";
+                    msg += " Homogenization\n";
                     break;
                 case FlavoringHardeningPackingModule fhp:
-                    msg += " F.H.P Module\n";
+                    msg += " FlavoringHardeningPacking\n";
                     break;
                 case FreezingModule f:
-                    msg += " F. Module\n";
+                    msg += " Freezing\n";
                     break;
                 default:
-                    msg += " Tank Module\n";
+                    msg += " Tank\n";
                     break;
             }
             msg += "Level: " + Math.Round(tank.Level, 3) + "m\n";
