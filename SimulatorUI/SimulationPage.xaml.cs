@@ -256,15 +256,16 @@ namespace SimulatorUI
                     TextBlock symbol = new TextBlock
                     {
                         Text = "",
-                        Width = 40,
+                        Width = 75,
                         Height = 100,
                         Name = "symbols_" + tank.Name,
                         //FontSize = 20,
-                        TextWrapping = TextWrapping.Wrap
+                        TextWrapping = TextWrapping.Wrap,
+                        TextAlignment = TextAlignment.Center
                     };
 
-                    Canvas.SetLeft(symbol, time * distance + offset  + 35);
-                    Canvas.SetTop(symbol, fromTop + 10);
+                    Canvas.SetLeft(symbol, time * distance + offset);
+                    Canvas.SetTop(symbol, fromTop + 20);
                     symbols.Add(symbol);
                     canvas.Children.Add(symbol);
                 }
