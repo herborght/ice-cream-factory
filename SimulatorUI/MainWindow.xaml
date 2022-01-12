@@ -50,8 +50,11 @@
                 Grid.Row="1" 
                 Text="-----------------------------" 
                 TextAlignment="Center" FontSize="14" FontWeight="Bold" Visibility="Visible" x:Name="bartwo"/>
-            
-            
+
+            <StackPanel Margin="0 0" Visibility="Visible" x:Name="tests">
+                <TextBlock Text="Tests" Margin="5 5"/>
+                <CheckBox IsChecked="False" Margin="5 5" Checked="FaultInjection" Unchecked="FaultInjection" x:Name="Fault">Fault Injection</CheckBox>
+            </StackPanel>
             <StackPanel Visibility="Collapsed" x:Name="Filter">
                 <StackPanel>
                     <TextBlock

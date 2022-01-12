@@ -51,6 +51,13 @@ namespace SimulatorUI
                 }
             }
         }
+        private void FaultInjection(object sender, RoutedEventArgs e)
+        {
+            for(; ; )
+            {
+                
+            }
+        }
         private void Frame_LoadCompleted(object sender, System.Windows.Navigation.NavigationEventArgs e)
         {
             if (currentPage is SimulationPage)
