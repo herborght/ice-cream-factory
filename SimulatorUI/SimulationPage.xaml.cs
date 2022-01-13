@@ -37,21 +37,25 @@ namespace SimulatorUI
             CreateTanks();
             Task.Run(() => UpdateVisuals());
         }
+
+        // Returns a list of all the expanders. Used in the MainWindow class to auto-expand all the expanders when switching
+        // to the simulation page if the option was toggled beforehand
         public List<Expander> GetExpanders()
         {
             return detailsExpanders;
         }
 
-        public void SetValve(bool check)
-        {
-            valvef = check;
-        }
-        public void PassData(bool data)
-        {
-            valvef = data;
-        }
-
         // DSD Joakim - Create all the tanks
+
+        // Explanation from Emil - Manually create all the tanks and their connections in a fake grid. This results in the tank
+        // "grid" being static, since it would be a real pain to manually update the tank positions and in which row/column they
+        // should be displayed when the screen changes size. 
+        // A better way would be to use databinding correctly to make it an actual dynamic grid which would allow dynamic resizing
+        // and vertical/horizontal screen scrolling, but since we knew nothing about databinding when we started this was the way
+        // we chose to do it, oh well.
+        //
+        // This function will create a row of three tanks before moving down to the next row, repeat. All elements that should be 
+        // displayed on screen are added to the Canvas, which we are using for easy positioning of elements within the Canvas.
         private void CreateTanks()
         {
             int height = 200; // General height of the tank elements
@@ -74,6 +78,7 @@ namespace SimulatorUI
 
             foreach (TankModule tank in tankList) //Setup the shapes and connection points
             {
+
                 if (time == 3)
                 {
                     fromTop += 300;
@@ -81,7 +86,7 @@ namespace SimulatorUI
                     rows++;
                 }
 
-                // The rectangle for visualizing the tank level
+                // DSD Joakim - The rectangle for visualizing the tank level
                 Rectangle tankRectangle = new Rectangle
                 {
                     Width = 75,
@@ -93,7 +98,7 @@ namespace SimulatorUI
                 Canvas.SetLeft(tankRectangle, time * distance + offset);
                 Canvas.SetTop(tankRectangle, fromTop);
 
-                // The rectangle showing how empty the tank is 
+                // DSD Joakim - The rectangle showing how empty the tank is 
                 Rectangle tankLevelRectangle = new Rectangle
                 {
                     Uid = tank.Name,
@@ -126,7 +131,7 @@ namespace SimulatorUI
                 Canvas.SetTop(detailsExpander, fromTop - 1); // yeah its stupid, but the expander box was visually a tiny bit under the top of the tank
                 detailsExpanders.Add(detailsExpander);
 
-                // The point at which the tank will have its connections
+                // DSD Joakim - The point at which the tank will have its connections
                 Point exit = new Point
                 {
                     X = time * distance + offset + 37.5,
@@ -142,7 +147,7 @@ namespace SimulatorUI
                 pointList.Add(exitPoint);
                 pointList.Add(entryPoint);
 
-                // Dump valves will probably have to improve the visuals of these, or change their position not really intuitive 
+                // DSD Joakim - Dump valves will probably have to improve the visuals of these, or change their position not really intuitive 
                 Ellipse dumpValve = new Ellipse
                 {
                     Width = 10,
@@ -233,7 +238,7 @@ namespace SimulatorUI
                 };
                 Canvas.SetRight(ambTempBlock, canvas.ActualWidth);
 
-                // All elements to be drawn are added to the canvas
+                // DSD Joakim - All elements to be drawn are added to the canvas
                 canvas.Children.Add(tankRectangle);
                 canvas.Children.Add(tankLevelRectangle);
                 canvas.Children.Add(dumpValve);
@@ -253,7 +258,6 @@ namespace SimulatorUI
                         Width = 75,
                         Height = 100,
                         Name = "symbols_" + tank.Name,
-                        //FontSize = 20,
                         TextWrapping = TextWrapping.Wrap,
                         TextAlignment = TextAlignment.Center
                     };
@@ -359,7 +363,7 @@ namespace SimulatorUI
                     canvas.Children.Add(label);
                 }
 
-                // This is a bit backward initial is the destination of the connection while target is the source, which means the lines have to be drawn backwards
+                // DSD Joakim - This is a bit backward initial is the destination of the connection while target is the source, which means the lines have to be drawn backwards
                 foreach (TankModule connected in tank.InFlowTanks)
                 {
                     // The pairs are used to access the rows and points for the lines
@@ -495,12 +499,15 @@ namespace SimulatorUI
 
                         if (rectangle.Height < 187)
                         {
+                            // To avoid having the arrow heads overflow over the lines, only display them when there is enough room for them
                             arrowhead1.Visibility = Visibility.Visible;
                             arrowhead2.Visibility = Visibility.Visible;
 
+                            // Set the arrowheads length to be one pixel to make it point in the correct direction
                             arrowhead1.Y1 = arrow.Y1 + 6;
                             arrowhead1.Y2 = arrow.Y1 + 7;
 
+                            // Display the % text over the level line if there isnt enough room for its textbox between the tank bottom and the level line
                             if (rectangle.Height < 200 - leveltext.Height)
                             {
                                 Canvas.SetTop(leveltext, (arrow.Y1 + arrow.Y2 - leveltext.Height) / 2);
@@ -610,7 +617,7 @@ namespace SimulatorUI
                             msg = "Entry\n";
                             if (Tag != null)
                             {
-                                valvef = (this.Tag as MainWindow).GetValvef();
+                                valvef = (Tag as MainWindow).GetValvef();
                                 if (valvef)
                                 {
                                     msg += "InFlow: \n" + Math.Round(tankList[0].InletFlow, 3) + "m3/s\n";
@@ -623,7 +630,7 @@ namespace SimulatorUI
                             msg = "Exit\n";
                             if (Tag != null)
                             {
-                                valvef = (this.Tag as MainWindow).GetValvef();
+                                valvef = (Tag as MainWindow).GetValvef();
                                 if (valvef)
                                 {
                                     msg += "OutFlow: \n" + Math.Round(tankList[^1].OutletFlow, 3) + "m3/s\n";
@@ -641,7 +648,7 @@ namespace SimulatorUI
                                 //Checks if valve flowrate is selected, and displays the flowrate if it is 
                                 if (Tag != null)
                                 {
-                                    valvef = (this.Tag as MainWindow).GetValvef();
+                                    valvef = (Tag as MainWindow).GetValvef();
                                     if (valvef)
                                     {
                                         msg += "InFlow: \n" + Math.Round(tank.InletFlow, 3) + "m3/s\n"; //Could also add the temperatures, will probably have to divide what each shows in other functions, as we should be able to select the 
@@ -684,7 +691,7 @@ namespace SimulatorUI
             }
         }
 
-        // Update special symbols
+        // DSD Joakim - Update special symbols
         private void SymbolUpdate()
         {
             foreach (TextBlock textBlock in symbols)
@@ -850,6 +857,8 @@ namespace SimulatorUI
 
             return msg;
         }
+
+        // SetOpen and SetClosed are used open/close all the expanders from the MainWindow class
         public void SetOpen()
         {
             foreach (Expander exp in detailsExpanders)
@@ -865,6 +874,7 @@ namespace SimulatorUI
             }
         }
 
+        // Toggle the abmient temp block visibility from the MainWindow class
         public void AmbientTempVisibility(bool b)
         {
             ambTempBlock.Visibility = b ? Visibility.Visible : Visibility.Hidden;

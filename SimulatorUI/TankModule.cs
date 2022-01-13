@@ -28,6 +28,7 @@ namespace SimulatorUI
             InFlowTanks = new List<TankModule>();
         }
 
+        // DSD Bendik - OnPropertyChanged and SetField used for databinding in the rawdata page tables
         protected virtual void OnPropertyChanged(string propertyname)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyname));
@@ -35,7 +36,11 @@ namespace SimulatorUI
 
         protected bool SetField<T>(ref T field, T value, string propertyname)
         {
-            if (EqualityComparer<T>.Default.Equals(field, value)) return false;
+            if (EqualityComparer<T>.Default.Equals(field, value))
+            {
+                return false;
+            }
+
             field = value;
             OnPropertyChanged(propertyname);
             return true;

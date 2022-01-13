@@ -21,6 +21,7 @@ namespace SimulatorUI
             FHPMList = new ObservableCollection<FlavoringHardeningPackingModule>();
             HomoList = new ObservableCollection<HomogenizationModule>();
             PastList = new ObservableCollection<PasteurizationModule>();
+
             foreach (TankModule module in list)
             {
                 if (module is FreezingModule)
