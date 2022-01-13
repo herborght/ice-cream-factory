@@ -28,17 +28,17 @@ namespace SimulatorUI
                     FreezingList.Add(module as FreezingModule);
                     TankList.Remove(module);
                 }
-                else if (module is FreezingModule)
+                else if (module is FlavoringHardeningPackingModule)
                 {
                     FHPMList.Add(module as FlavoringHardeningPackingModule);
                     TankList.Remove(module);
                 }
-                else if (module is FreezingModule)
+                else if (module is HomogenizationModule)
                 {
                     HomoList.Add(module as HomogenizationModule);
                     TankList.Remove(module);
                 }
-                else if (module is FreezingModule)
+                else if (module is PasteurizationModule)
                 {
                     PastList.Add(module as PasteurizationModule);
                     TankList.Remove(module);
