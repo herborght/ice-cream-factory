@@ -6,30 +6,33 @@ namespace SimulatorUI
 {
     public class HomogenizationModule : TankModule
     {
-        private bool homogeniztionon;
+        private bool homogenizationOn;
+        private bool ageingCoolingOn;
+        private double particleSize;
+        private double mixTemperature;
 
         public bool HomogenizationOn
         {
-            get { return homogeniztionon; }
-            set { SetField(ref homogeniztionon, value, "HomogenizationOn"); } 
+            get { return homogenizationOn; }
+            set { SetField(ref homogenizationOn, value, "HomogenizationOn"); } 
         }
-        private bool ageingcoolingon;
+
         public bool AgeingCoolingOn
         {
-            get { return ageingcoolingon; }
-            set { SetField(ref ageingcoolingon, value, "AgeingCoolingOn"); }
+            get { return ageingCoolingOn; }
+            set { SetField(ref ageingCoolingOn, value, "AgeingCoolingOn"); }
         }
-        private double particlesize;
+
         public double ParticleSize
         {
-            get { return particlesize; }
-            set { SetField(ref particlesize, value, "ParticleSize"); }
+            get { return particleSize; }
+            set { SetField(ref particleSize, value, "ParticleSize"); }
         }
-        private double mixtemperature;
+
         public double MixTemperature
         {
-            get { return mixtemperature; }
-            set { SetField(ref mixtemperature, value, "MixTemperature"); }
+            get { return mixTemperature; }
+            set { SetField(ref mixTemperature, value, "MixTemperature"); }
         }
         public double Stage1Pressure { get; }
         public double Stage2Pressure { get; }

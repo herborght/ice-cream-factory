@@ -6,56 +6,62 @@ namespace SimulatorUI
 {
     public class FreezingModule : TankModule
     {
-        private bool freezingon;
+        private bool freezingOn;
+        private double particleSize;
+        private double mixTemperature;
+        private double overRun;
+        private double pasteurizationUnits;
+        private bool sendTestValues;
+        private bool dasherOn;
+        private bool startLiquidFlavoring;
         public bool FreezingOn 
         {
-            get { return freezingon; }
-            set { SetField(ref freezingon, value, "FreezingOn"); } 
+            get { return freezingOn; }
+            set { SetField(ref freezingOn, value, "FreezingOn"); } 
         }
-        private bool dasheron;
         public bool DasherOn
         {
-            get { return dasheron; }
-            set { SetField(ref dasheron, value, "DasherOn"); }
+            get { return dasherOn; }
+            set { SetField(ref dasherOn, value, "DasherOn"); }
         }
-        private bool startliquidflavoring;
+        
         public bool StartLiquidFlavoring
         {
-            get { return startliquidflavoring; }
-            set { SetField(ref startliquidflavoring, value, "StartLiquidFlavoring"); }
+            get { return startLiquidFlavoring; }
+            set { SetField(ref startLiquidFlavoring, value, "StartLiquidFlavoring"); }
         }
-        public double particlesize;
+        
         public double ParticleSize
         {
-            get { return particlesize; }
-            set { SetField(ref particlesize, value, "ParticleSize"); }
+            get { return particleSize; }
+            set { SetField(ref particleSize, value, "ParticleSize"); }
         }
-        private double mixtemperature;
+        
         public double MixTemperature
         {
-            get { return mixtemperature; }
-            set { SetField(ref mixtemperature, value, "MixTemperature"); }
+            get { return mixTemperature; }
+            set { SetField(ref mixTemperature, value, "MixTemperature"); }
         }
-        private double overrun;
+        
         public double Overrun
         {
-            get { return overrun; }
-            set { SetField(ref overrun, value, "Overrun"); }
+            get { return overRun; }
+            set { SetField(ref overRun, value, "Overrun"); }
         }
-        private double pasteurizationunits;
+        
         public double PasteurizationUnits
         {
-            get { return pasteurizationunits; }
-            set { SetField(ref pasteurizationunits, value, "PasteurizationUnits "); }
+            get { return pasteurizationUnits; }
+            set { SetField(ref pasteurizationUnits, value, "PasteurizationUnits "); }
         }
         
         public double FreezerTemp { get; }
         public double BarrelRotationSpeed { get; }
-        private bool sendtestvalues;
+        
         public bool SendTestValues
         {
-            get { return sendtestvalues; }
-            set { SetField(ref sendtestvalues, value, "SendTestValues"); }
+            get { return sendTestValues; }
+            set { SetField(ref sendTestValues, value, "SendTestValues"); }
         }
         public FreezingModule(string name, double freezerTemp, double barrelRotationSpeed) : base(name)
         {

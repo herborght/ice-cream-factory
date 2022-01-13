@@ -212,7 +212,7 @@ namespace SimulatorUI
                         current.OutFlowTemp = parameter.AnalogValue;
                         break;
                     case "OutFlow":
-                        current.OutLetFlow = parameter.AnalogValue;
+                        current.OutletFlow = parameter.AnalogValue;
                         break;
                     default:
                         break;

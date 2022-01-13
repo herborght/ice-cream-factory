@@ -628,7 +628,7 @@ namespace SimulatorUI
                                 valvef = (this.Tag as MainWindow).GetValvef();
                                 if (valvef)
                                 {
-                                    msg += "OutFlow: \n" + Math.Round(tankList[tankList.Count - 1].OutLetFlow, 3) + "m3/s\n";
+                                    msg += "OutFlow: \n" + Math.Round(tankList[tankList.Count - 1].OutletFlow, 3) + "m3/s\n";
                                 }
                             }
                             
@@ -821,7 +821,7 @@ namespace SimulatorUI
             msg += "Temp: " + Math.Round(tank.Temperature, 3) + "K\n";
             msg += "InFlow: " + Math.Round(tank.InletFlow, 3) + "m3/s\n";
             msg += "InFow Temp: " + Math.Round(tank.InFlowTemp, 3) + "K\n";
-            msg += "OutFlow: " + Math.Round(tank.OutLetFlow, 3) + "m3/s\n";
+            msg += "OutFlow: " + Math.Round(tank.OutletFlow, 3) + "m3/s\n";
             msg += "OutFlow Temp: " + Math.Round(tank.OutFlowTemp, 3) + "K\n";
             if (tank.DumpValveOpen)
             {
