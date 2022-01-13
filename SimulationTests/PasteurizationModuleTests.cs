@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SimulatorUI;
 
 namespace SimulationTests
@@ -11,7 +8,7 @@ namespace SimulationTests
     public class PasteurizationModuleTests
     {
         // DSD Vår - Unit tests for pasteurization module
-        PasteurizationModule pModule;
+        private PasteurizationModule pModule;
 
         [TestMethod]
         public void ConstructorTest()

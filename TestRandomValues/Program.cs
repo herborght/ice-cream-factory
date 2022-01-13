@@ -1,18 +1,15 @@
-﻿using System;
-using ABB.InSecTT.Common;
-using ABB.InSecTT.Common.Configuration;
-using ABB.InSecTT.Common.Control;
+﻿using ABB.InSecTT.Common.Configuration;
 using SimulatorUI;
-using ABB.InSecTT.SimulatorEnv;
+using System;
 using System.Threading.Tasks;
 
 namespace TestRandomValues
 {
-    class Program
+    internal class Program
     {
         // DSD Joakim - Separate program.cs used for testing UI in isolation from simulation, with random values
         [STAThread]
-        static void Main(string[] args)
+        private static void Main(string[] args)
         {
             IParameterDataBase parameters = ParameterDataBase.FromConfiguration("ConfigFiles/SimulatorConfigs/TankConfigSim.xml");
             Task.Run(() => ExecuteSimulation(parameters));
@@ -32,7 +29,7 @@ namespace TestRandomValues
         private static void UpdateParameters(IParameterDataBase parameters)
         {
             int rand, moduleNr, val;
-            Random random = new Random();           
+            Random random = new Random();
             string name;
 
             for (int i = 0; i < 5; i++)

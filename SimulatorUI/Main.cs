@@ -2,10 +2,9 @@
 using ABB.InSecTT.Common.MessageHandling;
 using System;
 using System.Collections.Generic;
-using System.Text;
+using System.Globalization;
 using System.Threading.Tasks;
 using System.Xml;
-using System.Globalization;
 
 namespace SimulatorUI
 {
@@ -93,7 +92,7 @@ namespace SimulatorUI
                     case "HomogenizationModule":
                         double.TryParse(mod.Attributes["stage1Pressure"].Value, NumberStyles.Float, CultureInfo.InvariantCulture, out double m_S1Pressure);
                         double.TryParse(mod.Attributes["stage2Pressure"].Value, NumberStyles.Float, CultureInfo.InvariantCulture, out double m_S2Pressure);
-                        
+
                         tank = new HomogenizationModule(m_name, m_S1Pressure, m_S2Pressure);
                         break;
                     case "FreezingModule":
@@ -155,7 +154,7 @@ namespace SimulatorUI
             foreach (var parameterKey in m_parameters.ParameterKeys)
             {
                 // DSD Emil - SimEnv is not a tank, it only exists in the DB for visualization purposes.
-                if (parameterKey.Split('/')[0] == "SimEnv") 
+                if (parameterKey.Split('/')[0] == "SimEnv")
                 {
                     IParameter parameter = m_parameters.GetParameter(parameterKey);
                     ambTemp = parameter.AnalogValue;

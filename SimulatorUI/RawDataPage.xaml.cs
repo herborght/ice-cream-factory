@@ -1,17 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Threading.Tasks;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using System.Collections.ObjectModel;
+using System.Threading.Tasks;
+using System.Windows.Controls;
 
 namespace SimulatorUI
 {
@@ -32,16 +23,18 @@ namespace SimulatorUI
             HomoList = new ObservableCollection<HomogenizationModule>();
             PastList = new ObservableCollection<PasteurizationModule>();
             foreach (TankModule module in list)
-            {   
-                if(Object.ReferenceEquals(module.GetType(), typeof(FreezingModule)))
+            {
+                if (Object.ReferenceEquals(module.GetType(), typeof(FreezingModule)))
                 {
                     FreezingList.Add(module as FreezingModule);
                     TankList.Remove(module);
-                } else if (Object.ReferenceEquals(module.GetType(), typeof(FlavoringHardeningPackingModule)))
+                }
+                else if (Object.ReferenceEquals(module.GetType(), typeof(FlavoringHardeningPackingModule)))
                 {
                     FHPMList.Add(module as FlavoringHardeningPackingModule);
                     TankList.Remove(module);
-                } else if (Object.ReferenceEquals(module.GetType(), typeof(HomogenizationModule)))
+                }
+                else if (Object.ReferenceEquals(module.GetType(), typeof(HomogenizationModule)))
                 {
                     HomoList.Add(module as HomogenizationModule);
                     TankList.Remove(module);
@@ -61,7 +54,7 @@ namespace SimulatorUI
         //Function for setting the column order in the DataGrid, similar functions are created for all tables
         private void DataGrid_FHPMordering(object sender, EventArgs e)
         {
-            
+
             var grid = (DataGrid)sender;
             foreach (var item in grid.Columns)
             {

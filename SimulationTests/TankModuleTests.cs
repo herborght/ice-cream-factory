@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SimulatorUI;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace SimulationTests
 {
@@ -20,7 +17,7 @@ namespace SimulationTests
             Assert.AreEqual(0, T1.InFlowTanks.Count);
         }
 
-        TankModule T1 = new TankModule("T1");
+        private TankModule T1 = new TankModule("T1");
         [TestMethod]
         public void SettersTest()
         {

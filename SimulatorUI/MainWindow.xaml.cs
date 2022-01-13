@@ -1,12 +1,10 @@
-﻿using System;
+﻿using Microsoft.Win32;
+using System;
 using System.Collections.Generic;
+using System.IO;
+using System.IO.Compression;
 using System.Windows;
 using System.Windows.Controls;
-using System.IO.Compression;
-using System.IO;
-using System.Linq;
-using System.Globalization;
-using Microsoft.Win32;
 
 namespace SimulatorUI
 {
@@ -15,8 +13,8 @@ namespace SimulatorUI
     /// </summary>
     public partial class MainWindow : Window
     {
-        List<TankModule> tankList;
-        public Page currentPage; 
+        private List<TankModule> tankList;
+        public Page currentPage;
         public CheckBox valveCheckBox;
         private double ambientTemp;
 
@@ -33,7 +31,7 @@ namespace SimulatorUI
 
         public void AmbientTempCheckboxChanged(object sender, RoutedEventArgs e)
         {
-            if(ambientTemperature != null && currentPage is SimulationPage)
+            if (ambientTemperature != null && currentPage is SimulationPage)
             {
                 if (ambientTemperature.IsChecked == true)
                 {
@@ -49,9 +47,9 @@ namespace SimulatorUI
         // Simulate the UI "crashing" or "freezing" to test that the simulator can run undisrupted
         private void FaultInjection(object sender, RoutedEventArgs e)
         {
-            for(; ; )
+            for (; ; )
             {
-                
+
             }
         }
 
@@ -84,7 +82,7 @@ namespace SimulatorUI
         }
 
         public bool GetValvef()
-        {   
+        {
             //returns the value for valve flowrate
             return valveFlowrate.IsChecked ?? false;
         }
@@ -190,7 +188,7 @@ namespace SimulatorUI
                 }
                 else if (lastDate.HasValue)
                 {
-                    
+
                     foreach (FileInfo file in dir.EnumerateFiles())
                     {
                         if (file.CreationTime.Date <= lastDate)
@@ -204,7 +202,7 @@ namespace SimulatorUI
                 else
                 {
                     subdir.Delete(true);
-                    ZipFile.CreateFromDirectory(startPath, dialog.FileName);                   
+                    ZipFile.CreateFromDirectory(startPath, dialog.FileName);
                 }
             }
         }

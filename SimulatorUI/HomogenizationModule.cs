@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace SimulatorUI
+﻿namespace SimulatorUI
 {
     public class HomogenizationModule : TankModule
     {
@@ -14,7 +10,7 @@ namespace SimulatorUI
         public bool HomogenizationOn
         {
             get { return homogenizationOn; }
-            set { SetField(ref homogenizationOn, value, "HomogenizationOn"); } 
+            set { SetField(ref homogenizationOn, value, "HomogenizationOn"); }
         }
 
         public bool AgeingCoolingOn

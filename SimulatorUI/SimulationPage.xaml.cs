@@ -1,15 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Threading.Tasks;
-using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 using System.Windows.Shapes;
 
 namespace SimulatorUI
@@ -19,22 +13,22 @@ namespace SimulatorUI
     /// </summary>
     public partial class SimulationPage : Page
     {
-        List<TankModule> tankList;
-        List<Rectangle> tankLevelList; // List of the rectangles visualizing the tank level
-        List<KeyValuePair<string, KeyValuePair<int, Point>>> pointList; // The points of connectections for the tanks
-        List<Ellipse> connectedValves; // The visualization of the valves
-        List<Ellipse> dumpValves;
-        List<TextBlock> labels;
-        List<Expander> detailsExpanders;
-        List<TextBlock> symbols; //Could be replaced with images, for example pasteurization could use a snowflake and a flame
-        Boolean valvef;
-        List<Line> arrowshafts;
-        List<Line> arrowheads;
-        List<TextBlock> levelTextBlocks;
-        List<TextBlock> tempTextBlocks;
+        private List<TankModule> tankList;
+        private List<Rectangle> tankLevelList; // List of the rectangles visualizing the tank level
+        private List<KeyValuePair<string, KeyValuePair<int, Point>>> pointList; // The points of connectections for the tanks
+        private List<Ellipse> connectedValves; // The visualization of the valves
+        private List<Ellipse> dumpValves;
+        private List<TextBlock> labels;
+        private List<Expander> detailsExpanders;
+        private List<TextBlock> symbols; //Could be replaced with images, for example pasteurization could use a snowflake and a flame
+        private bool valvef;
+        private List<Line> arrowshafts;
+        private List<Line> arrowheads;
+        private List<TextBlock> levelTextBlocks;
+        private List<TextBlock> tempTextBlocks;
         private double ambientTemp;
-        TextBlock ambTempBlock;
-        
+        private TextBlock ambTempBlock;
+
         public SimulationPage(List<TankModule> list, double ambTemp)
         {
             tankList = list;
@@ -45,16 +39,16 @@ namespace SimulatorUI
         }
         public List<Expander> GetExpanders()
         {
-            return this.detailsExpanders;
+            return detailsExpanders;
         }
 
         public void SetValve(bool check)
         {
-            this.valvef = check;
+            valvef = check;
         }
         public void PassData(bool data)
         {
-            this.valvef = data;
+            valvef = data;
         }
 
         // DSD Joakim - Create all the tanks
@@ -96,7 +90,7 @@ namespace SimulatorUI
                     StrokeThickness = 2,
                     Stroke = Brushes.Black
                 };
-                Canvas.SetLeft(tankRectangle, time * distance + offset );
+                Canvas.SetLeft(tankRectangle, time * distance + offset);
                 Canvas.SetTop(tankRectangle, fromTop);
 
                 // The rectangle showing how empty the tank is 
@@ -109,7 +103,7 @@ namespace SimulatorUI
                     StrokeThickness = 2,
                     Stroke = Brushes.Black
                 };
-                Canvas.SetLeft(tankLevelRectangle, time * distance + offset );
+                Canvas.SetLeft(tankLevelRectangle, time * distance + offset);
                 Canvas.SetTop(tankLevelRectangle, fromTop);
                 tankLevelList.Add(tankLevelRectangle);
 
@@ -128,19 +122,19 @@ namespace SimulatorUI
                     BorderThickness = new Thickness(2)
                 };
                 Canvas.SetZIndex(detailsExpander, 10); // Set z-index to draw ontop ofother elements (such as tank connections)
-                Canvas.SetLeft(detailsExpander, time * distance + offset  + 80);
+                Canvas.SetLeft(detailsExpander, time * distance + offset + 80);
                 Canvas.SetTop(detailsExpander, fromTop - 1); // yeah its stupid, but the expander box was visually a tiny bit under the top of the tank
                 detailsExpanders.Add(detailsExpander);
 
                 // The point at which the tank will have its connections
                 Point exit = new Point
                 {
-                    X = time * distance + offset  + 37.5,
+                    X = time * distance + offset + 37.5,
                     Y = fromTop + height
                 };
                 Point entry = new Point
                 {
-                    X = time * distance + offset ,
+                    X = time * distance + offset,
                     Y = fromTop + height / 2
                 };
                 KeyValuePair<string, KeyValuePair<int, Point>> exitPoint = new KeyValuePair<string, KeyValuePair<int, Point>>(tank.Name + "_exit", new KeyValuePair<int, Point>(rows, exit)); //Added in this way to get which row they are on
@@ -158,29 +152,29 @@ namespace SimulatorUI
                     Stroke = Brushes.Black,
                     Uid = "d_" + tank.Name
                 };
-                Canvas.SetLeft(dumpValve, time * distance + offset  + 70); //just placed it on the other side
+                Canvas.SetLeft(dumpValve, time * distance + offset + 70); //just placed it on the other side
                 Canvas.SetTop(dumpValve, fromTop + height / 2);
                 dumpValves.Add(dumpValve);
 
                 // DSD Emil - Lines used for creating arrows
                 Line arrowshaft = new Line
                 {
-                    X1 = time * distance + offset  + 20,
+                    X1 = time * distance + offset + 20,
                     Y1 = fromTop + 1,
-                    X2 = time * distance + offset  + 20,
+                    X2 = time * distance + offset + 20,
                     Y2 = fromTop + height,
                     StrokeThickness = 2,
                     Stroke = Brushes.Black,
                     Uid = "as_" + tank.Name
                 };
-                Canvas.SetZIndex(arrowshaft,10);
+                Canvas.SetZIndex(arrowshaft, 10);
                 arrowshafts.Add(arrowshaft);
 
                 Line arrowhead = new Line
                 {
-                    X1 = time * distance + offset  + 20,
+                    X1 = time * distance + offset + 20,
                     Y1 = fromTop + 7,
-                    X2 = time * distance + offset  + 20,
+                    X2 = time * distance + offset + 20,
                     Y2 = fromTop + 8,
                     StrokeThickness = 13,
                     Stroke = Brushes.Black,
@@ -192,9 +186,9 @@ namespace SimulatorUI
 
                 Line arrowhead2 = new Line
                 {
-                    X1 = time * distance + offset  + 20,
+                    X1 = time * distance + offset + 20,
                     Y1 = fromTop + height - 8,
-                    X2 = time * distance + offset  + 20,
+                    X2 = time * distance + offset + 20,
                     Y2 = fromTop + height - 9,
                     StrokeThickness = 13,
                     Stroke = Brushes.Black,
@@ -212,7 +206,7 @@ namespace SimulatorUI
                     Height = 20,
                     Uid = tank.Name
                 };
-                Canvas.SetLeft(levelText, time * distance + offset  + 30);
+                Canvas.SetLeft(levelText, time * distance + offset + 30);
                 Canvas.SetTop(levelText, fromTop + 100);
                 levelTextBlocks.Add(levelText);
 
@@ -226,7 +220,7 @@ namespace SimulatorUI
                     TextAlignment = TextAlignment.Right,
                     Padding = new Thickness(0, 0, 5, 0),
                 };
-                Canvas.SetLeft(tempText, time * distance + offset  + 2);
+                Canvas.SetLeft(tempText, time * distance + offset + 2);
                 Canvas.SetTop(tempText, fromTop + 2);
                 Canvas.SetZIndex(tempText, 12);
                 tempTextBlocks.Add(tempText);
@@ -275,7 +269,7 @@ namespace SimulatorUI
             int[] times = new int[rows + 1]; // Used to increment the length of which the lines are apart from eachother
             foreach (TankModule tank in tankList) // Create the connections
             {
-                if(tank == tankList[0])
+                if (tank == tankList[0])
                 {
                     KeyValuePair<int, Point> initialPair = pointList.Find(x => x.Key == tank.Name + "_entry").Value;
                     Point initial = initialPair.Value;
@@ -365,8 +359,8 @@ namespace SimulatorUI
                 foreach (TankModule connected in tank.InFlowTanks)
                 {
                     // The pairs are used to access the rows and points for the lines
-                    KeyValuePair<int, Point> initialPair = pointList.Find(x => x.Key == tank.Name+ "_entry").Value; 
-                    KeyValuePair<int, Point> targetPair = pointList.Find(x => x.Key == connected.Name+"_exit").Value;
+                    KeyValuePair<int, Point> initialPair = pointList.Find(x => x.Key == tank.Name + "_entry").Value;
+                    KeyValuePair<int, Point> targetPair = pointList.Find(x => x.Key == connected.Name + "_exit").Value;
                     int initialRow = initialPair.Key;
                     int targetRow = targetPair.Key;
 
@@ -377,7 +371,7 @@ namespace SimulatorUI
                     };
 
                     // Used to specify the points of the line
-                    PointCollection points = new PointCollection(); 
+                    PointCollection points = new PointCollection();
                     Point initial = initialPair.Value;
                     Point target = targetPair.Value;
                     points.Add(initial);
@@ -391,7 +385,7 @@ namespace SimulatorUI
                         StrokeThickness = 2,
                         Stroke = Brushes.Black,
                         Uid = tank.Name + "_" + connected.Name // ID for the valves
-                    }; 
+                    };
                     connectedValves.Add(ellipse);
 
 
@@ -400,7 +394,7 @@ namespace SimulatorUI
                     {
                         Text = connected.Name + "->" + tank.Name + "\n",
                         Name = tank.Name + "_" + connected.Name
-                    }; 
+                    };
                     labels.Add(label);
 
                     if (initialRow == targetRow)
@@ -494,7 +488,7 @@ namespace SimulatorUI
 
                         TextBlock leveltext = levelTextBlocks.Find(x => x.Uid == name);
                         leveltext.Text = Math.Round(current.LevelPercentage, 3) + "%";
-                        
+
                         if (rectangle.Height < 187)
                         {
                             arrowhead1.Visibility = Visibility.Visible;
@@ -505,12 +499,12 @@ namespace SimulatorUI
 
                             if (rectangle.Height < 200 - leveltext.Height)
                             {
-                                Canvas.SetTop(leveltext, (arrow.Y1 + arrow.Y2 - leveltext.Height) / 2);                             
+                                Canvas.SetTop(leveltext, (arrow.Y1 + arrow.Y2 - leveltext.Height) / 2);
                             }
                             else
                             {
                                 Canvas.SetTop(leveltext, arrow.Y1 - leveltext.Height);
-                            }                            
+                            }
                         }
                         else
                         {
@@ -527,9 +521,9 @@ namespace SimulatorUI
                 {
                     valve.Dispatcher.Invoke(() =>
                     {
-                        if(valve.Uid == "entry")
+                        if (valve.Uid == "entry")
                         {
-                            if(tankList[0].InletFlow > 0)
+                            if (tankList[0].InletFlow > 0)
                             {
                                 valve.Fill = Brushes.White;
                             }
@@ -615,12 +609,12 @@ namespace SimulatorUI
                                 valvef = (this.Tag as MainWindow).GetValvef();
                                 if (valvef)
                                 {
-                                    msg += "InFlow: \n" + Math.Round(tankList[0].InletFlow, 3) + "m3/s\n"; 
+                                    msg += "InFlow: \n" + Math.Round(tankList[0].InletFlow, 3) + "m3/s\n";
                                 }
                             }
-                            
+
                         }
-                        else if(label.Name == "exit")
+                        else if (label.Name == "exit")
                         {
                             msg = "Exit\n";
                             if (Tag != null)
@@ -631,12 +625,12 @@ namespace SimulatorUI
                                     msg += "OutFlow: \n" + Math.Round(tankList[tankList.Count - 1].OutletFlow, 3) + "m3/s\n";
                                 }
                             }
-                            
+
                         }
                         else
                         {
                             TankModule tank = tankList.Find(x => x.Name == label.Name.Split('_')[0]);
-                            if(tank != null)
+                            if (tank != null)
                             {
                                 TankModule connected = tank.InFlowTanks.Find(x => x.Name == label.Name.Split('_')[1]);
                                 msg = connected.Name + "->" + tank.Name + "\n";
@@ -667,9 +661,9 @@ namespace SimulatorUI
 
                 ambTempBlock.Dispatcher.Invoke(() =>
                 {
-                    if(Tag != null)
+                    if (Tag != null)
                     {
-                        if((Tag as MainWindow).GetAmbTemp())
+                        if ((Tag as MainWindow).GetAmbTemp())
                         {
                             ambTempBlock.Visibility = Visibility.Visible;
                             ambTempBlock.Text = "Ambient temp: " + ambientTemp.ToString() + "K";
@@ -677,9 +671,9 @@ namespace SimulatorUI
                         else
                         {
                             ambTempBlock.Visibility = Visibility.Hidden;
-                        }           
+                        }
                     }
-                    
+
 
                 });
 
@@ -693,9 +687,10 @@ namespace SimulatorUI
         {
             foreach (TextBlock textBlock in symbols)
             {
-                textBlock.Dispatcher.Invoke(() => {
+                textBlock.Dispatcher.Invoke(() =>
+                {
                     TankModule tank = tankList.Find(x => x.Name == textBlock.Name.Split('_')[1]);
-                    switch(tank)
+                    switch (tank)
                     {
                         case PasteurizationModule p:
                             textBlock.Text = UpdatePasteurization(p);
@@ -709,8 +704,8 @@ namespace SimulatorUI
                         case FreezingModule f:
                             textBlock.Text = UpdateFreezing(f);
                             break;
-                        
-                    }                  
+
+                    }
                 });
             }
         }
@@ -736,16 +731,16 @@ namespace SimulatorUI
             }
             return ret;
         }
-        
+
 
         private string UpdateHomogenization(HomogenizationModule temp) //Present cooler and pressure in raw data instead
         {
             string ret = "";
-            if(temp.HomogenizationOn)
+            if (temp.HomogenizationOn)
             {
                 ret = "Homogen ";
             }
-            if(temp.AgeingCoolingOn)
+            if (temp.AgeingCoolingOn)
             {
                 ret += "Aging, -";
             }
@@ -767,7 +762,7 @@ namespace SimulatorUI
             {
                 ret += "Pack ";
             }
-            if(temp.FinishBatch)
+            if (temp.FinishBatch)
             {
                 ret = "Fin";
             }
@@ -798,24 +793,16 @@ namespace SimulatorUI
             string msg = "";
             TankModule tank = tankList.Find(x => x.Name == name);
             msg += "Type: ";
-            switch(tank)
+
+            msg += tank switch
             {
-                case PasteurizationModule p:
-                    msg += " Pasteurization\n";
-                    break;
-                case HomogenizationModule h:
-                    msg += " Homogenization\n";
-                    break;
-                case FlavoringHardeningPackingModule fhp:
-                    msg += " FlavoringHardeningPacking\n";
-                    break;
-                case FreezingModule f:
-                    msg += " Freezing\n";
-                    break;
-                default:
-                    msg += " Tank\n";
-                    break;
-            }
+                PasteurizationModule p => " Pasteurization\n",
+                HomogenizationModule h => " Homogenization\n",
+                FlavoringHardeningPackingModule fhp => " FlavoringHardeningPacking\n",
+                FreezingModule f => " Freezing\n",
+                _ => " Tank\n",
+            };
+
             msg += "Level: " + Math.Round(tank.Level, 3) + "m\n";
             msg += "Percent: " + Math.Round(tank.LevelPercentage, 3) + "%" + "\n";
             msg += "Temp: " + Math.Round(tank.Temperature, 3) + "K\n";
@@ -823,6 +810,7 @@ namespace SimulatorUI
             msg += "InFow Temp: " + Math.Round(tank.InFlowTemp, 3) + "K\n";
             msg += "OutFlow: " + Math.Round(tank.OutletFlow, 3) + "m3/s\n";
             msg += "OutFlow Temp: " + Math.Round(tank.OutFlowTemp, 3) + "K\n";
+
             if (tank.DumpValveOpen)
             {
                 msg += "Dump Valve: Open\n";
@@ -862,7 +850,7 @@ namespace SimulatorUI
         }
         public void SetOpen()
         {
-            foreach(Expander exp in detailsExpanders)
+            foreach (Expander exp in detailsExpanders)
             {
                 exp.IsExpanded = true;
             }
