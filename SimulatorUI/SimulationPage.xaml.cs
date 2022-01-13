@@ -278,9 +278,11 @@ namespace SimulatorUI
                         Y = initial.Y,
                         X = initial.X - 30
                     };
-                    PointCollection points = new PointCollection();
-                    points.Add(initial);
-                    points.Add(target);
+                    PointCollection points = new PointCollection
+                    {
+                        initial,
+                        target
+                    };
                     Ellipse ellipse = new Ellipse
                     {
                         Width = 10,
@@ -312,7 +314,7 @@ namespace SimulatorUI
                     canvas.Children.Add(label);
                 }
 
-                else if (tank == tankList[tankList.Count - 1])
+                else if (tank == tankList[^1])
                 {
                     KeyValuePair<int, Point> initialPair = pointList.Find(x => x.Key == tank.Name + "_exit").Value;
                     Point initial = initialPair.Value;
@@ -321,9 +323,11 @@ namespace SimulatorUI
                         Y = initial.Y + 20,
                         X = initial.X
                     };
-                    PointCollection points = new PointCollection();
-                    points.Add(initial);
-                    points.Add(target);
+                    PointCollection points = new PointCollection
+                    {
+                        initial,
+                        target
+                    };
                     Ellipse ellipse = new Ellipse
                     {
                         Width = 10,
@@ -534,7 +538,7 @@ namespace SimulatorUI
                         }
                         else if (valve.Uid == "exit")
                         {
-                            if (tankList[tankList.Count - 1].OutValveOpen)
+                            if (tankList[^1].OutValveOpen)
                             {
                                 valve.Fill = Brushes.White;
                             }
@@ -622,7 +626,7 @@ namespace SimulatorUI
                                 valvef = (this.Tag as MainWindow).GetValvef();
                                 if (valvef)
                                 {
-                                    msg += "OutFlow: \n" + Math.Round(tankList[tankList.Count - 1].OutletFlow, 3) + "m3/s\n";
+                                    msg += "OutFlow: \n" + Math.Round(tankList[^1].OutletFlow, 3) + "m3/s\n";
                                 }
                             }
 
@@ -673,8 +677,6 @@ namespace SimulatorUI
                             ambTempBlock.Visibility = Visibility.Hidden;
                         }
                     }
-
-
                 });
 
                 SymbolUpdate();
@@ -704,7 +706,8 @@ namespace SimulatorUI
                         case FreezingModule f:
                             textBlock.Text = UpdateFreezing(f);
                             break;
-
+                        default:
+                            break;
                     }
                 });
             }
@@ -731,7 +734,6 @@ namespace SimulatorUI
             }
             return ret;
         }
-
 
         private string UpdateHomogenization(HomogenizationModule temp) //Present cooler and pressure in raw data instead
         {

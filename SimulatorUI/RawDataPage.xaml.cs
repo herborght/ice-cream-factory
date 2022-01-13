@@ -6,7 +6,6 @@ using System.Windows.Controls;
 
 namespace SimulatorUI
 {
-
     public partial class RawDataPage : Page
     {
         public ObservableCollection<TankModule> TankList { get; set; }
@@ -24,22 +23,22 @@ namespace SimulatorUI
             PastList = new ObservableCollection<PasteurizationModule>();
             foreach (TankModule module in list)
             {
-                if (Object.ReferenceEquals(module.GetType(), typeof(FreezingModule)))
+                if (module is FreezingModule)
                 {
                     FreezingList.Add(module as FreezingModule);
                     TankList.Remove(module);
                 }
-                else if (Object.ReferenceEquals(module.GetType(), typeof(FlavoringHardeningPackingModule)))
+                else if (module is FreezingModule)
                 {
                     FHPMList.Add(module as FlavoringHardeningPackingModule);
                     TankList.Remove(module);
                 }
-                else if (Object.ReferenceEquals(module.GetType(), typeof(HomogenizationModule)))
+                else if (module is FreezingModule)
                 {
                     HomoList.Add(module as HomogenizationModule);
                     TankList.Remove(module);
                 }
-                else if (Object.ReferenceEquals(module.GetType(), typeof(PasteurizationModule)))
+                else if (module is FreezingModule)
                 {
                     PastList.Add(module as PasteurizationModule);
                     TankList.Remove(module);
@@ -51,15 +50,15 @@ namespace SimulatorUI
             InitializeComponent();
             Task.Run(() => UpdateLoop());
         }
+
         //Function for setting the column order in the DataGrid, similar functions are created for all tables
         private void DataGrid_FHPMordering(object sender, EventArgs e)
         {
-
-            var grid = (DataGrid)sender;
-            foreach (var item in grid.Columns)
+            DataGrid grid = (DataGrid)sender;
+            foreach (DataGridColumn item in grid.Columns)
             {
-                string itemname = item.Header.ToString();
-                switch (itemname)
+                string itemName = item.Header.ToString();
+                switch (itemName)
                 {
                     case "Name":
                         item.DisplayIndex = 0;
@@ -99,19 +98,20 @@ namespace SimulatorUI
                         break;
                     case "OutletArea":
                         item.DisplayIndex = 12;
+                        break;
+                    default:
                         break;
                 }
             }
         }
-        //Function for setting the column order in the DataGrid, similar functions are created for all tables
+        // Function for setting the column order in the DataGrid, similar functions are created for all tables
         private void DataGrid_Freeordering(object sender, EventArgs e)
         {
-
-            var grid = (DataGrid)sender;
-            foreach (var item in grid.Columns)
+            DataGrid grid = (DataGrid)sender;
+            foreach (DataGridColumn item in grid.Columns)
             {
-                string itemname = item.Header.ToString();
-                switch (itemname)
+                string itemName = item.Header.ToString();
+                switch (itemName)
                 {
                     case "Name":
                         item.DisplayIndex = 0;
@@ -151,6 +151,8 @@ namespace SimulatorUI
                         break;
                     case "OutletArea":
                         item.DisplayIndex = 12;
+                        break;
+                    default:
                         break;
                 }
             }
@@ -159,11 +161,11 @@ namespace SimulatorUI
         private void DataGrid_FREEordering(object sender, EventArgs e)
         {
 
-            var grid = (DataGrid)sender;
-            foreach (var item in grid.Columns)
+            DataGrid grid = (DataGrid)sender;
+            foreach (DataGridColumn item in grid.Columns)
             {
-                string itemname = item.Header.ToString();
-                switch (itemname)
+                string itemName = item.Header.ToString();
+                switch (itemName)
                 {
                     case "Name":
                         item.DisplayIndex = 0;
@@ -203,18 +205,19 @@ namespace SimulatorUI
                         break;
                     case "OutletArea":
                         item.DisplayIndex = 12;
+                        break;
+                    default:
                         break;
                 }
             }
         }
         private void DataGrid_HOMOordering(object sender, EventArgs e)
         {
-
-            var grid = (DataGrid)sender;
-            foreach (var item in grid.Columns)
+            DataGrid grid = (DataGrid)sender;
+            foreach (DataGridColumn item in grid.Columns)
             {
-                string itemname = item.Header.ToString();
-                switch (itemname)
+                string itemName = item.Header.ToString();
+                switch (itemName)
                 {
                     case "Name":
                         item.DisplayIndex = 0;
@@ -255,9 +258,12 @@ namespace SimulatorUI
                     case "OutletArea":
                         item.DisplayIndex = 12;
                         break;
+                    default:
+                        break;
                 }
             }
         }
+
         internal async Task UpdateLoop()
         {
             for (; ; )

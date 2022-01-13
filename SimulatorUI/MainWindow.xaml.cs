@@ -83,7 +83,7 @@ namespace SimulatorUI
 
         public bool GetValvef()
         {
-            //returns the value for valve flowrate
+            // Returns the value for valve flowrate
             return valveFlowrate.IsChecked ?? false;
         }
 
@@ -158,7 +158,6 @@ namespace SimulatorUI
                 // Checking if the user has inputed values
                 if (firstDate.HasValue && lastDate.HasValue)
                 {
-
                     // Iterate over the files in startpath
                     foreach (FileInfo file in dir.EnumerateFiles())
                     {
@@ -175,7 +174,6 @@ namespace SimulatorUI
                 }
                 else if (firstDate.HasValue)
                 {
-
                     foreach (FileInfo file in dir.EnumerateFiles())
                     {
                         if (file.CreationTime.Date >= firstDate)
@@ -188,7 +186,6 @@ namespace SimulatorUI
                 }
                 else if (lastDate.HasValue)
                 {
-
                     foreach (FileInfo file in dir.EnumerateFiles())
                     {
                         if (file.CreationTime.Date <= lastDate)

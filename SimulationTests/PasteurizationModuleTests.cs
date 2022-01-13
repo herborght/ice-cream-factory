@@ -40,11 +40,11 @@ namespace SimulationTests
             double expectedThickness = 2;
             double expectedHeaterConductivity = 3;
             double expectedCoolerConductivity = 0;
-            pModule = new PasteurizationModule("T1", expectedHeaterTemp, expectedCoolerTemp, expectedThickness, expectedHeaterConductivity, expectedCoolerConductivity);
-
-            pModule.HeaterOn = expectedHeaterOn;
-            pModule.CoolerOn = expectedCoolerOn;
-
+            pModule = new PasteurizationModule("T1", expectedHeaterTemp, expectedCoolerTemp, expectedThickness, expectedHeaterConductivity, expectedCoolerConductivity)
+            {
+                HeaterOn = expectedHeaterOn,
+                CoolerOn = expectedCoolerOn
+            };
 
             // Assert values 
             Assert.AreEqual(expectedHeaterOn, pModule.HeaterOn);

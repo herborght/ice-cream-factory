@@ -17,7 +17,7 @@ namespace SimulationTests
                 return Invoke(testMethod);
 
             TestResult[] result = null;
-            var thread = new Thread(() => result = Invoke(testMethod));
+            Thread thread = new Thread(() => result = Invoke(testMethod));
             thread.SetApartmentState(ApartmentState.STA);
             thread.Start();
             thread.Join();
@@ -34,11 +34,6 @@ namespace SimulationTests
     public class MainWindowTests
     {
         // DSD Vår - Unit tests for main window
-        private IParameterDataBase parameters;
-        private IEnumerable<IModule> modules;
-        private string configFilePath;
-
-        //Main main = new Main(parameters, modules, configFilePath);
 
         // Variables for SwitchViewTest
         private Page expectedCurr;
@@ -50,8 +45,6 @@ namespace SimulationTests
         private TankModule T1;
         private TankModule T2;
         private List<TankModule> tankList = new List<TankModule>();
-
-
 
         [STATestMethod]
         public void SwitchViewTest()
