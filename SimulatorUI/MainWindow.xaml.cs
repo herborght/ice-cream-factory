@@ -132,6 +132,8 @@ namespace SimulatorUI
         }
 
         // DSD Yrjar - Create a zipfile with all simulation data between the two chosen dates
+        // This download function currently creates a zipfile of the simulation events files
+        // Done this way because the CSV file from SimpleLog only contains the simulation parameter names, and no actual data
         private void Download(object sender, RoutedEventArgs e)
         {
             // DSD Emil - Create a dialog box for choosing download location and file name
