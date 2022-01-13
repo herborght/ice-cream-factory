@@ -24,27 +24,25 @@ namespace SimulatorUI
 
             foreach (TankModule module in list)
             {
-                if (module is FreezingModule)
+                switch (module)
                 {
-                    FreezingList.Add(module as FreezingModule);
-                    TankList.Remove(module);
+                    case FreezingModule f:
+                        FreezingList.Add(f);
+                        TankList.Remove(f);
+                        break;
+                    case FlavoringHardeningPackingModule fhp:
+                        FHPMList.Add(fhp);
+                        TankList.Remove(fhp);
+                        break;
+                    case HomogenizationModule h:
+                        HomoList.Add(h);
+                        TankList.Remove(h);
+                        break;
+                    case PasteurizationModule p:
+                        PastList.Add(p);
+                        TankList.Remove(p);
+                        break;
                 }
-                else if (module is FlavoringHardeningPackingModule)
-                {
-                    FHPMList.Add(module as FlavoringHardeningPackingModule);
-                    TankList.Remove(module);
-                }
-                else if (module is HomogenizationModule)
-                {
-                    HomoList.Add(module as HomogenizationModule);
-                    TankList.Remove(module);
-                }
-                else if (module is PasteurizationModule)
-                {
-                    PastList.Add(module as PasteurizationModule);
-                    TankList.Remove(module);
-                }
-
             }
             // Binding this instance as the datacontext for the view
             DataContext = this;
