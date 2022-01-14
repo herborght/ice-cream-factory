@@ -53,5 +53,5 @@ The simulator UI is organized into multiple cs classes and three xaml files. The
 
 Each of the xaml files has a .cs files belonging to it, with the same name, this file implements the logic of the windows and pages. Where Simulation page adds its elements programmatically using a Canvas control form and various shapes such as rectangles and ellipses to represent the values.   
 
-The different classes are instantiated by inheriting the attributes and fields of TankModule, and then adds their own unique fields. We use the Main.cs to read and update the val
+The different classes are instantiated by inheriting the attributes and fields of TankModule, and then adds their own unique fields. We use the Main.cs to read and update the values of the different modules, where it then forwards the information to the SimulationPage and RawDataPage. 
  
