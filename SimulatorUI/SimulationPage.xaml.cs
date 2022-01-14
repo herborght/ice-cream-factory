@@ -275,7 +275,7 @@ namespace SimulatorUI
             int[] times = new int[rows + 1]; // Used to increment the length of which the lines are apart from eachother
             foreach (TankModule tank in tankList) // Create the connections
             {
-                if(tank == tankList[0])
+                if(tank.InFlowTanks.Count == 0)
                 {
                     KeyValuePair<int, Point> initialPair = pointList.Find(x => x.Key == tank.Name + "_entry").Value;
                     Point initial = initialPair.Value;
@@ -318,7 +318,7 @@ namespace SimulatorUI
                     canvas.Children.Add(label);
                 }
 
-                else if (tank == tankList[tankList.Count - 1])
+                else if (!tankList.Exists(x => x.InFlowTanks.Contains(tank)))
                 {
                     KeyValuePair<int, Point> initialPair = pointList.Find(x => x.Key == tank.Name + "_exit").Value;
                     Point initial = initialPair.Value;
