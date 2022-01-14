@@ -31,6 +31,10 @@ namespace ABB.InSecTT.SimulatorEnv
                 sb.Append(eventArgs.Message);
             }
             sb.AppendLine();
+
+            // DSD - To avoid "document used by another process" crash, try a few times.
+            // This will make the simulationevents file incorrect since the order will be incorrect
+            // But done this way for demo purposes and to allow us to develop without randomly crashing all the time
             int time = 0;
             while (true)
             {

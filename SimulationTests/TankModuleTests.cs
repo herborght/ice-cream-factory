@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SimulatorUI;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace SimulationTests
 {
@@ -20,7 +17,7 @@ namespace SimulationTests
             Assert.AreEqual(0, T1.InFlowTanks.Count);
         }
 
-        TankModule T1 = new TankModule("T1");
+        private TankModule T1 = new TankModule("T1");
         [TestMethod]
         public void SettersTest()
         {
@@ -63,15 +60,15 @@ namespace SimulationTests
             Tank1.InFlowTanks.Add(Tank3);
             Tank3.InFlowTanks.Add(Tank2);
 
-            Tank2.OutLetFlow = 0.01;
-            Tank1.InletFlow = Tank1.InFlowTanks.Find(x => x.Name == Tank2.Name).OutLetFlow;
+            Tank2.OutletFlow = 0.01;
+            Tank1.InletFlow = Tank1.InFlowTanks.Find(x => x.Name == Tank2.Name).OutletFlow;
 
             Assert.AreEqual(2, Tank1.InFlowTanks.Count);
             Assert.IsTrue(Tank1.InFlowTanks.Exists(x => x.Name == Tank2.Name));
             Assert.IsTrue(Tank1.InFlowTanks.Exists(x => x.Name == Tank3.Name));
             Assert.IsTrue(Tank3.InFlowTanks.Exists(x => x.Name == Tank2.Name));
             Assert.AreEqual(1, Tank3.InFlowTanks.Count);
-            Assert.AreEqual(Tank1.InletFlow, Tank2.OutLetFlow);
+            Assert.AreEqual(Tank1.InletFlow, Tank2.OutletFlow);
         }
     }
 }

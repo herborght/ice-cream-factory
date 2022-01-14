@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SimulatorUI;
 
 namespace SimulationTests
@@ -9,8 +6,7 @@ namespace SimulationTests
     [TestClass]
     public class HomogenizationModuleTests
     {
-
-        HomogenizationModule hModule;
+        private HomogenizationModule hModule;
 
         [TestMethod]
         public void ConstructorTest()

@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SimulatorUI;
 
 namespace SimulationTests
@@ -11,7 +8,7 @@ namespace SimulationTests
     public class PasteurizationModuleTests
     {
         // DSD Vår - Unit tests for pasteurization module
-        PasteurizationModule pModule;
+        private PasteurizationModule pModule;
 
         [TestMethod]
         public void ConstructorTest()
@@ -43,11 +40,11 @@ namespace SimulationTests
             double expectedThickness = 2;
             double expectedHeaterConductivity = 3;
             double expectedCoolerConductivity = 0;
-            pModule = new PasteurizationModule("T1", expectedHeaterTemp, expectedCoolerTemp, expectedThickness, expectedHeaterConductivity, expectedCoolerConductivity);
-
-            pModule.HeaterOn = expectedHeaterOn;
-            pModule.CoolerOn = expectedCoolerOn;
-
+            pModule = new PasteurizationModule("T1", expectedHeaterTemp, expectedCoolerTemp, expectedThickness, expectedHeaterConductivity, expectedCoolerConductivity)
+            {
+                HeaterOn = expectedHeaterOn,
+                CoolerOn = expectedCoolerOn
+            };
 
             // Assert values 
             Assert.AreEqual(expectedHeaterOn, pModule.HeaterOn);
