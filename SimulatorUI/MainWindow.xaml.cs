@@ -5,6 +5,7 @@ using System.IO;
 using System.IO.Compression;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Navigation;
 
 namespace SimulatorUI
 {
@@ -15,7 +16,6 @@ namespace SimulatorUI
     {
         private List<TankModule> tankList;
         public Page currentPage;
-        public CheckBox valveCheckBox;
         private double ambientTemp;
 
         public MainWindow(List<TankModule> list, string configName, double ambTemp)
@@ -53,7 +53,7 @@ namespace SimulatorUI
             }
         }
 
-        private void Frame_LoadCompleted(object sender, System.Windows.Navigation.NavigationEventArgs e)
+        private void Frame_LoadCompleted(object sender, NavigationEventArgs e)
         {
             if (currentPage is SimulationPage)
             {
