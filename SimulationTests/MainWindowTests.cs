@@ -1,13 +1,11 @@
-﻿using SimulatorUI;
-using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Windows.Controls;
+﻿using ABB.InSecTT.Common.Configuration;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System.Windows;
 using NUnit.Framework;
-using ABB.InSecTT.Common.Configuration;
+using SimulatorUI;
+using System.Collections.Generic;
 using System.Threading;
+using System.Windows;
+using System.Windows.Controls;
 
 namespace SimulationTests
 {
@@ -19,7 +17,7 @@ namespace SimulationTests
                 return Invoke(testMethod);
 
             TestResult[] result = null;
-            var thread = new Thread(() => result = Invoke(testMethod));
+            Thread thread = new Thread(() => result = Invoke(testMethod));
             thread.SetApartmentState(ApartmentState.STA);
             thread.Start();
             thread.Join();
@@ -36,23 +34,17 @@ namespace SimulationTests
     public class MainWindowTests
     {
         // DSD Vår - Unit tests for main window
-        IParameterDataBase parameters;
-        IEnumerable<IModule> modules;
-        string configFilePath;
-        //Main main = new Main(parameters, modules, configFilePath);
 
         // Variables for SwitchViewTest
-        Page expectedCurr;
-        Page result;
-        object sender;
-        RoutedEventArgs e;
+        private Page expectedCurr;
+        private Page result;
+        private object sender;
+        private RoutedEventArgs e;
 
         // Variables for MainWIndow (but think i can just use main.)
-        TankModule T1;
-        TankModule T2;
-        List<TankModule> tankList = new List<TankModule>();
-
-
+        private TankModule T1;
+        private TankModule T2;
+        private List<TankModule> tankList = new List<TankModule>();
 
         [STATestMethod]
         public void SwitchViewTest()

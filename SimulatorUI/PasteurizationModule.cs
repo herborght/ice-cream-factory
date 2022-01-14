@@ -1,22 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace SimulatorUI
+﻿namespace SimulatorUI
 {
     public class PasteurizationModule : TankModule
     {
-        private bool heateron;
+        private bool heaterOn;
+        private bool coolerOn;
         public bool HeaterOn
         {
-            get { return heateron; }
-            set { SetField(ref heateron, value, "HeaterOn"); }
+            get { return heaterOn; }
+            set { SetField(ref heaterOn, value, "HeaterOn"); }
         }
-        private bool cooleron;
+
         public bool CoolerOn
         {
-            get { return cooleron; }
-            set { SetField(ref cooleron, value, "CoolerOn"); }
+            get { return coolerOn; }
+            set { SetField(ref coolerOn, value, "CoolerOn"); }
         }
         public double HeaterTemp { get; }
         public double CoolerTemp { get; }
