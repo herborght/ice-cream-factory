@@ -34,7 +34,7 @@ namespace SimulatorUI
         List<TextBlock> tempTextBlocks;
         private double ambientTemp;
         TextBlock ambTempBlock;
-        
+
         public SimulationPage(List<TankModule> list, double ambTemp)
         {
             tankList = list;
@@ -78,6 +78,16 @@ namespace SimulatorUI
             levelTextBlocks = new List<TextBlock>();
             tempTextBlocks = new List<TextBlock>();
 
+            // DSD Emil - Textblock displaying simulatiom ambient temperature
+            ambTempBlock = new TextBlock
+            {
+                TextAlignment = TextAlignment.Right,
+                Padding = new Thickness(0, 0, 5, 0),
+            };
+            Canvas.SetRight(ambTempBlock, canvas.ActualWidth);
+            
+            canvas.Children.Add(ambTempBlock);
+
             foreach (TankModule tank in tankList) //Setup the shapes and connection points
             {
                 if (time == 3)
@@ -87,385 +97,432 @@ namespace SimulatorUI
                     rows++;
                 }
 
-                // The rectangle for visualizing the tank level
-                Rectangle tankRectangle = new Rectangle
-                {
-                    Width = 75,
-                    Height = height,
-                    Fill = Brushes.Blue,
-                    StrokeThickness = 2,
-                    Stroke = Brushes.Black
-                };
-                Canvas.SetLeft(tankRectangle, time * distance + offset );
-                Canvas.SetTop(tankRectangle, fromTop);
+                AddTanks(tank, time, distance, offset, height, fromTop); //Function to add rectangles representing the tanks
 
-                // The rectangle showing how empty the tank is 
-                Rectangle tankLevelRectangle = new Rectangle
-                {
-                    Uid = tank.Name,
-                    Width = 75,
-                    Height = 200,
-                    Fill = Brushes.White,
-                    StrokeThickness = 2,
-                    Stroke = Brushes.Black
-                };
-                Canvas.SetLeft(tankLevelRectangle, time * distance + offset );
-                Canvas.SetTop(tankLevelRectangle, fromTop);
-                tankLevelList.Add(tankLevelRectangle);
+                AddDropdownBox(tank, time, distance, offset, fromTop); //Function to add the dropdown boxes containing the raw data
 
-                // DSD Emil - Expander used for details dropdown
-                TextBlock headerText = new TextBlock
-                {
-                    Text = "Name: " + tank.Name,
-                    Margin = new Thickness(0, 0, 3, 0)
-                };
-                Expander detailsExpander = new Expander
-                {
-                    Uid = tank.Name,
-                    Header = headerText,
-                    Background = Brushes.White,
-                    BorderBrush = Brushes.Black,
-                    BorderThickness = new Thickness(2)
-                };
-                Canvas.SetZIndex(detailsExpander, 10); // Set z-index to draw ontop ofother elements (such as tank connections)
-                Canvas.SetLeft(detailsExpander, time * distance + offset  + 80);
-                Canvas.SetTop(detailsExpander, fromTop - 1); // yeah its stupid, but the expander box was visually a tiny bit under the top of the tank
-                detailsExpanders.Add(detailsExpander);
+                AddEntryExitPoint(tank, time, distance, offset, height, fromTop, rows); //Add entry and exit point for the tanks
 
-                // The point at which the tank will have its connections
-                Point exit = new Point
-                {
-                    X = time * distance + offset  + 37.5,
-                    Y = fromTop + height
-                };
-                Point entry = new Point
-                {
-                    X = time * distance + offset ,
-                    Y = fromTop + height / 2
-                };
-                KeyValuePair<string, KeyValuePair<int, Point>> exitPoint = new KeyValuePair<string, KeyValuePair<int, Point>>(tank.Name + "_exit", new KeyValuePair<int, Point>(rows, exit)); //Added in this way to get which row they are on
-                KeyValuePair<string, KeyValuePair<int, Point>> entryPoint = new KeyValuePair<string, KeyValuePair<int, Point>>(tank.Name + "_entry", new KeyValuePair<int, Point>(rows, entry));
-                pointList.Add(exitPoint);
-                pointList.Add(entryPoint);
+                AddDumpValves(tank, time, distance, offset, height, fromTop); //Add dump valves for the tanks
 
-                // Dump valves will probably have to improve the visuals of these, or change their position not really intuitive 
-                Ellipse dumpValve = new Ellipse
-                {
-                    Width = 10,
-                    Height = 10,
-                    Fill = Brushes.Black,
-                    StrokeThickness = 2,
-                    Stroke = Brushes.Black,
-                    Uid = "d_" + tank.Name
-                };
-                Canvas.SetLeft(dumpValve, time * distance + offset  + 70); //just placed it on the other side
-                Canvas.SetTop(dumpValve, fromTop + height / 2);
-                dumpValves.Add(dumpValve);
+                AddLevelArrow(tank, time, distance,  offset, height, fromTop); //Add arrow to show the tank level and percentage
 
-                // DSD Emil - Lines used for creating arrows
-                Line arrowshaft = new Line
-                {
-                    X1 = time * distance + offset  + 20,
-                    Y1 = fromTop + 1,
-                    X2 = time * distance + offset  + 20,
-                    Y2 = fromTop + height,
-                    StrokeThickness = 2,
-                    Stroke = Brushes.Black,
-                    Uid = "as_" + tank.Name
-                };
-                Canvas.SetZIndex(arrowshaft,10);
-                arrowshafts.Add(arrowshaft);
-
-                Line arrowhead = new Line
-                {
-                    X1 = time * distance + offset  + 20,
-                    Y1 = fromTop + 7,
-                    X2 = time * distance + offset  + 20,
-                    Y2 = fromTop + 8,
-                    StrokeThickness = 13,
-                    Stroke = Brushes.Black,
-                    StrokeStartLineCap = PenLineCap.Triangle,
-                    Uid = "ah1_" + tank.Name
-                };
-                Canvas.SetZIndex(arrowhead, 11);
-                arrowheads.Add(arrowhead);
-
-                Line arrowhead2 = new Line
-                {
-                    X1 = time * distance + offset  + 20,
-                    Y1 = fromTop + height - 8,
-                    X2 = time * distance + offset  + 20,
-                    Y2 = fromTop + height - 9,
-                    StrokeThickness = 13,
-                    Stroke = Brushes.Black,
-                    StrokeStartLineCap = PenLineCap.Triangle,
-                    Uid = "ah2_" + tank.Name
-                };
-                Canvas.SetZIndex(arrowhead2, 11);
-                arrowheads.Add(arrowhead2);
-
-                // DSD Emil - Text displaying the current level, beside the arrows
-                TextBlock levelText = new TextBlock
-                {
-                    Text = "0%",
-                    Width = 40,
-                    Height = 20,
-                    Uid = tank.Name
-                };
-                Canvas.SetLeft(levelText, time * distance + offset  + 30);
-                Canvas.SetTop(levelText, fromTop + 100);
-                levelTextBlocks.Add(levelText);
-
-                // DSD Emil - Text displaying the current temp, at the top of the tank
-                TextBlock tempText = new TextBlock
-                {
-                    Text = "0K",
-                    Width = 71,
-                    Height = 20,
-                    Uid = tank.Name,
-                    TextAlignment = TextAlignment.Right,
-                    Padding = new Thickness(0, 0, 5, 0),
-                };
-                Canvas.SetLeft(tempText, time * distance + offset  + 2);
-                Canvas.SetTop(tempText, fromTop + 2);
-                Canvas.SetZIndex(tempText, 12);
-                tempTextBlocks.Add(tempText);
-
-                // DSD Emil - Textblock displaying simulatiom ambient temperature
-                ambTempBlock = new TextBlock
-                {
-                    TextAlignment = TextAlignment.Right,
-                    Padding = new Thickness(0, 0, 5, 0),
-                };
-                Canvas.SetRight(ambTempBlock, canvas.ActualWidth);
-
-                // All elements to be drawn are added to the canvas
-                canvas.Children.Add(tankRectangle);
-                canvas.Children.Add(tankLevelRectangle);
-                canvas.Children.Add(dumpValve);
-                canvas.Children.Add(detailsExpander);
-                canvas.Children.Add(arrowshaft);
-                canvas.Children.Add(arrowhead);
-                canvas.Children.Add(arrowhead2);
-                canvas.Children.Add(levelText);
-                canvas.Children.Add(tempText);
-                canvas.Children.Add(ambTempBlock);
+                AddTankDetails(tank, time, distance, offset, height, fromTop); //Add various tank details 
 
                 if (tank is PasteurizationModule || tank is HomogenizationModule || tank is FreezingModule || tank is FlavoringHardeningPackingModule)
                 {
-                    TextBlock symbol = new TextBlock
-                    {
-                        Text = "",
-                        Width = 40,
-                        Height = 100,
-                        Name = "symbols_" + tank.Name,
-                        //FontSize = 20,
-                        TextWrapping = TextWrapping.Wrap
-                    };
-
-                    Canvas.SetLeft(symbol, time * distance + offset  + 35);
-                    Canvas.SetTop(symbol, fromTop + 10);
-                    symbols.Add(symbol);
-                    canvas.Children.Add(symbol);
+                    //Add addtional symbols for different tanks
+                    AddTankSymbols(tank, time, distance, offset, height, fromTop);
                 }
 
                 time++;
             }
+
             int[] times = new int[rows + 1]; // Used to increment the length of which the lines are apart from eachother
             foreach (TankModule tank in tankList) // Create the connections
             {
-                if(tank == tankList[0])
+                if (tank.InFlowTanks.Count == 0) //If the tank does not have an inflow
                 {
-                    KeyValuePair<int, Point> initialPair = pointList.Find(x => x.Key == tank.Name + "_entry").Value;
-                    Point initial = initialPair.Value;
-                    Point target = new Point
-                    {
-                        Y = initial.Y,
-                        X = initial.X - 30
-                    };
-                    PointCollection points = new PointCollection();
-                    points.Add(initial);
-                    points.Add(target);
-                    Ellipse ellipse = new Ellipse
-                    {
-                        Width = 10,
-                        Height = 10,
-                        Fill = Brushes.Black,
-                        StrokeThickness = 2,
-                        Stroke = Brushes.Black,
-                        Uid = "entry" // ID for the valves
-                    };
-                    connectedValves.Add(ellipse);
-                    TextBlock label = new TextBlock
-                    {
-                        Text = "Entry" + "\n",
-                        Name = "entry"
-                    };
-                    labels.Add(label);
-
-                    Canvas.SetLeft(ellipse, target.X - 5);
-                    Canvas.SetTop(ellipse, target.Y - 5);
-                    Canvas.SetLeft(label, target.X - 25);
-                    Canvas.SetTop(label, target.Y + 10);
-                    Polyline line = new Polyline
-                    {
-                        Stroke = Brushes.Black
-                    };
-                    line.Points = points;
-                    canvas.Children.Add(line);
-                    canvas.Children.Add(ellipse);
-                    canvas.Children.Add(label);
+                    AddInitialValve(tank);
                 }
 
-                else if (tank == tankList[tankList.Count - 1])
+                else if (!tankList.Exists(x => x.InFlowTanks.Contains(tank)))
                 {
-                    KeyValuePair<int, Point> initialPair = pointList.Find(x => x.Key == tank.Name + "_exit").Value;
-                    Point initial = initialPair.Value;
-                    Point target = new Point
-                    {
-                        Y = initial.Y + 20,
-                        X = initial.X
-                    };
-                    PointCollection points = new PointCollection();
-                    points.Add(initial);
-                    points.Add(target);
-                    Ellipse ellipse = new Ellipse
-                    {
-                        Width = 10,
-                        Height = 10,
-                        Fill = Brushes.Black,
-                        StrokeThickness = 2,
-                        Stroke = Brushes.Black,
-                        Uid = "exit" // ID for the valves
-                    };
-                    connectedValves.Add(ellipse);
-                    TextBlock label = new TextBlock
-                    {
-                        Text = "Exit" + "\n",
-                        Name = "exit"
-                    };
-                    labels.Add(label);
-
-                    Canvas.SetLeft(ellipse, target.X - 5);
-                    Canvas.SetTop(ellipse, target.Y - 5);
-                    Canvas.SetLeft(label, target.X + 20);
-                    Canvas.SetTop(label, target.Y - 10);
-                    Polyline line = new Polyline
-                    {
-                        Stroke = Brushes.Black
-                    };
-                    line.Points = points;
-                    canvas.Children.Add(line);
-                    canvas.Children.Add(ellipse);
-                    canvas.Children.Add(label);
+                    AddEndValve(tank);
                 }
 
                 // This is a bit backward initial is the destination of the connection while target is the source, which means the lines have to be drawn backwards
                 foreach (TankModule connected in tank.InFlowTanks)
                 {
-                    // The pairs are used to access the rows and points for the lines
-                    KeyValuePair<int, Point> initialPair = pointList.Find(x => x.Key == tank.Name+ "_entry").Value; 
-                    KeyValuePair<int, Point> targetPair = pointList.Find(x => x.Key == connected.Name+"_exit").Value;
-                    int initialRow = initialPair.Key;
-                    int targetRow = targetPair.Key;
-
-                    // Used to visualize the connections between each tank
-                    Polyline line = new Polyline
-                    {
-                        Stroke = Brushes.Black
-                    };
-
-                    // Used to specify the points of the line
-                    PointCollection points = new PointCollection(); 
-                    Point initial = initialPair.Value;
-                    Point target = targetPair.Value;
-                    points.Add(initial);
-
-                    // Used to visualize the valves
-                    Ellipse ellipse = new Ellipse
-                    {
-                        Width = 10,
-                        Height = 10,
-                        Fill = Brushes.Black,
-                        StrokeThickness = 2,
-                        Stroke = Brushes.Black,
-                        Uid = tank.Name + "_" + connected.Name // ID for the valves
-                    }; 
-                    connectedValves.Add(ellipse);
-
-
-                    // Label for which valve it is
-                    TextBlock label = new TextBlock
-                    {
-                        Text = connected.Name + "->" + tank.Name + "\n",
-                        Name = tank.Name + "_" + connected.Name
-                    }; 
-                    labels.Add(label);
-
-                    if (initialRow == targetRow)
-                    {
-                        times[initialRow]++;
-                        Point first = new Point
-                        {
-                            X = initial.X - 75,
-                            Y = initial.Y // Make the lines look more seperate
-                        };
-
-                        Point second = new Point
-                        {
-                            Y = target.Y + 15 * times[targetRow],
-                            X = first.X
-                        };
-
-                        Point third = new Point
-                        {
-                            Y = second.Y,
-                            X = target.X
-                        };
-
-                        points.Add(first);
-                        points.Add(second);
-                        points.Add(third);
-
-                        Canvas.SetLeft(ellipse, second.X - 5);
-                        Canvas.SetTop(ellipse, second.Y - 5);
-                        Canvas.SetLeft(label, second.X - 60);
-                        Canvas.SetTop(label, second.Y - 50);
-                    }
-                    else // If the target is not in the same row it will use 4 points instead of 2
-                    {
-                        times[targetRow]++;
-                        Point first = new Point
-                        {
-                            Y = initial.Y,
-                            X = initial.X - 60
-                        };
-                        Point second = new Point
-                        {
-                            Y = target.Y + 15 * times[targetRow],
-                            X = first.X
-                        };
-                        Point third = new Point
-                        {
-                            Y = second.Y,
-                            X = target.X
-                        };
-                        points.Add(first);
-                        points.Add(second);
-                        points.Add(third);
-
-                        Canvas.SetLeft(ellipse, second.X - 5);
-                        Canvas.SetTop(ellipse, second.Y - 5);
-                        Canvas.SetLeft(label, second.X + 5);
-                        Canvas.SetTop(label, second.Y + 5);
-                    }
-                    points.Add(target);
-                    line.Points = points;
-                    canvas.Children.Add(line);
-                    canvas.Children.Add(ellipse);
-                    canvas.Children.Add(label);
+                    AddConnections(tank ,connected,  times);
                 }
             }
+        }
+
+        private void AddTanks(TankModule tank, int time, int distance, int offset, int height, int fromTop)
+        {
+            // The rectangle for visualizing the tank level
+            Rectangle tankRectangle = new Rectangle
+            {
+                Width = 75,
+                Height = height,
+                Fill = Brushes.Blue,
+                StrokeThickness = 2,
+                Stroke = Brushes.Black
+            };
+            Canvas.SetLeft(tankRectangle, time * distance + offset);
+            Canvas.SetTop(tankRectangle, fromTop);
+
+            // The rectangle showing how empty the tank is 
+            Rectangle tankLevelRectangle = new Rectangle
+            {
+                Uid = tank.Name,
+                Width = 75,
+                Height = 200,
+                Fill = Brushes.White,
+                StrokeThickness = 2,
+                Stroke = Brushes.Black
+            };
+            Canvas.SetLeft(tankLevelRectangle, time * distance + offset);
+            Canvas.SetTop(tankLevelRectangle, fromTop);
+            tankLevelList.Add(tankLevelRectangle);
+
+            canvas.Children.Add(tankRectangle);
+            canvas.Children.Add(tankLevelRectangle);
+        }
+
+        private void AddDropdownBox(TankModule tank, int time, int distance, int offset, int fromTop)
+        {
+            // DSD Emil - Expander used for details dropdown
+            TextBlock headerText = new TextBlock
+            {
+                Text = "Name: " + tank.Name,
+                Margin = new Thickness(0, 0, 3, 0)
+            };
+            Expander detailsExpander = new Expander
+            {
+                Uid = tank.Name,
+                Header = headerText,
+                Background = Brushes.White,
+                BorderBrush = Brushes.Black,
+                BorderThickness = new Thickness(2)
+            };
+            Canvas.SetZIndex(detailsExpander, 10); // Set z-index to draw ontop ofother elements (such as tank connections)
+            Canvas.SetLeft(detailsExpander, time * distance + offset + 80);
+            Canvas.SetTop(detailsExpander, fromTop - 1); // yeah its stupid, but the expander box was visually a tiny bit under the top of the tank
+            detailsExpanders.Add(detailsExpander);
+
+            canvas.Children.Add(detailsExpander);
+        }
+
+        private void AddEntryExitPoint(TankModule tank,int time, int distance, int offset, int height, int fromTop, int rows)
+        {
+            // The point at which the tank will have its connections
+            Point exit = new Point
+            {
+                X = time * distance + offset + 37.5,
+                Y = fromTop + height
+            };
+            Point entry = new Point
+            {
+                X = time * distance + offset,
+                Y = fromTop + height / 2
+            };
+            KeyValuePair<string, KeyValuePair<int, Point>> exitPoint = new KeyValuePair<string, KeyValuePair<int, Point>>(tank.Name + "_exit", new KeyValuePair<int, Point>(rows, exit)); //Added in this way to get which row they are on
+            KeyValuePair<string, KeyValuePair<int, Point>> entryPoint = new KeyValuePair<string, KeyValuePair<int, Point>>(tank.Name + "_entry", new KeyValuePair<int, Point>(rows, entry));
+            pointList.Add(exitPoint);
+            pointList.Add(entryPoint);
+        }
+
+        private void AddDumpValves(TankModule tank, int time, int distance, int offset, int height, int fromTop)
+        {
+            // Dump valves will probably have to improve the visuals of these, or change their position not really intuitive 
+            Ellipse dumpValve = new Ellipse
+            {
+                Width = 10,
+                Height = 10,
+                Fill = Brushes.Black,
+                StrokeThickness = 2,
+                Stroke = Brushes.Black,
+                Uid = "d_" + tank.Name
+            };
+            Canvas.SetLeft(dumpValve, time * distance + offset + 70); //just placed it on the other side
+            Canvas.SetTop(dumpValve, fromTop + height / 2);
+            dumpValves.Add(dumpValve);
+
+            canvas.Children.Add(dumpValve);
+        }
+
+        private void AddLevelArrow(TankModule tank, int time, int distance, int offset, int height, int fromTop)
+        {
+            // DSD Emil - Lines used for creating arrows
+            Line arrowshaft = new Line
+            {
+                X1 = time * distance + offset + 20,
+                Y1 = fromTop + 1,
+                X2 = time * distance + offset + 20,
+                Y2 = fromTop + height,
+                StrokeThickness = 2,
+                Stroke = Brushes.Black,
+                Uid = "as_" + tank.Name
+            };
+            Canvas.SetZIndex(arrowshaft, 10);
+            arrowshafts.Add(arrowshaft);
+
+            Line arrowhead = new Line
+            {
+                X1 = time * distance + offset + 20,
+                Y1 = fromTop + 7,
+                X2 = time * distance + offset + 20,
+                Y2 = fromTop + 8,
+                StrokeThickness = 13,
+                Stroke = Brushes.Black,
+                StrokeStartLineCap = PenLineCap.Triangle,
+                Uid = "ah1_" + tank.Name
+            };
+            Canvas.SetZIndex(arrowhead, 11);
+            arrowheads.Add(arrowhead);
+
+            Line arrowhead2 = new Line
+            {
+                X1 = time * distance + offset + 20,
+                Y1 = fromTop + height - 8,
+                X2 = time * distance + offset + 20,
+                Y2 = fromTop + height - 9,
+                StrokeThickness = 13,
+                Stroke = Brushes.Black,
+                StrokeStartLineCap = PenLineCap.Triangle,
+                Uid = "ah2_" + tank.Name
+            };
+            Canvas.SetZIndex(arrowhead2, 11);
+            arrowheads.Add(arrowhead2);
+
+            canvas.Children.Add(arrowshaft);
+            canvas.Children.Add(arrowhead);
+            canvas.Children.Add(arrowhead2);
+        }
+
+        private void AddTankDetails(TankModule tank, int time, int distance, int offset, int height, int fromTop)
+        {
+            // DSD Emil - Text displaying the current level, beside the arrows
+            TextBlock levelText = new TextBlock
+            {
+                Text = "0%",
+                Width = 40,
+                Height = 20,
+                Uid = tank.Name
+            };
+            Canvas.SetLeft(levelText, time * distance + offset + 30);
+            Canvas.SetTop(levelText, fromTop + 100);
+            levelTextBlocks.Add(levelText);
+
+            // DSD Emil - Text displaying the current temp, at the top of the tank
+            TextBlock tempText = new TextBlock
+            {
+                Text = "0K",
+                Width = 71,
+                Height = 20,
+                Uid = tank.Name,
+                TextAlignment = TextAlignment.Right,
+                Padding = new Thickness(0, 0, 5, 0),
+            };
+            Canvas.SetLeft(tempText, time * distance + offset + 2);
+            Canvas.SetTop(tempText, fromTop + 2);
+            Canvas.SetZIndex(tempText, 12);
+            tempTextBlocks.Add(tempText);
+
+            canvas.Children.Add(levelText);
+            canvas.Children.Add(tempText);
+        }
+
+        private void AddTankSymbols(TankModule tank, int time, int distance, int offset, int height, int fromTop)
+        {
+            TextBlock symbol = new TextBlock
+            {
+                Text = "",
+                Width = 40,
+                Height = 100,
+                Name = "symbols_" + tank.Name,
+                //FontSize = 20,
+                TextWrapping = TextWrapping.Wrap
+            };
+
+            Canvas.SetLeft(symbol, time * distance + offset + 35);
+            Canvas.SetTop(symbol, fromTop + 10);
+            symbols.Add(symbol);
+
+            canvas.Children.Add(symbol);
+        }
+
+        private void AddInitialValve(TankModule tank)
+        {
+            KeyValuePair<int, Point> initialPair = pointList.Find(x => x.Key == tank.Name + "_entry").Value;
+            Point initial = initialPair.Value;
+            Point target = new Point
+            {
+                Y = initial.Y,
+                X = initial.X - 30
+            };
+            PointCollection points = new PointCollection();
+            points.Add(initial);
+            points.Add(target);
+            Ellipse ellipse = new Ellipse
+            {
+                Width = 10,
+                Height = 10,
+                Fill = Brushes.Black,
+                StrokeThickness = 2,
+                Stroke = Brushes.Black,
+                Uid = "entry" // ID for the valves
+            };
+            connectedValves.Add(ellipse);
+            TextBlock label = new TextBlock
+            {
+                Text = "Entry" + "\n",
+                Name = "entry"
+            };
+            labels.Add(label);
+
+            Canvas.SetLeft(ellipse, target.X - 5);
+            Canvas.SetTop(ellipse, target.Y - 5);
+            Canvas.SetLeft(label, target.X - 25);
+            Canvas.SetTop(label, target.Y + 10);
+            Polyline line = new Polyline
+            {
+                Stroke = Brushes.Black
+            };
+            line.Points = points;
+            canvas.Children.Add(line);
+            canvas.Children.Add(ellipse);
+            canvas.Children.Add(label);
+        }
+
+        private void AddEndValve(TankModule tank)
+        {
+            KeyValuePair<int, Point> initialPair = pointList.Find(x => x.Key == tank.Name + "_exit").Value;
+            Point initial = initialPair.Value;
+            Point target = new Point
+            {
+                Y = initial.Y + 20,
+                X = initial.X
+            };
+            PointCollection points = new PointCollection();
+            points.Add(initial);
+            points.Add(target);
+            Ellipse ellipse = new Ellipse
+            {
+                Width = 10,
+                Height = 10,
+                Fill = Brushes.Black,
+                StrokeThickness = 2,
+                Stroke = Brushes.Black,
+                Uid = "exit" // ID for the valves
+            };
+            connectedValves.Add(ellipse);
+            TextBlock label = new TextBlock
+            {
+                Text = "Exit" + "\n",
+                Name = "exit"
+            };
+            labels.Add(label);
+
+            Canvas.SetLeft(ellipse, target.X - 5);
+            Canvas.SetTop(ellipse, target.Y - 5);
+            Canvas.SetLeft(label, target.X + 20);
+            Canvas.SetTop(label, target.Y - 10);
+            Polyline line = new Polyline
+            {
+                Stroke = Brushes.Black
+            };
+            line.Points = points;
+            canvas.Children.Add(line);
+            canvas.Children.Add(ellipse);
+            canvas.Children.Add(label);
+        }
+
+        private void AddConnections(TankModule tank, TankModule connected, int[] times)
+        {
+            // The pairs are used to access the rows and points for the lines
+            KeyValuePair<int, Point> initialPair = pointList.Find(x => x.Key == tank.Name + "_entry").Value;
+            KeyValuePair<int, Point> targetPair = pointList.Find(x => x.Key == connected.Name + "_exit").Value;
+            int initialRow = initialPair.Key;
+            int targetRow = targetPair.Key;
+
+            // Used to visualize the connections between each tank
+            Polyline line = new Polyline
+            {
+                Stroke = Brushes.Black
+            };
+
+            // Used to specify the points of the line
+            PointCollection points = new PointCollection();
+            Point initial = initialPair.Value;
+            Point target = targetPair.Value;
+            points.Add(initial);
+
+            // Used to visualize the valves
+            Ellipse ellipse = new Ellipse
+            {
+                Width = 10,
+                Height = 10,
+                Fill = Brushes.Black,
+                StrokeThickness = 2,
+                Stroke = Brushes.Black,
+                Uid = tank.Name + "_" + connected.Name // ID for the valves
+            };
+            connectedValves.Add(ellipse);
+
+
+            // Label for which valve it is
+            TextBlock label = new TextBlock
+            {
+                Text = connected.Name + "->" + tank.Name + "\n",
+                Name = tank.Name + "_" + connected.Name
+            };
+            labels.Add(label);
+
+            if (initialRow == targetRow)
+            {
+                times[initialRow]++;
+                Point first = new Point
+                {
+                    X = initial.X - 75,
+                    Y = initial.Y // Make the lines look more seperate
+                };
+
+                Point second = new Point
+                {
+                    Y = target.Y + 15 * times[targetRow],
+                    X = first.X
+                };
+
+                Point third = new Point
+                {
+                    Y = second.Y,
+                    X = target.X
+                };
+
+                points.Add(first);
+                points.Add(second);
+                points.Add(third);
+
+                Canvas.SetLeft(ellipse, second.X - 5);
+                Canvas.SetTop(ellipse, second.Y - 5);
+                Canvas.SetLeft(label, second.X - 60);
+                Canvas.SetTop(label, second.Y - 50);
+            }
+            else // If the target is not in the same row it will use 4 points instead of 2
+            {
+                times[targetRow]++;
+                Point first = new Point
+                {
+                    Y = initial.Y,
+                    X = initial.X - 60
+                };
+                Point second = new Point
+                {
+                    Y = target.Y + 15 * times[targetRow],
+                    X = first.X
+                };
+                Point third = new Point
+                {
+                    Y = second.Y,
+                    X = target.X
+                };
+                points.Add(first);
+                points.Add(second);
+                points.Add(third);
+
+                Canvas.SetLeft(ellipse, second.X - 5);
+                Canvas.SetTop(ellipse, second.Y - 5);
+                Canvas.SetLeft(label, second.X + 5);
+                Canvas.SetTop(label, second.Y + 5);
+            }
+            points.Add(target);
+            line.Points = points;
+            canvas.Children.Add(line);
+            canvas.Children.Add(ellipse);
+            canvas.Children.Add(label);
         }
 
         // DSD Joakim - Loops through the different elements and updates them
