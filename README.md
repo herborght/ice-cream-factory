@@ -36,7 +36,9 @@ The raw data page with a simulation running.
   * Run the installer (mosquitto-2.0.13-install-windows-x64.exe)** 
   * Navigate to download location and start the broker with `mosquitto` in the command prompt 
 * Install Visual Studio for running the application: https://code.visualstudio.com/download 
-* Clone the project into your local directory: `git clone https://github.com/herborght/ice-cream-factory.git` 
+* Clone the project into your local directory: 
+
+`git clone https://github.com/herborght/ice-cream-factory.git` 
 * Open the project in Visual Studio 
   * Navigate to “app.config” under SimulatorEnv/app.config 
   * Change the “BrokerAddress” value to localhost IP (127.0.0.1) 
