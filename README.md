@@ -1,6 +1,6 @@
 # Ice Cream Factory
 
-![Screenshot](screenshot.png)
+![Screenshot](ICF.png)
 
 ### Description
 
@@ -24,12 +24,11 @@ The ice cream factory projects is done in collaboration with ABB and Mäladalen 
 
 The Simulation Page with a simulation running.
 
-![Screenshot](screenshot.png)
-
+![Screenshot](rawpagecorrect.png)
 
 The raw data page with a simulation running.
 
-![Screenshot](screenshot.png)
+![Screenshot](rawpageactualcorrect.png)
 
 ***
 ### Installation guide
