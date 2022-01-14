@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SimulatorUI;
 
 namespace SimulationTests
@@ -58,7 +55,7 @@ namespace SimulationTests
             Assert.AreEqual(expectedMixTemperature, freezingModule.MixTemperature);
             Assert.AreEqual(expectedPasteurizationUnits, freezingModule.PasteurizationUnits);
             Assert.AreEqual(expectedSendTestValues, freezingModule.SendTestValues);
-            Assert.AreEqual(expectedOverrun, freezingModule.Overrun);   
+            Assert.AreEqual(expectedOverrun, freezingModule.Overrun);
 
         }
     }

@@ -1,15 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Threading.Tasks;
-using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 using System.Windows.Shapes;
 
 namespace SimulatorUI
@@ -19,21 +13,22 @@ namespace SimulatorUI
     /// </summary>
     public partial class SimulationPage : Page
     {
-        List<TankModule> tankList;
-        List<Rectangle> tankLevelList; // List of the rectangles visualizing the tank level
-        List<KeyValuePair<string, KeyValuePair<int, Point>>> pointList; // The points of connectections for the tanks
-        List<Ellipse> connectedValves; // The visualization of the valves
-        List<Ellipse> dumpValves;
-        List<TextBlock> labels;
-        List<Expander> detailsExpanders;
-        List<TextBlock> symbols; //Could be replaced with images, for example pasteurization could use a snowflake and a flame
-        Boolean valvef;
-        List<Line> arrowshafts;
-        List<Line> arrowheads;
-        List<TextBlock> levelTextBlocks;
-        List<TextBlock> tempTextBlocks;
+        private List<TankModule> tankList;
+        private List<Rectangle> tankLevelList; // List of the rectangles visualizing the tank level
+        private List<KeyValuePair<string, KeyValuePair<int, Point>>> pointList; // The points of connectections for the tanks
+        private List<Ellipse> connectedValves; // The visualization of the valves
+        private List<Ellipse> dumpValves;
+        private List<TextBlock> labels;
+        private List<Expander> detailsExpanders;
+        private List<TextBlock> symbols; //Could be replaced with images, for example pasteurization could use a snowflake and a flame
+        private bool valvef;
+        private List<Line> arrowshafts;
+        private List<Line> arrowheads;
+        private List<TextBlock> levelTextBlocks;
+        private List<TextBlock> tempTextBlocks;
         private double ambientTemp;
-        TextBlock ambTempBlock;
+        private TextBlock ambTempBlock;
+
 
         public SimulationPage(List<TankModule> list, double ambTemp)
         {
@@ -43,21 +38,25 @@ namespace SimulatorUI
             CreateTanks();
             Task.Run(() => UpdateVisuals());
         }
+
+        // Returns a list of all the expanders. Used in the MainWindow class to auto-expand all the expanders when switching
+        // to the simulation page if the option was toggled beforehand
         public List<Expander> GetExpanders()
         {
-            return this.detailsExpanders;
-        }
-
-        public void SetValve(bool check)
-        {
-            this.valvef = check;
-        }
-        public void PassData(bool data)
-        {
-            this.valvef = data;
+            return detailsExpanders;
         }
 
         // DSD Joakim - Create all the tanks
+
+        // Explanation from Emil - Manually create all the tanks and their connections in a fake grid. This results in the tank
+        // "grid" being static, since it would be a real pain to manually update the tank positions and in which row/column they
+        // should be displayed when the screen changes size. 
+        // A better way would be to use databinding correctly to make it an actual dynamic grid which would allow dynamic resizing
+        // and vertical/horizontal screen scrolling, but since we knew nothing about databinding when we started this was the way
+        // we chose to do it, oh well.
+        //
+        // This function will create a row of three tanks before moving down to the next row, repeat. All elements that should be 
+        // displayed on screen are added to the Canvas, which we are using for easy positioning of elements within the Canvas.
         private void CreateTanks()
         {
             int height = 200; // General height of the tank elements
@@ -90,6 +89,7 @@ namespace SimulatorUI
 
             foreach (TankModule tank in tankList) //Setup the shapes and connection points
             {
+
                 if (time == 3)
                 {
                     fromTop += 300;
@@ -121,6 +121,7 @@ namespace SimulatorUI
             int[] times = new int[rows + 1]; // Used to increment the length of which the lines are apart from eachother
             foreach (TankModule tank in tankList) // Create the connections
             {
+
                 if (tank.InFlowTanks.Count == 0) //If the tank does not have an inflow
                 {
                     AddInitialValve(tank);
@@ -128,10 +129,11 @@ namespace SimulatorUI
 
                 else if (!tankList.Exists(x => x.InFlowTanks.Contains(tank)))
                 {
+
                     AddEndValve(tank);
                 }
 
-                // This is a bit backward initial is the destination of the connection while target is the source, which means the lines have to be drawn backwards
+                // DSD Joakim - This is a bit backward initial is the destination of the connection while target is the source, which means the lines have to be drawn backwards
                 foreach (TankModule connected in tank.InFlowTanks)
                 {
                     AddConnections(tank ,connected,  times);
@@ -550,23 +552,26 @@ namespace SimulatorUI
 
                         TextBlock leveltext = levelTextBlocks.Find(x => x.Uid == name);
                         leveltext.Text = Math.Round(current.LevelPercentage, 3) + "%";
-                        
+
                         if (rectangle.Height < 187)
                         {
+                            // To avoid having the arrow heads overflow over the lines, only display them when there is enough room for them
                             arrowhead1.Visibility = Visibility.Visible;
                             arrowhead2.Visibility = Visibility.Visible;
 
+                            // Set the arrowheads length to be one pixel to make it point in the correct direction
                             arrowhead1.Y1 = arrow.Y1 + 6;
                             arrowhead1.Y2 = arrow.Y1 + 7;
 
+                            // Display the % text over the level line if there isnt enough room for its textbox between the tank bottom and the level line
                             if (rectangle.Height < 200 - leveltext.Height)
                             {
-                                Canvas.SetTop(leveltext, (arrow.Y1 + arrow.Y2 - leveltext.Height) / 2);                             
+                                Canvas.SetTop(leveltext, (arrow.Y1 + arrow.Y2 - leveltext.Height) / 2);
                             }
                             else
                             {
                                 Canvas.SetTop(leveltext, arrow.Y1 - leveltext.Height);
-                            }                            
+                            }
                         }
                         else
                         {
@@ -583,9 +588,9 @@ namespace SimulatorUI
                 {
                     valve.Dispatcher.Invoke(() =>
                     {
-                        if(valve.Uid == "entry")
+                        if (valve.Uid == "entry")
                         {
-                            if(tankList[0].InletFlow > 0)
+                            if (tankList[0].InletFlow > 0)
                             {
                                 valve.Fill = Brushes.White;
                             }
@@ -596,7 +601,7 @@ namespace SimulatorUI
                         }
                         else if (valve.Uid == "exit")
                         {
-                            if (tankList[tankList.Count - 1].OutValveOpen)
+                            if (tankList[^1].OutValveOpen)
                             {
                                 valve.Fill = Brushes.White;
                             }
@@ -668,38 +673,38 @@ namespace SimulatorUI
                             msg = "Entry\n";
                             if (Tag != null)
                             {
-                                valvef = (this.Tag as MainWindow).GetValvef();
+                                valvef = (Tag as MainWindow).GetValvef();
                                 if (valvef)
                                 {
-                                    msg += "InFlow: \n" + Math.Round(tankList[0].InletFlow, 3) + "m3/s\n"; 
+                                    msg += "InFlow: \n" + Math.Round(tankList[0].InletFlow, 3) + "m3/s\n";
                                 }
                             }
-                            
+
                         }
-                        else if(label.Name == "exit")
+                        else if (label.Name == "exit")
                         {
                             msg = "Exit\n";
                             if (Tag != null)
                             {
-                                valvef = (this.Tag as MainWindow).GetValvef();
+                                valvef = (Tag as MainWindow).GetValvef();
                                 if (valvef)
                                 {
-                                    msg += "OutFlow: \n" + Math.Round(tankList[tankList.Count - 1].OutLetFlow, 3) + "m3/s\n";
+                                    msg += "OutFlow: \n" + Math.Round(tankList[^1].OutletFlow, 3) + "m3/s\n";
                                 }
                             }
-                            
+
                         }
                         else
                         {
                             TankModule tank = tankList.Find(x => x.Name == label.Name.Split('_')[0]);
-                            if(tank != null)
+                            if (tank != null)
                             {
                                 TankModule connected = tank.InFlowTanks.Find(x => x.Name == label.Name.Split('_')[1]);
                                 msg = connected.Name + "->" + tank.Name + "\n";
                                 //Checks if valve flowrate is selected, and displays the flowrate if it is 
                                 if (Tag != null)
                                 {
-                                    valvef = (this.Tag as MainWindow).GetValvef();
+                                    valvef = (Tag as MainWindow).GetValvef();
                                     if (valvef)
                                     {
                                         msg += "InFlow: \n" + Math.Round(tank.InletFlow, 3) + "m3/s\n"; //Could also add the temperatures, will probably have to divide what each shows in other functions, as we should be able to select the 
@@ -723,9 +728,9 @@ namespace SimulatorUI
 
                 ambTempBlock.Dispatcher.Invoke(() =>
                 {
-                    if(Tag != null)
+                    if (Tag != null)
                     {
-                        if((Tag as MainWindow).GetAmbTemp())
+                        if ((Tag as MainWindow).GetAmbTemp())
                         {
                             ambTempBlock.Visibility = Visibility.Visible;
                             ambTempBlock.Text = "Ambient temp: " + ambientTemp.ToString() + "K";
@@ -733,10 +738,8 @@ namespace SimulatorUI
                         else
                         {
                             ambTempBlock.Visibility = Visibility.Hidden;
-                        }           
+                        }
                     }
-                    
-
                 });
 
                 SymbolUpdate();
@@ -744,14 +747,15 @@ namespace SimulatorUI
             }
         }
 
-        // Update special symbols
+        // DSD Joakim - Update special symbols
         private void SymbolUpdate()
         {
             foreach (TextBlock textBlock in symbols)
             {
-                textBlock.Dispatcher.Invoke(() => {
+                textBlock.Dispatcher.Invoke(() =>
+                {
                     TankModule tank = tankList.Find(x => x.Name == textBlock.Name.Split('_')[1]);
-                    switch(tank)
+                    switch (tank)
                     {
                         case PasteurizationModule p:
                             textBlock.Text = UpdatePasteurization(p);
@@ -765,8 +769,9 @@ namespace SimulatorUI
                         case FreezingModule f:
                             textBlock.Text = UpdateFreezing(f);
                             break;
-                        
-                    }                  
+                        default:
+                            break;
+                    }
                 });
             }
         }
@@ -792,16 +797,15 @@ namespace SimulatorUI
             }
             return ret;
         }
-        
 
         private string UpdateHomogenization(HomogenizationModule temp) //Present cooler and pressure in raw data instead
         {
             string ret = "";
-            if(temp.HomogenizationOn)
+            if (temp.HomogenizationOn)
             {
                 ret = "Homogen ";
             }
-            if(temp.AgeingCoolingOn)
+            if (temp.AgeingCoolingOn)
             {
                 ret += "Aging, -";
             }
@@ -823,7 +827,7 @@ namespace SimulatorUI
             {
                 ret += "Pack ";
             }
-            if(temp.FinishBatch)
+            if (temp.FinishBatch)
             {
                 ret = "Fin";
             }
@@ -854,31 +858,24 @@ namespace SimulatorUI
             string msg = "";
             TankModule tank = tankList.Find(x => x.Name == name);
             msg += "Type: ";
-            switch(tank)
+
+            msg += tank switch
             {
-                case PasteurizationModule p:
-                    msg += " P. Module\n";
-                    break;
-                case HomogenizationModule h:
-                    msg += " H. Module\n";
-                    break;
-                case FlavoringHardeningPackingModule fhp:
-                    msg += " F.H.P Module\n";
-                    break;
-                case FreezingModule f:
-                    msg += " F. Module\n";
-                    break;
-                default:
-                    msg += " Tank Module\n";
-                    break;
-            }
+                PasteurizationModule p => " Pasteurization\n",
+                HomogenizationModule h => " Homogenization\n",
+                FlavoringHardeningPackingModule fhp => " FlavoringHardeningPacking\n",
+                FreezingModule f => " Freezing\n",
+                _ => " Tank\n",
+            };
+
             msg += "Level: " + Math.Round(tank.Level, 3) + "m\n";
             msg += "Percent: " + Math.Round(tank.LevelPercentage, 3) + "%" + "\n";
             msg += "Temp: " + Math.Round(tank.Temperature, 3) + "K\n";
             msg += "InFlow: " + Math.Round(tank.InletFlow, 3) + "m3/s\n";
             msg += "InFow Temp: " + Math.Round(tank.InFlowTemp, 3) + "K\n";
-            msg += "OutFlow: " + Math.Round(tank.OutLetFlow, 3) + "m3/s\n";
+            msg += "OutFlow: " + Math.Round(tank.OutletFlow, 3) + "m3/s\n";
             msg += "OutFlow Temp: " + Math.Round(tank.OutFlowTemp, 3) + "K\n";
+
             if (tank.DumpValveOpen)
             {
                 msg += "Dump Valve: Open\n";
@@ -916,9 +913,11 @@ namespace SimulatorUI
 
             return msg;
         }
+
+        // SetOpen and SetClosed are used open/close all the expanders from the MainWindow class
         public void SetOpen()
         {
-            foreach(Expander exp in detailsExpanders)
+            foreach (Expander exp in detailsExpanders)
             {
                 exp.IsExpanded = true;
             }
@@ -931,6 +930,7 @@ namespace SimulatorUI
             }
         }
 
+        // Toggle the abmient temp block visibility from the MainWindow class
         public void AmbientTempVisibility(bool b)
         {
             ambTempBlock.Visibility = b ? Visibility.Visible : Visibility.Hidden;
