@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <config>
-  <modules>
+	<modules>
     <module name="SimEnv" baseArea="0.0" outletArea="0.0" height="0" type="SimEnv" >
       <AnalogOutputParameter>AmbientTemp</AnalogOutputParameter>
     </module>
@@ -79,109 +79,5 @@
       <AnalogOutputParameter>Temperature</AnalogOutputParameter>
       <AnalogOutputParameter>OutFlowTemp</AnalogOutputParameter>
     </module>
-    <module name="F1" baseArea="0.5" outletArea="0.05" height="2" type="TankModule" >
-      <DigitalInputParameter>OpenDumpValve</DigitalInputParameter>
-      <AnalogOutputParameter>Level</AnalogOutputParameter>
-      <AnalogOutputParameter>LevelPercent</AnalogOutputParameter>
-      <AnalogInputParameter>InFlow</AnalogInputParameter>
-      <AnalogInputParameter>InFlowTemp</AnalogInputParameter>
-      <AnalogOutputParameter>Temperature</AnalogOutputParameter>
-      <AnalogOutputParameter>OutFlowTemp</AnalogOutputParameter>
-      <DigitalInputParameter>OpenOutlet</DigitalInputParameter>
-      <AnalogOutputParameter>OutFlow</AnalogOutputParameter>
-    </module>
-    <module name="F2" baseArea="0.5" outletArea="0.05" height="2" heaterTemp="373.15" coolerTemp="273.15" thickness="0.05" HTC="80" CTC="80" type="PasteurizationModule" >
-      <AnalogOutputParameter>Level</AnalogOutputParameter>
-      <AnalogOutputParameter>LevelPercent</AnalogOutputParameter>
-      <AnalogInputParameter>InFlow</AnalogInputParameter>
-      <DigitalInputParameter>OpenOutlet</DigitalInputParameter>
-      <DigitalInputParameter>OpenDumpValve</DigitalInputParameter>
-      <AnalogOutputParameter>OutFlow</AnalogOutputParameter>
-      <DigitalInputParameter>HeaterOn</DigitalInputParameter>
-      <DigitalInputParameter>CoolerOn</DigitalInputParameter>
-      <AnalogInputParameter>InFlowTemp</AnalogInputParameter >
-      <AnalogOutputParameter>Temperature</AnalogOutputParameter>
-      <AnalogOutputParameter>OutFlowTemp</AnalogOutputParameter>
-      <InOutChaining from="F1/OutFlow">InFlow</InOutChaining>
-      <InOutChaining from= "F1/OutFlowTemp">InFlowTemp</InOutChaining >
-    </module>
-    <module name="F3" type="HomogenizationModule" height="1" outletArea="0.005" baseArea="1" stage2Pressure="6e6" stage1Pressure="1.7e7">
-      <AnalogOutputParameter>Level</AnalogOutputParameter>
-      <AnalogOutputParameter>LevelPercent</AnalogOutputParameter>
-      <InOutChaining from="F2/OutFlow">InFlow</InOutChaining>
-      <DigitalInputParameter>OpenOutlet</DigitalInputParameter>
-      <DigitalInputParameter>OpenDumpValve</DigitalInputParameter>
-      <DigitalInputParameter>HomogenizationOn</DigitalInputParameter>
-      <DigitalInputParameter>AgeingCoolingOn</DigitalInputParameter>
-      <AnalogOutputParameter>OutFlow</AnalogOutputParameter>
-      <AnalogOutputParameter>ParticleSize</AnalogOutputParameter>
-      <InOutChaining from= "F2/OutFlowTemp">InFlowTemp</InOutChaining >
-      <AnalogOutputParameter>Temperature</AnalogOutputParameter>
-      <AnalogOutputParameter>OutFlowTemp</AnalogOutputParameter>
-
-    </module>
-    <module name="F4" type="FreezingModule" height="3" outletArea="0.005" baseArea="1" barrelRotationSpeed="200" freezerTemp="200">
-      <AnalogOutputParameter>Level</AnalogOutputParameter>
-      <AnalogOutputParameter>LevelPercent</AnalogOutputParameter>
-      <InOutChaining from="F3/OutFlow">InFlow</InOutChaining>
-      <DigitalInputParameter>OpenOutlet</DigitalInputParameter>
-      <DigitalInputParameter>OpenDumpValve</DigitalInputParameter>
-      <DigitalInputParameter>FreezingOn</DigitalInputParameter>
-      <DigitalInputParameter>DasherOn</DigitalInputParameter>
-      <DigitalInputParameter>StartLiquidFlavoring</DigitalInputParameter>
-      <AnalogOutputParameter>OutFlow</AnalogOutputParameter>
-      <AnalogOutputParameter>ParticleSize</AnalogOutputParameter>
-      <AnalogOutputParameter>Overrun</AnalogOutputParameter>
-      <AnalogOutputParameter>PasteurizationUnits</AnalogOutputParameter>
-      <AnalogOutputParameter>ParticleSize</AnalogOutputParameter>
-      <DigitalInputParameter>SendTestValues</DigitalInputParameter>
-      <InOutChaining from= "F3/OutFlowTemp">InFlowTemp</InOutChaining >
-      <AnalogOutputParameter>Temperature</AnalogOutputParameter>
-      <AnalogOutputParameter>OutFlowTemp</AnalogOutputParameter>
-    </module>
-    <module name="F5" baseArea="1" outletArea="0.05" height="3" type="FlavoringPackagingModule" packagingType ="cone" coolerTemperature ="243.15">
-      <InOutChaining from="F4/OutFlow">InFlow</InOutChaining>
-      <AnalogOutputParameter>Level</AnalogOutputParameter>
-      <AnalogOutputParameter>LevelPercent</AnalogOutputParameter>
-      <DigitalInputParameter>OpenOutlet</DigitalInputParameter>
-      <DigitalInputParameter>OpenDumpValve</DigitalInputParameter>
-      <AnalogOutputParameter>OutFlow</AnalogOutputParameter>
-      <DigitalInputParameter>StartFlavoring</DigitalInputParameter>
-      <DigitalInputParameter>StartHardening</DigitalInputParameter>
-      <DigitalInputParameter>StartPackaging</DigitalInputParameter>
-      <DigitalInputParameter>FinishBatch</DigitalInputParameter>
-      <InOutChaining from= "F4/OutFlowTemp">InFlowTemp</InOutChaining >
-      <AnalogOutputParameter>Temperature</AnalogOutputParameter>
-      <AnalogOutputParameter>OutFlowTemp</AnalogOutputParameter>
-    </module>
-    <module name="G1" baseArea="0.5" outletArea="0.05" height="2" type="TankModule" >
-      <DigitalInputParameter>OpenDumpValve</DigitalInputParameter>
-      <AnalogOutputParameter>Level</AnalogOutputParameter>
-      <AnalogOutputParameter>LevelPercent</AnalogOutputParameter>
-      <AnalogInputParameter>InFlow</AnalogInputParameter>
-      <AnalogInputParameter>InFlowTemp</AnalogInputParameter>
-      <AnalogOutputParameter>Temperature</AnalogOutputParameter>
-      <AnalogOutputParameter>OutFlowTemp</AnalogOutputParameter>
-      <DigitalInputParameter>OpenOutlet</DigitalInputParameter>
-      <AnalogOutputParameter>OutFlow</AnalogOutputParameter>
-      <InOutChaining from="F2/OutFlow">InFlow</InOutChaining>
-      <InOutChaining from= "F2/OutFlowTemp">InFlowTemp</InOutChaining >
-    </module>
-    <module name="G2" baseArea="0.5" outletArea="0.05" height="2" heaterTemp="373.15" coolerTemp="273.15" thickness="0.05" HTC="80" CTC="80" type="PasteurizationModule" >
-      <AnalogOutputParameter>Level</AnalogOutputParameter>
-      <AnalogOutputParameter>LevelPercent</AnalogOutputParameter>
-      <AnalogInputParameter>InFlow</AnalogInputParameter>
-      <DigitalInputParameter>OpenOutlet</DigitalInputParameter>
-      <DigitalInputParameter>OpenDumpValve</DigitalInputParameter>
-      <AnalogOutputParameter>OutFlow</AnalogOutputParameter>
-      <DigitalInputParameter>HeaterOn</DigitalInputParameter>
-      <DigitalInputParameter>CoolerOn</DigitalInputParameter>
-      <AnalogInputParameter>InFlowTemp</AnalogInputParameter >
-      <AnalogOutputParameter>Temperature</AnalogOutputParameter>
-      <AnalogOutputParameter>OutFlowTemp</AnalogOutputParameter>
-      <InOutChaining from="T1/OutFlow">InFlow</InOutChaining>
-      <InOutChaining from= "T1/OutFlowTemp">InFlowTemp</InOutChaining >
-    </module>
-  </modules>
+	</modules>
 </config>
-
